@@ -84,3 +84,17 @@ test('minimal locked rules are confirmed before any structural change and failur
 test('password-based PocketBase master is excluded from tenant business rules',()=>{
  const plan=api.buildAcademySecurityPlan(schema());for(const patch of plan)for(const key of ['listRule','viewRule','createRule','updateRule','deleteRule'])if(typeof patch.after[key]==='string'){assert.ok(!patch.after[key].includes('role ?= "master"'));}assert.match(plan.find(row=>row.name==='suprima_students').after.listRule,/role \?= "admin"/);
 });
+test('verification reports exact rule mismatch metadata without treating an absent rule as locked',async()=>{
+ const f=fixture(),ordinary=f.db.collections.getOne.bind(f.db.collections);f.db.collections.getOne=async id=>{const current=await ordinary(id);if(current.name==='suprima_profiles'&&typeof current.listRule==='string'&&current.listRule){delete current.createRule;}return current;};
+ await assert.rejects(api.configureAcademySecurity(f.db),error=>{assert.equal(error.phase,'verify');assert.equal(error.collection,'suprima_profiles');assert.equal(error.verifyCheck.kind,'rule');assert.equal(error.verifyCheck.ruleName,'createRule');assert.equal(error.verifyCheck.expectedType,'null');assert.equal(error.verifyCheck.actualType,'undefined');assert.equal(error.verifyCheck.actualKeyPresent,false);assert.equal(error.locked,true);return true;});
+});
+test('verification reports index normalization evidence without silently changing equality',async()=>{
+ const f=fixture(),ordinary=f.db.collections.getOne.bind(f.db.collections);f.db.collections.getOne=async id=>{const current=await ordinary(id);if(current.name==='suprima_profiles'&&typeof current.listRule==='string'&&current.listRule)current.indexes=current.indexes.map(sql=>sql.replace('CREATE UNIQUE','CREATE  UNIQUE'));return current;};
+ await assert.rejects(api.configureAcademySecurity(f.db),error=>{assert.equal(error.verifyCheck.kind,'index');assert.equal(error.verifyCheck.indexName,'idx_suprema_profiles_user');assert.equal(error.verifyCheck.normalizedIndexMatch,true);assert.equal(error.verifyCheck.actualIndexesCount,1);assert.equal(error.locked,true);return true;});
+});
+test('lockdown uses fresh exact rule readback even when update response fails after commit',async()=>{
+ const f=fixture(),ordinary=f.db.collections.update.bind(f.db.collections);f.db.collections.update=async(id,patch)=>{const result=await ordinary(id,patch);if(Object.keys(patch).length===5&&Object.values(patch).every(value=>value===null))throw{status:400};return result;};assert.equal((await api.configureAcademySecurity(f.db)).success,true);
+});
+test('lockdown never treats an uncommitted failed write or unknown metadata as locked',async()=>{
+ const f=fixture(),ordinary=f.db.collections.update.bind(f.db.collections);f.db.collections.update=async(id,patch)=>{if(id==='collection-suprima_students'&&Object.keys(patch).length===5&&Object.values(patch).every(value=>value===null))throw{status:400};return ordinary(id,patch);};await assert.rejects(api.configureAcademySecurity(f.db),error=>{assert.equal(error.message,'ACADEMY_LOCKDOWN_REQUIRED');assert.equal(error.locked,false);assert.ok(error.lockWriteErrors.some(row=>row.collection==='suprima_students'&&row.status===400));return true;});
+});
