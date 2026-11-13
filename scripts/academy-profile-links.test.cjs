@@ -53,3 +53,9 @@ test('missing user schema, permission and network failures never fall back to ad
     assert.deepEqual(context.queries, ['user']); assert.equal(context.licenseReads(), 0);
   }
 }));
+
+test('a valid password-session master cannot use academy business APIs', () => withBackend(async () => {
+  const context = setup({user:[{...profile,role:'master'}]});
+  await assert.rejects(context.bridge.requireAcademyUser(req()), error=>error.status===403 && error.message==='마스터는 Google 로그인으로 접속해 주세요.');
+  assert.equal(context.licenseReads(),0);
+}));

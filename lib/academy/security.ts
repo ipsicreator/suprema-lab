@@ -51,7 +51,7 @@ export function buildAcademySecurityPlan(collections: CollectionModel[], quarant
   const actor = "@collection.suprima_profiles:actor";
   const linked = "(" + links.map(name => `${actor}.${name} ?= @request.auth.id`).join(" || ") + ")";
   const own = "(" + links.map(name => `${name} ?= @request.auth.id`).join(" || ") + ")";
-  const manager = `(${actor}.role ?= "master" || ${actor}.role ?= "admin")`;
+  const manager = `${actor}.role ?= "admin"`;
   const active = (academy: string) => `@collection.suprima_licenses:license.academy_id ?= ${academy} && @collection.suprima_licenses:license.active ?= true`;
   const base = (academy: string) => `${auth} && ${linked} && ${actor}.academy_id ?= ${academy} && ${academy} != "" && ${active(academy)}`;
   const allowed = (prefix = "") => `${base(prefix + "academy_id")} && (${manager} || (${actor}.role ?= "consultant" && ${prefix}${SECURITY_ASSIGNMENT_FIELD} ?= ${actor}.id))`;
@@ -223,3 +223,4 @@ export async function configureAcademySecurity(db: PocketBase, actorEmail = "") 
     throw Object.assign(new Error(code), { ...context, locked: recovery.locked, linksRestored: recovery.linksRestored, backendStatus: typeof object.status === "number" ? object.status : undefined, backendMessage: safeBackendMessage(response.message ?? object.message), invalidFields, validationCodes: [...new Set(validationCodes)], validationDetails });
   }
 }
+

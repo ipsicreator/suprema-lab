@@ -61,7 +61,9 @@ export async function requireAcademyUser(request: Request) {
     const linked = profile && typeof profile.id === "string" && profile.user === userId;
     const academyId = typeof profile?.academy_id === "string" ? profile.academy_id.trim() : "";
     const role = typeof profile?.role === "string" ? profile.role : "";
-    if (!linked || !academyId || !["master", "admin", "consultant"].includes(role)) fail(403, "학원 소속과 담당자 권한을 확인해 주세요.");
+    if (!linked || !academyId) fail(403, "학원 소속과 담당자 권한을 확인해 주세요.");
+    if (role === "master") fail(403, "마스터는 Google 로그인으로 접속해 주세요.");
+    if (!["admin", "consultant"].includes(role)) fail(403, "학원 소속과 담당자 권한을 확인해 주세요.");
     const license = await db.collection("suprima_licenses").getFirstListItem(db.filter("academy_id={:academy} && active=true", { academy: academyId }), { ...requestOptions(), fields: "id,academy_id,active" });
     if (license.academy_id !== academyId || license.active !== true) fail(403, "사용 가능한 학원 이용권이 없습니다.");
     return { userId, academyId, role };

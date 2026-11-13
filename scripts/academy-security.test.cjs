@@ -81,3 +81,6 @@ test('minimal locked rules are confirmed before any structural change and failur
  assert.equal(updates.slice(0,4).length,4);for(const update of updates.slice(0,4)){assert.deepEqual(Object.keys(update.patch),['listRule','viewRule','createRule','updateRule','deleteRule']);assert.ok(Object.values(update.patch).every(value=>value===null));}for(const col of f.collections.filter(row=>row.name.startsWith('suprima_')))for(const key of ['listRule','viewRule','createRule','updateRule','deleteRule'])assert.equal(col[key],null);
 });
 
+test('password-based PocketBase master is excluded from tenant business rules',()=>{
+ const plan=api.buildAcademySecurityPlan(schema());for(const patch of plan)for(const key of ['listRule','viewRule','createRule','updateRule','deleteRule'])if(typeof patch.after[key]==='string'){assert.ok(!patch.after[key].includes('role ?= "master"'));}assert.match(plan.find(row=>row.name==='suprima_students').after.listRule,/role \?= "admin"/);
+});
