@@ -91,3 +91,6 @@ a {
 ::-webkit-scrollbar-thumb:hover {
   background: var(--text-light);
 }
+
+/* New activity pages adapt to mobile without changing the established landing layout. */
+html:has([data-personal-activity-page]), body:has([data-personal-activity-page]) { min-width: 0; }

@@ -26,6 +26,7 @@ export default function AdminPage() {
             <h2 style={{ fontSize: 21, fontWeight: 750, marginBottom: 8 }}>학원 권한·학생 배정 점검</h2>
             <p style={{ color: "#71665e", fontSize: 15 }}>실제 저장소의 학원별 역할과 학생 배정 상태를 확인합니다.</p>
           </Link>
+          <Link href="/admin/activities" style={{display:"block",padding:28,borderRadius:14,border:"1px solid #e8dfd3",background:"white"}}><h2 style={{fontSize:21,fontWeight:750}}>학생 개인 활동 · 계정 연결</h2><p>학생 찾기, 연결 코드 등록, 탐구·세특·독서와 수정 이력 조회</p></Link>
           <PdfStorageSetup />
         </div>
       </AdminOnly></RequireAuth>

@@ -1,5 +1,7 @@
-﻿/* eslint-disable react-hooks/set-state-in-effect, react/no-unescaped-entities, @typescript-eslint/no-explicit-any */
+/* eslint-disable react-hooks/set-state-in-effect, react/no-unescaped-entities, @typescript-eslint/no-explicit-any */
 "use client";
+
+import PersonalActivityHistory from "../components/PersonalActivityHistory";
 
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
@@ -183,6 +185,7 @@ export default function ExplorationPage() {
       }
     >
       <div className="max-w-5xl mx-auto">
+      <PersonalActivityHistory defaultKind="exploration"/>
         <header className="mb-10 text-center">
           <div className="flex flex-col items-center gap-4 mb-6">
             <div className="v-badge">학생부/성적분석 → 탐구/독서 제안</div>

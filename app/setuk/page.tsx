@@ -1,5 +1,7 @@
 "use client";
 
+import PersonalActivityHistory from "../components/PersonalActivityHistory";
+
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -68,6 +70,7 @@ export default function SetukPage() {
 
   return (
     <div className={styles.pageContainer}>
+      <PersonalActivityHistory defaultKind="setuk"/>
       
       {/* Screen Frame Template Card - Centered, Symmetrical, and Highly Compact */}
       <div id="setuk-wrapper" style={{

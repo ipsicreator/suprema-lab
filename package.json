@@ -11,7 +11,8 @@
     "sync:consultant": "node scripts/sync_consultant_app.js",
     "typecheck": "tsc --noEmit",
     "test": "node --test scripts/*.test.cjs",
-    "test:integration": "node scripts/admissions-upload.integration.cjs"
+    "test:integration": "node scripts/admissions-upload.integration.cjs",
+    "test:activities": "node scripts/personal-activities.integration.cjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

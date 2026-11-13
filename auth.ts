@@ -41,14 +41,16 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
     async jwt({ token, account, profile }) {
       if (account) {
         token.provider = account.provider;
+        token.providerId = account.providerAccountId;
       }
-      if (profile && "id" in profile) {
+      if (!token.providerId && profile && "id" in profile) {
         token.providerId = String(profile.id);
       }
       return token;
     },
     async session({ session, token }) {
       if (session.user) {
+        session.user.id = token.sub ?? "";
         (session.user as { provider?: string }).provider = token.provider as string | undefined;
         (session.user as { providerId?: string }).providerId = token.providerId as string | undefined;
       }

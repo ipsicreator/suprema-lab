@@ -72,6 +72,7 @@ export default function FlowShell({
             />
           </div>
         </header>
+        <nav aria-label="개인 활동 메뉴" className="px-6 pt-3 text-right md:px-8"><Link href="/activities" className="text-sm font-bold text-[#8b1a1a]">내 활동 기록 · 학원 연결 →</Link></nav>
 
         {steps.length ? (
           <section className="px-6 pt-6 md:px-8 md:pt-7">

@@ -1,5 +1,7 @@
 "use client";
 
+import PersonalActivityHistory from "../../components/PersonalActivityHistory";
+
 import { useEffect, useMemo, useState } from "react";
 
 type TopicResult = {
@@ -170,6 +172,7 @@ export default function Step3() {
 
   return (
     <div className="mx-auto max-w-[980px] rounded-[28px] border border-[#eadfce] bg-white p-6 text-left shadow-[0_18px_50px_rgba(44,26,10,0.04)]">
+      <PersonalActivityHistory defaultKind="exploration"/>
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[22px] border border-[#eadfce] bg-[#fffaf4] p-5 print:hidden">
         <div>
           <div className="text-xs font-black tracking-[0.18em] text-[#8b1a1a]">RESULT ACTION</div>

@@ -1,0 +1,9 @@
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import RequireAuth from "../../components/auth/RequireAuth";
+import AdminOnly from "../../components/auth/AdminOnly";
+import StaffActivityViewer from "../../components/StaffActivityViewer";
+type Student={id:string;name:string;academy_id:string};
+function StudentSearch(){const[students,setStudents]=useState<Student[]>([]),[search,setSearch]=useState(""),[selected,setSelected]=useState(""),[error,setError]=useState("");useEffect(()=>{const controller=new AbortController();fetch("/api/platform/admin/activities?roster=1",{cache:"no-store",signal:controller.signal}).then(async response=>{const data=await response.json();if(!response.ok)throw new Error(data.error||"학생을 불러오지 못했습니다.");setStudents(data.students);}).catch(e=>{if(!controller.signal.aborted)setError(e.message);});return()=>controller.abort();},[]);return <><h1 className="my-5 text-3xl font-bold">개인 활동 · 학생 연결 관리</h1><label className="block">학생 찾기<input className="my-3 block w-full rounded-xl border p-3" value={search} onChange={e=>setSearch(e.target.value)} placeholder="학생 이름 또는 학원 구분으로 검색"/></label><label htmlFor="activity-student">학생 선택</label><select id="activity-student" className="my-3 block w-full rounded-xl border p-3" value={selected} onChange={e=>setSelected(e.target.value)}><option value="">학생을 선택하세요</option>{students.filter(s=>`${s.name} ${s.academy_id}`.includes(search)).map(s=><option key={s.id} value={s.id}>{s.name||"이름 미등록"} · {s.academy_id}</option>)}</select>{error&&<p role="alert">{error}</p>}{selected&&<StaffActivityViewer key={selected} studentId={selected}/>}</>;}
+export default function ActivityAdminPage(){return <main data-personal-activity-page className="mx-auto max-w-6xl px-4 py-8"><RequireAuth><AdminOnly><Link href="/admin">← 관리자 홈</Link><StudentSearch/></AdminOnly></RequireAuth></main>;}

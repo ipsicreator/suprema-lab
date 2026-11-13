@@ -1,4 +1,6 @@
-﻿"use client";
+"use client";
+
+import PersonalActivityHistory from "../components/PersonalActivityHistory";
 
 import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
@@ -82,6 +84,7 @@ function SolutionContent() {
 
   return (
     <div className="min-h-screen bg-[#020617] text-slate-50 pt-20 px-6 pb-20">
+      <PersonalActivityHistory defaultKind="reading"/>
       <div className="max-w-5xl mx-auto">
         <div className="text-center mb-12">
           <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
