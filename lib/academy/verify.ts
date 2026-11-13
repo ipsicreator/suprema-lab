@@ -126,6 +126,18 @@ export async function verifyAcademyAccess(db: PocketBase, makeClient: ClientFact
       await reject(() => assignAcademyStudent(db, actor, { studentId: current.id, consultantId: profiles[4].id, expectedUpdated: current.updated }));
       await reject(() => assignAcademyStudent(db, { ...actor, role: "consultant" }, { studentId: current.id, consultantId: profiles[1].id, expectedUpdated: current.updated }));
     });
+    await check("inactive_license_revokes_academy_access", async () => {
+      await db.collection("suprima_licenses").update(licenses[0].id, { active: false }, options());
+      await group([
+        (async () => equalIds(await list(manager, "suprima_students"), []))(),
+        (async () => equalIds(await list(peer, "suprima_students"), []))(),
+        (async () => equalIds(await list(manager, "suprima_pdf_analyses"), []))(),
+        (async () => equalIds(await list(peer, "suprima_pdf_analyses"), []))(),
+        reject(() => view(manager, "suprima_students", students[0].id)),
+        reject(() => view(peer, "suprima_students", students[0].id)),
+        (async () => equalIds(await list(foreignManager, "suprima_students"), [students[3].id]))(),
+      ]);
+    });
   } catch (error) {
     const value = error && typeof error === "object" ? error as { status?: unknown; data?: { data?: unknown } } : {};
     const allowedFields = ["id", "email", "password", "passwordConfirm", "verified", "name", "user", "academy_id", "role", "active", "school", "grade", "enrollment_status", "assigned_consultant", "student_id", "content"];
@@ -141,5 +153,6 @@ export async function verifyAcademyAccess(db: PocketBase, makeClient: ClientFact
   const cleanup = { attempted: created.length, failed: cleanupFailures, complete: cleanupFailures === 0 };
   return { success: checks.length > 0 && checks.every(check => check.passed) && cleanup.complete, checkedAt: new Date().toISOString(), checks, cleanup, ...(failure ? { failure } : {}), isolatedSyntheticFixtures: true };
 }
+
 
 

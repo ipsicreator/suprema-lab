@@ -20,6 +20,19 @@ const pre = { whiteSpace: "pre-wrap" as const, overflowWrap: "anywhere" as const
 const endpoint = "/api/platform/admin/academy";
 const record = (value: unknown): Result => value && typeof value === "object" && !Array.isArray(value) ? value as Result : {};
 
+const checkLabels: Record<string, string> = {
+  anonymous_records_blocked: "로그인 없는 접근 차단",
+  managers_only_own_academy: "학원 관리자 소속 제한",
+  consultants_only_assigned_students: "담당 학생만 조회",
+  analyses_follow_student_scope: "학생 기록 접근 제한",
+  staff_and_license_academy_scope: "담당자·이용권 소속 제한",
+  direct_privilege_and_assignment_changes_blocked: "권한·배정 임의 변경 차단",
+  manager_assignment_and_removal_change_visibility: "배정·해제 반영",
+  manager_reassignment_revokes_previous_consultant: "재배정 시 이전 담당자 접근 해제",
+  foreign_and_consultant_assignment_rejected: "타 학원·담당자 배정 변경 차단",
+  inactive_license_revokes_academy_access: "이용권 종료 학원 접근 차단",
+};
+
 function ActionResult({ title, value }: { title: string; value: Result }) {
   const checks = Array.isArray(value.checks) ? value.checks : [];
   return <section style={panel} aria-live="polite">
@@ -27,7 +40,7 @@ function ActionResult({ title, value }: { title: string; value: Result }) {
     {typeof value.error === "string" && <p style={{ color: "#a52424", marginTop: 10 }}>{value.error}</p>}
     {checks.length > 0 && <ul style={{ marginTop: 12, paddingLeft: 20 }}>{checks.map((raw, index) => {
       const check = record(raw), passed = check.passed ?? check.pass ?? check.ok;
-      return <li key={index} style={{ marginTop: 6 }}>{typeof check.name === "string" ? check.name : `검증 ${index + 1}`}: {passed === true ? "통과" : passed === false ? "실패" : "결과 확인 필요"}</li>;
+      return <li key={index} style={{ marginTop: 6 }}>{typeof check.name === "string" ? checkLabels[check.name] || check.name : `검증 ${index + 1}`}: {passed === true ? "통과" : passed === false ? "실패" : "결과 확인 필요"}</li>;
     })}</ul>}
     {Object.hasOwn(value, "cleanup") && <div style={{ marginTop: 14 }}><strong>검증 자료 정리 결과</strong><pre style={pre}>{JSON.stringify(value.cleanup, null, 2)}</pre></div>}
     <details open={!checks.length} style={{ marginTop: 14 }}><summary>전체 실행 결과</summary><pre style={pre}>{JSON.stringify(value, null, 2)}</pre></details>

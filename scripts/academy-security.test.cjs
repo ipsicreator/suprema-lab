@@ -45,8 +45,31 @@ test('ambiguous canonical accounts are denied with impossible rules without dele
  const f=fixture({ambiguous:true});const result=await api.configureAcademySecurity(f.db);assert.equal(result.quarantined,true);assert.equal(result.ambiguousProfiles,1);for(const col of f.collections.filter(row=>row.name.startsWith('suprima_')))for(const key of ['listRule','viewRule','createRule','updateRule','deleteRule'])assert.equal(col[key],'@request.auth.id = "" && @request.auth.id != ""');assert.deepEqual(f.collections.find(row=>row.name==='suprima_profiles').indexes,[]);
 });
 test('configure route authenticates before backend and rejects cross-origin requests without data leakage',async()=>{
- let touched=0;const make=authError=>load('app/api/platform/admin/academy/configure/route.ts',{'next/server':{NextResponse:{json:(body,init)=>Response.json(body,init)}},'@/lib/http/same-origin':{assertSameOrigin:req=>{if(req.headers.get('origin')!=='https://lab.test')throw new Error('CROSS_ORIGIN');}},'@/lib/server-auth':{requireAdminOrThrow:async()=>{if(authError)throw new Error(authError);}},'@/lib/pocketbaseAdmin':{hasPocketBaseAdmin:()=>{touched++;return true;},pbAdmin:async()=>{touched++;return{};}},'@/lib/academy/security':{configureAcademySecurity:async()=>{throw Object.assign(new Error('ACADEMY_CONFIGURE_FAILED'),{phase:'rules',collection:'suprima_students',backendStatus:400,invalidFields:['updateRule']});}}});
+ let touched=0;const make=authError=>load('app/api/platform/admin/academy/configure/route.ts',{'next/server':{NextResponse:{json:(body,init)=>Response.json(body,init)}},'@/lib/http/same-origin':{assertSameOrigin:req=>{if(req.headers.get('origin')!=='https://lab.test')throw new Error('CROSS_ORIGIN');}},'@/lib/server-auth':{requireAdminOrThrow:async()=>{if(authError)throw new Error(authError);return {email:"owner@example.test"};}},'@/lib/pocketbaseAdmin':{hasPocketBaseAdmin:()=>{touched++;return true;},pbAdmin:async()=>{touched++;return{};}},'@/lib/academy/security':{configureAcademySecurity:async()=>{throw Object.assign(new Error('ACADEMY_CONFIGURE_FAILED'),{phase:'rules',collection:'suprima_students',backendStatus:400,invalidFields:['updateRule']});}}});
  for(const [auth,status]of [['UNAUTHORIZED',401],['FORBIDDEN',403]]){const r=await make(auth).POST(new Request('https://lab.test/api',{method:'POST',headers:{origin:'https://lab.test'}}));assert.equal(r.status,status);assert.equal(touched,0);}
  const foreign=await make().POST(new Request('https://lab.test/api',{method:'POST',headers:{origin:'https://evil.test'}}));assert.equal(foreign.status,403);assert.equal(touched,0);
  const failure=await make().POST(new Request('https://lab.test/api',{method:'POST',headers:{origin:'https://lab.test'}}));assert.equal(failure.status,500);assert.equal((await failure.json()).phase,'rules');
+});
+
+function repairFixture({email='owner@example.test',roles,fail=false}={}){
+ const base=fixture({legacy:true,fail}),profiles=Array.from({length:12},(_,index)=>({id:'profile-'+index,user:'user-a',role:roles?.[index]||(index===0?'master':'consultant'),admin_id:index===0?'':'user-a',academy_id:'academy-'+index,name:'private-name-'+index}));
+ const before=structuredClone(profiles),ordinary=base.db.collection.bind(base.db);
+ base.db.collection=name=>name==='users'?{getOne:async id=>({id,email})}:name==='suprima_profiles'?{getFullList:async()=>structuredClone(profiles),getOne:async id=>structuredClone(profiles.find(row=>row.id===id)),update:async(id,data)=>{base.trace.push('link:'+id+':'+data.user);Object.assign(profiles.find(row=>row.id===id),data);return structuredClone(profiles.find(row=>row.id===id));}}:ordinary(name);
+ return{...base,profiles,before};
+}
+test('only the authenticated owner with one master and legacy consultant duplicates can detach old user links',async()=>{
+ const f=repairFixture();const result=await api.configureAcademySecurity(f.db,' OWNER@EXAMPLE.TEST ');assert.equal(result.detachedProfiles,11);assert.equal(result.quarantined,false);assert.equal(f.profiles[0].user,'user-a');for(let i=1;i<f.profiles.length;i++){assert.equal(f.profiles[i].user,'');assert.deepEqual(f.profiles[i],{...f.before[i],user:''});}assert.ok(f.trace.indexOf('backup-save')<f.trace.findIndex(value=>value.startsWith('link:')));assert.equal(f.revision().snapshot.profileLinks.length,11);assert.deepEqual(f.revision().snapshot.profileLinks[0],{profileId:'profile-1',user:'user-a'});
+});
+test('wrong owner, multiple masters, unexpected role or ownership metadata never detach profiles',async()=>{
+ for(const options of [{email:'other@example.test'},{roles:['master','master']},{roles:['master','admin']},{}]){
+ const f=repairFixture(options);if(!Object.keys(options).length)f.profiles[1].admin_id='different-owner';const before=structuredClone(f.profiles);const result=await api.configureAcademySecurity(f.db,'owner@example.test');assert.equal(result.detachedProfiles,0);assert.equal(result.quarantined,true);assert.deepEqual(f.profiles,before);assert.ok(!f.trace.some(value=>value.startsWith('link:')));
+ }
+});
+test('failed restriction restores detached links and prior indexes from private backup',async()=>{
+ const f=repairFixture({fail:true});await assert.rejects(api.configureAcademySecurity(f.db,'owner@example.test'),/ROLLED_BACK/);assert.deepEqual(f.profiles,f.before);assert.equal(f.revision().state,'rolled_back');for(const original of f.initial)assert.deepEqual(f.collections.find(row=>row.id===original.id),original);
+});
+test('relation creation reloads canonical field IDs before applying rules',async()=>{
+ const f=fixture({legacy:true}),ordinary=f.db.collections.update.bind(f.db.collections);let created=false;
+ f.db.collections.update=async(id,patch)=>{if(id==='collection-suprima_students'&&patch.schema){const relation=patch.schema.find(field=>field.name==='assigned_consultant');if(relation&&!created){created=true;const response=await ordinary(id,patch);response.schema.find(field=>field.name==='assigned_consultant').id='server-field-id';return response;}if(relation&&!relation.id)throw{status:400,response:{data:{schema:{code:'validation_missing_field_id'}}}};}return ordinary(id,patch);};
+ assert.equal((await api.configureAcademySecurity(f.db)).changedCollections,4);assert.equal(f.collections.find(row=>row.name==='suprima_students').schema.at(-1).id,'server-field-id');
 });
