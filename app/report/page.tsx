@@ -38,7 +38,7 @@ export default function ReportPage() {
         <div className="no-print" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", alignItems: "center", borderBottom: "1px solid #ECE0D1", paddingBottom: "24px", marginBottom: "40px" }}>
           <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
             <Link href="/diagnosis/step4" style={{ display: "flex", alignItems: "center", gap: "6px", color: "#6B7280", fontSize: "12px", fontWeight: "bold", textDecoration: "none", backgroundColor: "#F9FAFB", padding: "8px 16px", borderRadius: "10px", border: "1px solid #E5E7EB" }}><ArrowLeft className="w-4 h-4" /> 진단 화면</Link>
-            <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}><Image src="/suprema-logo.svg" alt="수프리마랩" width={140} height={38} priority style={{ objectFit: "contain" }} /></Link>
+            <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}><Image src="/suprema-logo.svg" alt="수프리마 랩" width={140} height={38} priority style={{ objectFit: "contain" }} /></Link>
           </div>
           <span style={{ fontSize: "11px", fontWeight: 900, color: "#9CA3AF", letterSpacing: "0.2em", textTransform: "uppercase" }}>Diagnosis Report</span>
         </div>

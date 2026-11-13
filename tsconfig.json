@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -19,7 +23,10 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*", "./*"]
+      "@/*": [
+        "./src/*",
+        "./*"
+      ]
     }
   },
   "include": [
@@ -39,6 +46,8 @@
     "scratch",
     "scratch/**",
     "scripts",
-    "scripts/**"
+    "scripts/**",
+    "학원용앱",
+    "학원용앱/**"
   ]
 }

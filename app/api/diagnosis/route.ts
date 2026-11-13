@@ -3,6 +3,8 @@ import { diagnoseAdmissionRange } from "@/lib/utils/admission/admissionDiagnosis
 import { getActiveAdmissions } from "@/lib/admissions/store";
 import { buildYearCutoffs, resolveAdmissionRow, validateDiagnosisInput } from "@/lib/admissions/diagnosis";
 
+import { academyCors } from "@/lib/academy/bridge";
+
 export const runtime = "nodejs";
 function convert5To9Grade(grade: number) {
   if (grade <= 2) return 1 + (grade - 1) * 2.6;
@@ -10,7 +12,7 @@ function convert5To9Grade(grade: number) {
   if (grade <= 4) return 5.8 + (grade - 3) * 2;
   return 7.8 + (grade - 4) * 1.2;
 }
-export async function POST(req: NextRequest) {
+async function diagnose(req: NextRequest) {
   let input: ReturnType<typeof validateDiagnosisInput>;
   try { input = validateDiagnosisInput(await req.json()); }
   catch (error) { return NextResponse.json({ error: error instanceof SyntaxError ? "올바른 진단 요청을 보내 주세요." : error instanceof Error ? error.message : "진단 입력을 확인해 주세요." }, { status: 400 }); }
@@ -38,4 +40,22 @@ export async function POST(req: NextRequest) {
   } catch {
     return NextResponse.json({ error: "입시 근거를 불러오지 못했습니다. 기존 결과를 유지하고 잠시 후 다시 시도해 주세요." }, { status: 503 });
   }
+}
+
+export async function OPTIONS(request: Request) {
+  try { return new NextResponse(null, { status: 204, headers: academyCors(request) }); }
+  catch { return NextResponse.json({ error: "허용되지 않은 요청 출처입니다." }, { status: 403, headers: { "Vary": "Origin", "Cache-Control": "no-store" } }); }
+}
+
+export async function POST(request: NextRequest) {
+  let cors: Headers;
+  try { cors = academyCors(request); }
+  catch { return NextResponse.json({ error: "허용되지 않은 요청 출처입니다." }, { status: 403, headers: { "Vary": "Origin", "Cache-Control": "no-store" } }); }
+  const response = await diagnose(request);
+  cors.forEach((value, key) => {
+    if (key === "vary") {
+      response.headers.set("Vary", [...new Set([...(response.headers.get("Vary") || "").split(",").map(item => item.trim()).filter(Boolean), ...value.split(",").map(item => item.trim())])].join(", "));
+    } else response.headers.set(key, value);
+  });
+  return response;
 }

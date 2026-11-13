@@ -21,7 +21,7 @@ export async function GET() {
   return NextResponse.json(
     {
       ok: true,
-      app: "suprema-platform",
+      app: "suprema-lab",
       vercel: {
         env: process.env.VERCEL_ENV || null,
         git: {

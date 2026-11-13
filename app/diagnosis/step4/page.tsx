@@ -166,7 +166,7 @@ export default function DiagnosisStep4Page() {
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) { setStatus("올바른 메일주소를 입력해 주세요."); return; }
     setSending(true); setStatus("");
     try {
-      const response = await fetch("/api/send-email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim(), subject: "[수프리마랩] 전체 진단 결과", reportData: { service: "수프리마랩", type: "admission-position-diagnosis", studentIndex: grade, gradingSystem: profile?.gradingSystem || "9-level", targets } }) });
+      const response = await fetch("/api/send-email", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ email: email.trim(), subject: "[수프리마 랩] 전체 진단 결과", reportData: { service: "수프리마 랩", type: "admission-position-diagnosis", studentIndex: grade, gradingSystem: profile?.gradingSystem || "9-level", targets } }) });
       const result = await response.json().catch(() => ({}));
       setStatus(result?.message || (response.ok ? "메일 발송 완료" : "메일 발송 실패"));
     } catch { setStatus("메일 발송 중 오류가 발생했습니다."); } finally { setSending(false); }

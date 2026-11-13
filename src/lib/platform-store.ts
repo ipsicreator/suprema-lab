@@ -82,7 +82,7 @@ interface PlatformData {
   usage: ServiceUsage[];
 }
 
-const STORAGE_DIR = path.join(process.cwd(), ".cache", "suprema-platform");
+const STORAGE_DIR = path.join(process.cwd(), ".cache", "suprema-lab");
 const DATA_FILE = path.join(STORAGE_DIR, "platform-db.json");
 
 const defaultPlans: ProductPlan[] = [

@@ -18,6 +18,7 @@ const eslintConfig = defineConfig([
     "consultant-app/public/qa_captures/**",
     "output_assets/**",
     "scratch/**",
+    "학원용앱/**",
     "recovered_thread_*.jsonl",
     "recovered_thread_*_messages.txt",
   ]),

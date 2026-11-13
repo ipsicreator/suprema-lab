@@ -179,7 +179,7 @@ function AdmissionManager() {
     <div className={styles.shell}>
       <nav className={styles.nav} aria-label="관리자 메뉴"><Link href="/admin">관리자 홈</Link><Link href="/admin/pricing">가격·결제 관리</Link></nav>
       <header className={styles.header}>
-        <span className={styles.eyebrow}>수프리마랩 관리자</span>
+        <span className={styles.eyebrow}>수프리마 랩 관리자</span>
         <h1>입시 데이터 관리</h1>
         <p>엑셀이나 CSV 파일을 올리고, 검증 결과를 확인한 뒤 서비스에 반영하세요.</p>
       </header>

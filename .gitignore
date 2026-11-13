@@ -80,3 +80,9 @@ scratch/
 /.codex/
 /.omx/
 
+
+# Independent academy application repository
+/학원용앱/
+
+# Versioned configuration names only (no secrets)
+!.env.example
