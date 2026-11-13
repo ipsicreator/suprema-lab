@@ -3,7 +3,7 @@ import { useState, useMemo } from 'react';
 import { ArrowLeft, Compass, Printer, Save, CheckCircle2, Search, Filter } from 'lucide-react';
 import { parseGpaTextToNumber } from '../../../../lib/utils/admission/admissionLines';
 import AdmissionOfficerEvaluation from '../AdmissionOfficerEvaluation';
-import { ADMISSION_DATA } from '../data';
+import { useAdmissionData } from "../data/useAdmissionData";
 
 interface PositionDiagnosisProps {
   onBack?: () => void;
@@ -11,6 +11,7 @@ interface PositionDiagnosisProps {
 }
 
 export default function PositionDiagnosis({ onBack, studentData }: PositionDiagnosisProps) {
+  const { rows: ADMISSION_DATA, loading: dataLoading, error: dataError } = useAdmissionData();
   const [selectedRegion, setSelectedRegion] = useState<string>('');
   const [selectedSubRegion, setSelectedSubRegion] = useState<string>('');
   const [selectedUniv, setSelectedUniv] = useState<string>('');
@@ -28,32 +29,32 @@ export default function PositionDiagnosis({ onBack, studentData }: PositionDiagn
   }, [studentData]);
 
   // Cascading filters
-  const regions = useMemo(() => Array.from(new Set(ADMISSION_DATA.map(d => d.region))).sort(), []);
+  const regions = useMemo(() => Array.from(new Set(ADMISSION_DATA.map(d => d.region))).sort(), [ADMISSION_DATA]);
   
   const subRegions = useMemo(() => {
     if (!selectedRegion) return [];
     return Array.from(new Set(ADMISSION_DATA.filter(d => d.region === selectedRegion).map(d => d.subRegion))).sort();
-  }, [selectedRegion]);
+  }, [selectedRegion, ADMISSION_DATA]);
 
   const univs = useMemo(() => {
     if (!selectedSubRegion) return [];
-    return Array.from(new Set(ADMISSION_DATA.filter(d => d.subRegion === selectedSubRegion).map(d => d.univ))).sort();
-  }, [selectedSubRegion]);
+    return Array.from(new Set(ADMISSION_DATA.filter(d => d.region === selectedRegion && d.subRegion === selectedSubRegion).map(d => d.univ))).sort();
+  }, [selectedRegion, selectedSubRegion, ADMISSION_DATA]);
 
   const tracks = useMemo(() => {
     if (!selectedUniv) return [];
     return Array.from(new Set(ADMISSION_DATA.filter(d => d.univ === selectedUniv).map(d => d.track))).sort();
-  }, [selectedUniv]);
+  }, [selectedUniv, ADMISSION_DATA]);
 
   const depts = useMemo(() => {
     if (!selectedTrack) return [];
     return Array.from(new Set(ADMISSION_DATA.filter(d => d.univ === selectedUniv && d.track === selectedTrack).map(d => d.dept))).sort();
-  }, [selectedUniv, selectedTrack]);
+  }, [selectedUniv, selectedTrack, ADMISSION_DATA]);
 
   const types = useMemo(() => {
     if (!selectedDept) return [];
     return Array.from(new Set(ADMISSION_DATA.filter(d => d.univ === selectedUniv && d.track === selectedTrack && d.dept === selectedDept).map(d => d.type))).sort();
-  }, [selectedUniv, selectedTrack, selectedDept]);
+  }, [selectedUniv, selectedTrack, selectedDept, ADMISSION_DATA]);
 
   const filteredData = useMemo(() => {
     return ADMISSION_DATA.filter(d => {
@@ -65,7 +66,7 @@ export default function PositionDiagnosis({ onBack, studentData }: PositionDiagn
       if (selectedType && d.type !== selectedType) return false;
       return true;
     });
-  }, [selectedRegion, selectedSubRegion, selectedUniv, selectedTrack, selectedDept, selectedType]);
+  }, [selectedRegion, selectedSubRegion, selectedUniv, selectedTrack, selectedDept, selectedType, ADMISSION_DATA]);
 
   const handlePrint = () => {
     window.print();
@@ -78,6 +79,8 @@ export default function PositionDiagnosis({ onBack, studentData }: PositionDiagn
 
   return (
     <div className="p-6 min-h-screen" style={{ backgroundColor: '#f8fafc' }}>
+      {dataLoading && <p role="status">입시 데이터를 불러오는 중입니다.</p>}
+      {dataError && <p role="alert" style={{ color: "#b91c1c" }}>{dataError}</p>}
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2rem', backgroundColor: '#fff', padding: '1.25rem 1.5rem', borderRadius: '0.75rem', boxShadow: '0 1px 3px rgba(0,0,0,0.1)' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           {onBack && (

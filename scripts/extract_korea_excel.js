@@ -12,6 +12,6 @@ const koreaData = [
 const wb = XLSX.utils.book_new();
 const ws = XLSX.utils.json_to_sheet(koreaData);
 XLSX.utils.book_append_sheet(wb, ws, "고려대_2028_수시_요약");
-const outputPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\고려대학교_2028_수시_정리.xlsx";
+const outputPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\고려대학교_2028_수시_정리.xlsx";
 XLSX.writeFile(wb, outputPath);
 console.log(`[산출물 완료] 고려대학교 생성: ${outputPath}`);

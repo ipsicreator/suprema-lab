@@ -1,0 +1,62 @@
+[
+  {
+    "from": "public/captures/01_학생정보입력.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/01_학생정보입력.png",
+    "sha256": "1391D7944A997D3F7702D93A0B232F2B3276E382C6A2BF2B65C9CC1EAD23A54C"
+  },
+  {
+    "from": "public/captures/02_학생부_분석.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/02_학생부_분석.png",
+    "sha256": "96D699C10418D07B8FDA197CAB20CFEC1E7B421458F3EC10668DAF3E5699CF67"
+  },
+  {
+    "from": "public/captures/03_탐구활동_독서_세특.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/03_탐구활동_독서_세특.png",
+    "sha256": "3B2582FCC1071AFC7C900ED3563C4B802BAE11F632832D387743EBAA48195140"
+  },
+  {
+    "from": "public/captures/04_입시위치_진단.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/04_입시위치_진단.png",
+    "sha256": "F571B851D473443D5D0E4880B0C18E3DC05F447F1712CAE9A5F14D933B611337"
+  },
+  {
+    "from": "public/captures/verify-diagnosis-step1.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-diagnosis-step1.png",
+    "sha256": "320C5D220115C773B29A18DC05DD349365F75D472B84E405FA99293C6CEFB7C3"
+  },
+  {
+    "from": "public/captures/verify-diagnosis-step2.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-diagnosis-step2.png",
+    "sha256": "225A105B89A5E5B6F8F4D8F1E8E56D3F57186239187A17E726F2C4972A110F40"
+  },
+  {
+    "from": "public/captures/verify-diagnosis-step3.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-diagnosis-step3.png",
+    "sha256": "7097EE63ADBD41579C730CC7DFD1C4EEE8A2EB3DCCD9BE6BC40773D3D57C1399"
+  },
+  {
+    "from": "public/captures/verify-diagnosis-step4.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-diagnosis-step4.png",
+    "sha256": "7142B7786BC428E423178E32FD4847DCDABD27A0E496D6532203D9F1D5049343"
+  },
+  {
+    "from": "public/captures/verify-exploration.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-exploration.png",
+    "sha256": "08B5C148C1E92D02DA7C7CC317A8B2C015A3ACFE9EBEE71DF1BA151181E075B6"
+  },
+  {
+    "from": "public/captures/verify-home.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-home.png",
+    "sha256": "B1F532C0072F979BE0E2D6349B389032D0FD76EC9525A6AA0444D9BD733A9829"
+  },
+  {
+    "from": "public/captures/verify-intro.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-intro.png",
+    "sha256": "B1F532C0072F979BE0E2D6349B389032D0FD76EC9525A6AA0444D9BD733A9829"
+  },
+  {
+    "from": "public/captures/verify-report.png",
+    "to": "화면구성_플로우별/10_과거캡처_보관/verify-report.png",
+    "sha256": "F0D9446DED9137948F3CEE4F9106ED4AE0F6BE02EE8E7FE8BA224179367C7F69"
+  }
+]

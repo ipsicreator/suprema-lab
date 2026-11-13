@@ -2,7 +2,7 @@ const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
 
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 // 1. 서울대학교 (전수 데이터)
 const snuFullData = [

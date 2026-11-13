@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const sourceDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
+const sourceDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
 
 const files = fs.readdirSync(sourceDir);
 

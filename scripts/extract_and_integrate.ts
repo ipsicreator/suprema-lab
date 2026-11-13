@@ -3,8 +3,8 @@ import path from 'path';
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import XLSX from 'xlsx';
 
-const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\university_admissions_2028_integrated.xlsx';
+const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\university_admissions_2028_integrated.xlsx';
 
 // Load API key
 const envContent = fs.readFileSync('.env.local', 'utf8');

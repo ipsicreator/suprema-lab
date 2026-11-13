@@ -3,8 +3,8 @@ import "./globals.css";
 import SessionProviders from "./components/auth/SessionProviders";
 
 export const metadata: Metadata = {
-  title: "수프리마 AI 입시 플랫폼",
-  description: "입시 위치진단과 AI 학생부 분석을 통합 운영하는 수프리마 AI 입시 플랫폼",
+  title: "수프리마랩 | 학생부 분석·입시 진단",
+  description: "학생부 분석, 탐구·독서·세특 설계와 입시 위치 진단을 연결하는 수프리마랩",
 };
 
 export default function RootLayout({

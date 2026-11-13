@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import pb from '@/lib/pocketbase';
+import { pbAdmin } from '@/lib/pocketbaseAdmin';
+import { requireAdminOrThrow } from '@/lib/server-auth';
 
 interface HistoryRecord {
   [key: string]: unknown;
@@ -10,6 +11,8 @@ export async function GET(request: Request) {
   const type = searchParams.get('type');
 
   try {
+    await requireAdminOrThrow();
+    const pb = await pbAdmin();
     let history: HistoryRecord[] = [];
     if (type === 'setuk') {
       // setuk_history 컬렉션에서 데이터 가져오기
@@ -28,6 +31,7 @@ export async function GET(request: Request) {
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : "Unknown error";
     console.error('History fetch error:', error);
-    return NextResponse.json({ success: false, error: message }, { status: 500 });
+    const status = message === "UNAUTHORIZED" ? 401 : message === "FORBIDDEN" ? 403 : ["ADMIN_NOT_CONFIGURED", "AUTH_NOT_CONFIGURED"].includes(message) ? 503 : 500;
+    return NextResponse.json({ success: false, error: status === 500 ? "이력을 불러오지 못했습니다." : message }, { status });
   }
 }

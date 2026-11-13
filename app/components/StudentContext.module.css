@@ -1,0 +1,6 @@
+.context { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:10px 16px; margin:8px 28px 0; padding:12px 16px; background:#faf6f0; border-radius:10px; color:#655b50; font-size:13px; }
+.context > div { display:flex; align-items:center; flex-wrap:wrap; gap:8px 16px; min-width:0; overflow-wrap:anywhere; }
+.context strong { color:#1a0f08; font-size:14px; }
+.context a { flex-shrink:0; color:#8b1a1a; text-underline-offset:4px; }
+@media(max-width:640px) { .context { margin:10px 16px 0; padding:12px; } }
+@media print { .context { margin:0 0 12px; padding:0; background:white; } .context a { display:none; } }

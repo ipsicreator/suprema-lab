@@ -27,7 +27,7 @@
 html,
 body {
   margin: 0;
-  min-width: var(--fixed-width);
+  min-width: 320px;
   overflow-x: auto;
 }
 
@@ -45,8 +45,8 @@ body {
 }
 
 #root-wrapper {
-  width: var(--fixed-width);
-  max-width: var(--fixed-width);
+  width: 100%;
+  max-width: 1200px;
   margin: 0 auto;
   min-height: 100vh;
   position: relative;

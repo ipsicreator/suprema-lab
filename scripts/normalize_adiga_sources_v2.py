@@ -11,7 +11,7 @@ from reportlab.lib.utils import ImageReader
 from reportlab.pdfgen import canvas
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 RAW_MANIFEST = ROOT / "outputs" / "adiga_2028_raw_manifest.json"
 RAW_DIR = ROOT / "outputs" / "adiga_2028_raw"
 PDF_DIR = ROOT / "outputs" / "adiga_2028_pdf"

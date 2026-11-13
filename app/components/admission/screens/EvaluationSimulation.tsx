@@ -4,7 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import pb from "../../../../lib/pocketbase";
 import { MOCK_CANDIDATE, SUCCESSFUL_CANDIDATES, UNIVERSITIES } from "../../../../lib/utils/evaluationLogic";
 import { parseGpaTextToNumber } from "../../../../lib/utils/admission/admissionLines";
-import { ADMISSION_DATA } from "../data";
+import { useAdmissionData } from "../data/useAdmissionData";
 import RadarEvaluationChart from "../charts/RadarEvaluationChart";
 import RubricPanel from "../evaluation/RubricPanel";
 import SepecViewer from "../evaluation/SepecViewer";
@@ -51,6 +51,7 @@ function buildRubricState(labels: string[]) {
 }
 
 export default function EvaluationSimulation({ onBack, studentData }: EvaluationSimulationProps) {
+  const { rows: ADMISSION_DATA, loading: dataLoading, error: dataError } = useAdmissionData();
   const [candidate, setCandidate] = useState<CandidateRecord>(MOCK_CANDIDATE as CandidateRecord);
   const [isSaved, setIsSaved] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -121,7 +122,7 @@ export default function EvaluationSimulation({ onBack, studentData }: Evaluation
       const cutoff = admission.cutoff26 ?? admission.cutoff25 ?? admission.cutoff24;
       return String(admission.univ || '').includes(selectedUniv.name) && cutoff !== null;
     });
-  }, [selectedUniv.name]);
+  }, [selectedUniv.name, ADMISSION_DATA]);
 
   const activeTarget = targetDeptIdx >= 0 ? matchingTargets[targetDeptIdx] ?? matchingTargets[0] ?? null : null;
   const cutoff = activeTarget ? (activeTarget.cutoff26 ?? activeTarget.cutoff25 ?? activeTarget.cutoff24 ?? 0) : 0;
@@ -174,6 +175,8 @@ export default function EvaluationSimulation({ onBack, studentData }: Evaluation
 
   return (
     <div className="p-6 min-h-screen" style={{ padding: "1.5rem", backgroundColor: "#f8fafc", minHeight: "100vh", display: "flex", flexDirection: "column", gap: "1.5rem" }}>
+      {dataLoading && <p role="status">입시 데이터를 불러오는 중입니다.</p>}
+      {dataError && <p role="alert" style={{ color: "#b91c1c" }}>{dataError}</p>}
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", backgroundColor: "#fff", padding: "1.25rem 1.5rem", borderRadius: "0.75rem", boxShadow: "0 1px 3px rgba(0,0,0,0.1)" }}>
         <div style={{ display: "flex", alignItems: "center", gap: "1.5rem" }}>
           {onBack && (

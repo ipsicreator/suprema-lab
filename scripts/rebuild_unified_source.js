@@ -2,9 +2,9 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const SOURCE_TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\public\\uploads';
-const UNIFIED_OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_source';
+const SOURCE_TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\public\\uploads';
+const UNIFIED_OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_source';
 
 async function createUnifiedSource(univName) {
     const configPath = path.join(SOURCE_TRUTH_DIR, univName, 'source_info.json');

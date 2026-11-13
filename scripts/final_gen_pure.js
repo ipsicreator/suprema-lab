@@ -3,9 +3,9 @@ const path = require('path');
 const XLSX = require('xlsx');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 
-const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\university_admissions_2028_integrated.xlsx';
-const NOTEBOOK_LM_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\for_notebook_lm';
+const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\university_admissions_2028_integrated.xlsx';
+const NOTEBOOK_LM_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\for_notebook_lm';
 
 if (!fs.existsSync(NOTEBOOK_LM_DIR)) fs.mkdirSync(NOTEBOOK_LM_DIR, { recursive: true });
 

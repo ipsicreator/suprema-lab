@@ -1,0 +1,50 @@
+[
+  {
+    "route": "/intro",
+    "width": 375,
+    "scroll": 375,
+    "h1": "학생의 가능성을\n다음 전략으로",
+    "overflow": [
+      {
+        "tag": "DIV",
+        "cl": "intro-module__lcEqpW__compass"
+      },
+      {
+        "tag": "DIV",
+        "cl": "intro-module__lcEqpW__compassInner"
+      },
+      {
+        "tag": "DIV",
+        "cl": "intro-module__lcEqpW__compassNeedle"
+      }
+    ]
+  },
+  {
+    "route": "/diagnosis/step1",
+    "width": 375,
+    "scroll": 375,
+    "h1": "진단정보입력",
+    "overflow": []
+  },
+  {
+    "route": "/diagnosis/step2",
+    "width": 375,
+    "scroll": 375,
+    "h1": "학생부 분석",
+    "overflow": []
+  },
+  {
+    "route": "/diagnosis/step3",
+    "width": 375,
+    "scroll": 375,
+    "h1": "탐구·독서·세특",
+    "overflow": []
+  },
+  {
+    "route": "/diagnosis/step4",
+    "width": 375,
+    "scroll": 375,
+    "h1": "입시위치 진단",
+    "overflow": []
+  }
+]

@@ -2,10 +2,10 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
+const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
 const SEARCH_ROOTS = [
-    'C:\\Users\\chris\\Desktop\\suprema-platform\\.tmp',
-    'C:\\Users\\chris\\Desktop\\suprema-platform\\public'
+    'C:\\Users\\chris\\Desktop\\수프리마랩\\.tmp',
+    'C:\\Users\\chris\\Desktop\\수프리마랩\\public'
 ];
 
 const keywords = ["모집인원", "최저학력기준", "전형방법", "모집단위", "지원자격", "반영비율", "진로선택", "배점"];

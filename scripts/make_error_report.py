@@ -7,7 +7,7 @@ from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.shared import Inches, Pt
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 OUT = ROOT / "outputs" / "오류원인보고서.docx"
 
 

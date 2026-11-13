@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 const path = require('path');
 
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const yonseiData = [
     // [단과대, 학과, 계열, 추천형, 종합인재, 탐구인재, 기회균형, 논술]

@@ -21,6 +21,8 @@ export type AdmissionDiagnosisResult = {
 };
 
 const YEAR_ORDER = [2026, 2025, 2024];
+const YEAR_WEIGHTS: Record<number, number> = { 2026: 0.5, 2025: 0.3, 2024: 0.2 };
+const validGrade = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 9;
 
 function roundToTwo(value: number) {
   return Math.round(value * 100) / 100;
@@ -84,8 +86,9 @@ function statusLabel(status: YearFeedback["status"]) {
 export function diagnoseAdmissionRange(studentIndex: number, rows: YearCutoff[]): AdmissionDiagnosisResult {
   const normalizedRows = YEAR_ORDER.map((year) => {
     const source = rows.find((row) => row.year === year) ?? { year, cutoff50: null, cutoff70: null };
-    const cutoff50 = source.cutoff50 ?? null;
-    const cutoff70 = source.cutoff70 ?? null;
+    let cutoff50 = validGrade(studentIndex) && validGrade(source.cutoff50) ? source.cutoff50 : null;
+    let cutoff70 = validGrade(studentIndex) && validGrade(source.cutoff70) ? source.cutoff70 : null;
+    if (cutoff50 !== null && cutoff70 !== null && cutoff50 > cutoff70) { cutoff50 = null; cutoff70 = null; }
     const status = classifyYear(studentIndex, cutoff50, cutoff70);
     return {
       year,
@@ -101,27 +104,27 @@ export function diagnoseAdmissionRange(studentIndex: number, rows: YearCutoff[])
   const weightedSafe = weightedAverage(
     normalizedRows
       .filter((row) => row.cutoff50 !== null)
-      .map((row, index) => ({ value: row.cutoff50 as number, weight: [0.5, 0.3, 0.2][index] ?? 0.1 })),
+      .map((row) => ({ value: row.cutoff50 as number, weight: YEAR_WEIGHTS[row.year] })),
   );
   const weightedReach = weightedAverage(
     normalizedRows
       .filter((row) => row.cutoff70 !== null)
-      .map((row, index) => ({ value: row.cutoff70 as number, weight: [0.5, 0.3, 0.2][index] ?? 0.1 })),
+      .map((row) => ({ value: row.cutoff70 as number, weight: YEAR_WEIGHTS[row.year] })),
   );
 
   const spread = weightedAverage(
     normalizedRows
       .filter((row) => row.cutoff50 !== null && row.cutoff70 !== null)
-      .map((row, index) => ({
+      .map((row) => ({
         value: (row.cutoff70 as number) - (row.cutoff50 as number),
-        weight: [0.5, 0.3, 0.2][index] ?? 0.1,
+        weight: YEAR_WEIGHTS[row.year],
       })),
   );
 
   const score = weightedAverage(
-    normalizedRows.map((row, index) => ({
+    normalizedRows.filter(row => row.status !== "unknown").map((row) => ({
       value: statusScore(row.status),
-      weight: [0.5, 0.3, 0.2][index] ?? 0.1,
+      weight: YEAR_WEIGHTS[row.year],
     })),
   );
 
@@ -130,7 +133,7 @@ export function diagnoseAdmissionRange(studentIndex: number, rows: YearCutoff[])
   const safeMargin = spread !== null ? Math.max(0.12, Math.min(0.25, spread * 0.12)) : 0.15;
   const challengeMargin = spread !== null ? Math.max(0.25, Math.min(0.5, spread * 0.35)) : 0.35;
 
-  let finalLevel = "상향/위험";
+  let finalLevel = "판단 보류";
   if (score !== null) {
     if (score <= 0.6) finalLevel = "매우 안정";
     else if (score <= 1.3) finalLevel = "안정";
@@ -153,7 +156,7 @@ export function diagnoseAdmissionRange(studentIndex: number, rows: YearCutoff[])
 
   return {
     finalLevel,
-    finalComment: `${yearlySummary}을 순서대로 반영한 결과 ${finalLevel}으로 판단했습니다.`,
+    finalComment: score === null ? "비교 가능한 입결 근거가 없어 판단을 보류합니다. 대학·전형·입결 기준을 확인해 주세요." : `${yearlySummary}을 순서대로 반영한 결과 ${finalLevel}으로 판단했습니다.`,
     safeCutoff,
     reachCutoff,
     spread,

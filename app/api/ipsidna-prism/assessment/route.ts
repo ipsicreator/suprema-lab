@@ -17,7 +17,7 @@ function scoreAnswers(answers: Record<string, ChoiceKey>) {
 function resolveType(score: Record<string, number>): "SEDAN" | "SUV" | "SPORTS" | "OFFROAD" {
   const entries = Object.entries(score).sort((a, b) => b[1] - a[1]);
   const t = entries[0]?.[0] ?? "SEDAN";
-  return (t as any) ?? "SEDAN";
+  return t === "SUV" || t === "SPORTS" || t === "OFFROAD" ? t : "SEDAN";
 }
 
 export async function POST(req: Request) {
@@ -25,11 +25,11 @@ export async function POST(req: Request) {
     return NextResponse.json({ ok: false, error: "pocketbase_not_configured" }, { status: 500 });
   }
 
-  const body = (await req.json().catch(() => null)) as any;
+  const body = (await req.json().catch(() => null)) as Record<string, unknown> | null;
   const lead_id = String(body?.lead_id ?? "").trim();
   const answers = (body?.answers ?? null) as Record<string, ChoiceKey> | null;
 
-  if (!lead_id || !answers || typeof answers !== "object") {
+  if (!lead_id || !answers || typeof answers !== "object" || Array.isArray(answers) || !Object.keys(answers).length || Object.keys(answers).length > 200 || !Object.values(answers).every(value => ["A", "B", "C", "D"].includes(value))) {
     return NextResponse.json({ ok: false, error: "invalid_payload" }, { status: 400 });
   }
 

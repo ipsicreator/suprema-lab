@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import Link from "next/link";
 import { useMemo } from "react";
 import { getEngineTypeFromUrl, getLastPrismEngineType } from "../../../lib/ipsidna/storage";
@@ -11,7 +13,7 @@ export default function PrismFullIntroPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.brandRow}>
-          <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+          <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
           <div className={styles.brandText}>입시DNA프리즘 · 본 진단</div>
         </div>
       </header>

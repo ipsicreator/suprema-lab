@@ -1,10 +1,12 @@
 "use client";
 
 import ReportComponent from "../report";
+import type { ComponentProps } from "react";
+type ReportProps = ComponentProps<typeof ReportComponent>;
 
 interface Step4Props {
-  evaluated: any[];
-  userInfo: any;
+  evaluated: ReportProps["results"];
+  userInfo: ReportProps["studentInfo"];
   onReset: () => void;
 }
 

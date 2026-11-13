@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const NOTEBOOK_LM_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\for_notebook_lm';
+const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const NOTEBOOK_LM_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\for_notebook_lm';
 
 if (!fs.existsSync(NOTEBOOK_LM_DIR)) fs.mkdirSync(NOTEBOOK_LM_DIR, { recursive: true });
 

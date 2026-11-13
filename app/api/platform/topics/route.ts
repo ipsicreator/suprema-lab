@@ -12,7 +12,7 @@ export async function GET(request: Request) {
 
   try {
     const records = await pb.collection('suprema_exploration_results').getList(1, 50, {
-      filter: `user_id = "${userId}"`,
+      filter: pb.filter("user_id = {:userId}", { userId }),
       sort: '-created',
     });
 
@@ -28,7 +28,7 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { userId, subject, interests, studentSignals, careerHint, targetGoal, grade, count } = body;
 
-    if (!userId || !subject) {
+    if (typeof userId !== "string" || !userId || typeof subject !== "string" || !subject || (interests !== undefined && typeof interests !== "string") || (grade !== undefined && grade !== "middle" && grade !== "high") || (count !== undefined && (!Number.isInteger(count) || count < 1 || count > 20))) {
       return NextResponse.json({ error: 'User ID and Subject are required' }, { status: 400 });
     }
 

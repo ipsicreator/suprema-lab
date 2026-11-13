@@ -27,6 +27,7 @@ export default function SetukPage() {
   const [loading, setLoading] = useState(false);
 
   const handleAnalyze = async () => {
+    if (loading) return;
     setLoading(true);
     setStep(3);
     try {
@@ -36,8 +37,7 @@ export default function SetukPage() {
         body: JSON.stringify({
           userKeywords: [subject, topic, isMajorRelated ? "전공 연계 심화" : "자기주도적 탐구"],
           department: userInfo?.hopeDepartment || "자율전공",
-          studentRecord: activity,
-          academyId: userInfo?.schoolName || "대치 수프리마"
+          studentRecord: activity
         })
       });
 
@@ -59,8 +59,8 @@ export default function SetukPage() {
         setLoading(false);
       }, 1500);
       
-    } catch (err: any) {
-      alert(`분석 중 오류가 발생했습니다: ${err.message}`);
+    } catch (err) {
+      alert(`분석 중 오류가 발생했습니다: ${err instanceof Error ? err.message : "알 수 없는 오류"}`);
       setStep(2);
       setLoading(false);
     }

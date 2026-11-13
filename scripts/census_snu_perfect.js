@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 const path = require('path');
 
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const snuData = [
     // [단과대, 학과/학부, 계열, 지역균형인원, 일반전형인원]

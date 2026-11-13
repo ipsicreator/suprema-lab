@@ -11,7 +11,7 @@ const genAI = new GoogleGenerativeAI(apiKey);
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
 async function run() {
-  const pdfPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\seoul_priority1_exact_raw\\서울대학교\\서울대학교[서울][본교]_2028_시행계획(1차수).pdf";
+  const pdfPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\seoul_priority1_exact_raw\\서울대학교\\서울대학교[서울][본교]_2028_시행계획(1차수).pdf";
   
   if (!fs.existsSync(pdfPath)) {
     console.error("PDF not found at:", pdfPath);

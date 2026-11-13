@@ -8,7 +8,7 @@ from pathlib import Path
 from openpyxl import load_workbook
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 INPUT_XLSX = ROOT / "outputs" / "2028_입시계획" / "2028_최종결과.xlsx"
 OUTPUT_XLSX = ROOT / "outputs" / "2028_numeric_18_repaired_v8.xlsx"
 

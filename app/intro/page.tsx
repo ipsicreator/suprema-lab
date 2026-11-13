@@ -23,7 +23,7 @@ export default function IntroPage() {
           <div className={styles.brand}>
             <Image
               src="/대치수프리마_2025-removebg-preview.png"
-              alt="Su·Prima 입시&코칭센터"
+              alt="수프리마랩"
               width={390}
               height={106}
               priority
@@ -34,8 +34,8 @@ export default function IntroPage() {
 
         <section className={styles.hero} aria-label="intro hero">
           <div className={styles.heroCopy}>
-            <p className={styles.kicker}>Su·Prima 입시&코칭센터</p>
-            <h1>나의 입시멘토</h1>
+            <p className={styles.kicker}>수프리마랩</p>
+            <h1>학생의 가능성을<br />다음 전략으로</h1>
             <div className={styles.rule} />
             <p className={styles.subhead}>정확한 진단, 맞춤형 코칭으로 합격까지</p>
             <p className={styles.support}>

@@ -16,7 +16,7 @@ except Exception:  # pragma: no cover
     parse_hwp = None
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 INPUT_XLSX = ROOT / "outputs" / "2028_입시계획" / "2028_최종결과.xlsx"
 OUTPUT_XLSX = ROOT / "outputs" / "2028_numeric_18_repaired_v3.xlsx"
 PDF_ROOT = ROOT / "data" / "2028_pdf_extracted"

@@ -16,46 +16,9 @@ type TopicResult = {
   tip?: string;
 };
 
-const fallbackKeywords = ["구조안정성", "내진설계", "스마트건설"];
+const fallbackKeywords: string[] = [];
 const subjectOptions = ["국어", "영어", "수학", "사회탐구", "과학탐구", "정보(IT)"];
-const initialBaseTopics: TopicResult[] = [
-  {
-    id: "initial-1",
-    subject: "과학탐구",
-    keyword: "구조안정성",
-    topic_title: "태양광 패널 각도와 오염이 발전 효율에 미치는 영향",
-    topic_direction: "태양광 패널의 각도를 조정하고 표면 오염 조건을 비교해 발전 효율 변화를 분석합니다.",
-    books: ["신재생에너지", "태양광 발전"],
-    papers: ["태양광 발전 효율 최적화 연구", "패널 성능 분석"],
-    data_sources: ["한국에너지공단 데이터", "공공데이터포털", "기상청 일사량 데이터"],
-    expected_conclusion: "패널 각도와 오염 정도가 발전 효율에 미치는 영향을 정량적으로 제시합니다.",
-    setuk_sentence: "구조안정성, 내진설계, 스마트건설을 바탕으로 태양광 패널 각도와 오염이 발전 효율에 미치는 영향 주제를 설정하고, 조건별 발전량을 비교 분석하며 자료 수집과 해석 역량을 보임.",
-  },
-  {
-    id: "initial-2",
-    subject: "과학탐구",
-    keyword: "내진설계",
-    topic_title: "교실 CO₂ 농도와 학생 집중도의 상관 분석",
-    topic_direction: "CO₂ 센서로 교실 농도를 측정하고 같은 시간대 집중도 지표와 비교합니다.",
-    books: ["실험 설계와 데이터 분석", "환경과학"],
-    papers: ["실내 공기질과 학습 성과의 관계", "CO₂ 농도 연구"],
-    data_sources: ["환경부 대기질 데이터", "공공데이터포털", "센서 데이터"],
-    expected_conclusion: "실내 CO₂ 농도 변화가 학습 환경에 미치는 영향을 설명합니다.",
-    setuk_sentence: "내진설계와 스마트건설 관심을 바탕으로 교실 CO₂ 농도와 학생 집중도의 관계를 분석하고, 측정값과 설문 결과를 연결해 환경 개선 필요성을 도출함.",
-  },
-  {
-    id: "initial-3",
-    subject: "과학탐구",
-    keyword: "스마트건설",
-    topic_title: "세제 성분별 계면활성제 거품 지속 시간 비교",
-    topic_direction: "세제 종류별 계면활성제 함량을 조사하고 동일 조건에서 거품 지속 시간을 측정합니다.",
-    books: ["화학과 생활", "물질의 성질"],
-    papers: ["계면활성제의 물리화학적 성질", "세제 성분 분석"],
-    data_sources: ["화학물질정보시스템", "제품 성분 정보", "실험 측정 데이터"],
-    expected_conclusion: "성분 차이가 거품 지속성과 세정 성능에 미치는 영향을 비교합니다.",
-    setuk_sentence: "스마트건설과 환경 소재 관심을 확장해 세제 성분별 계면활성제 거품 지속 시간을 비교하고, 성분과 성능의 관계를 분석해 화학 개념을 생활 문제 해결에 적용함.",
-  },
-];
+const initialBaseTopics: TopicResult[] = [];
 
 function normalizeSubject(value: unknown) {
   const text = typeof value === "string" ? value : "";
@@ -69,38 +32,51 @@ function readUserContext() {
   try {
     const raw = sessionStorage.getItem("suprema_user_info");
     if (!raw) {
-      return { keywords: fallbackKeywords, subject: "과학탐구", careerHint: "건축공학", email: "" };
+      return { keywords: fallbackKeywords, subject: "과학탐구", careerHint: "", email: "" };
     }
     const info = JSON.parse(raw);
-    const analysisKeywords = Array.isArray(info?.studentAnalysis?.keyKeywords) ? info.studentAnalysis.keyKeywords : [];
+    const analysisKeywords: string[] = Array.isArray(info?.studentAnalysis?.keyKeywords) ? info.studentAnalysis.keyKeywords.filter((item: unknown): item is string => typeof item === "string") : [];
     const keywords = analysisKeywords.length ? analysisKeywords.slice(0, 3) : fallbackKeywords;
     return {
       keywords,
       subject: normalizeSubject(info?.supportTrack),
-      careerHint: info?.careerHint || info?.hopeDepartment || "건축공학",
-      email: info?.email || "",
+      careerHint: typeof info?.careerHint === "string" ? info.careerHint : typeof info?.hopeDepartment === "string" ? info.hopeDepartment : "",
+      email: typeof info?.email === "string" ? info.email : "",
     };
   } catch {
-    return { keywords: fallbackKeywords, subject: "과학탐구", careerHint: "건축공학", email: "" };
+    return { keywords: fallbackKeywords, subject: "과학탐구", careerHint: "", email: "" };
   }
 }
+
+async function requestTopics(payload: { subject: string; keywords: string[]; careerHint: string; count: number }) {
+  const response = await fetch("/api/diagnosis/exploration-topics", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(payload),
+  });
+  const data = await response.json();
+  if (!response.ok) throw new Error(data?.error || "탐구 주제 생성 실패");
+  return Array.isArray(data?.topics) ? (data.topics as TopicResult[]) : [];
+}
+
 
 export default function Step3() {
   const [baseTopics, setBaseTopics] = useState<TopicResult[]>(initialBaseTopics);
   const [customTopics, setCustomTopics] = useState<TopicResult[]>([]);
   const [subject, setSubject] = useState("과학탐구");
   const [customKeyword, setCustomKeyword] = useState("");
-  const [careerHint, setCareerHint] = useState("건축공학");
+  const [careerHint, setCareerHint] = useState("");
   const [email, setEmail] = useState("");
   const [mailOpen, setMailOpen] = useState(false);
   const [status, setStatus] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [mailSending, setMailSending] = useState(false);
 
   const allTopics = useMemo(() => [...baseTopics, ...customTopics], [baseTopics, customTopics]);
   const canAdd = customTopics.length < 3;
 
   useEffect(() => {
+    if (loading) return;
     try {
       sessionStorage.setItem(
         "diagnosis_step3_topics",
@@ -111,44 +87,25 @@ export default function Step3() {
         }),
       );
     } catch {}
-  }, [allTopics, careerHint, subject]);
+  }, [allTopics, careerHint, subject, loading]);
 
   useEffect(() => {
+    let active = true;
     const context = readUserContext();
-    setSubject(context.subject);
-    setCareerHint(context.careerHint);
-    setEmail(context.email);
-    void generateBaseTopics(context.subject, context.keywords, context.careerHint);
-  }, []);
-
-  async function requestTopics(payload: { subject: string; keywords: string[]; careerHint: string; count: number }) {
-    const response = await fetch("/api/diagnosis/exploration-topics", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
-    const data = await response.json();
-    if (!response.ok) throw new Error(data?.error || "탐구 주제 생성 실패");
-    return Array.isArray(data?.topics) ? (data.topics as TopicResult[]) : [];
-  }
-
-  async function generateBaseTopics(nextSubject: string, keywords: string[], nextCareerHint: string) {
-    setLoading(true);
-    setStatus("");
-    try {
-      const topics = await requestTopics({
-        subject: nextSubject,
-        keywords: keywords.slice(0, 3),
-        careerHint: nextCareerHint,
-        count: 3,
-      });
+    const hasContext = context.keywords.length > 0 || Boolean(context.careerHint);
+    const pending = hasContext ? requestTopics({ subject: context.subject, keywords: context.keywords.length ? context.keywords : [context.careerHint], careerHint: context.careerHint, count: 3 }) : Promise.resolve([]);
+    pending.then((topics) => {
+      if (!active) return;
+      setSubject(context.subject);
+      setCareerHint(context.careerHint);
+      setEmail(context.email);
       setBaseTopics(topics.slice(0, 3));
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : "기본 주제 생성 실패");
-    } finally {
-      setLoading(false);
-    }
-  }
+      if (!hasContext) setStatus("학생정보에서 희망 진로나 분석 키워드를 입력한 뒤 주제를 생성해 주세요.");
+    }).catch((error: unknown) => {
+      if (active) setStatus(error instanceof Error ? error.message : "기본 주제 생성 실패");
+    }).finally(() => { if (active) setLoading(false); });
+    return () => { active = false; };
+  }, []);
 
   async function handleAddCustomTopic() {
     const keyword = customKeyword.trim();

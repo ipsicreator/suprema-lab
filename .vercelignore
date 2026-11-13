@@ -29,3 +29,16 @@ public/*.traineddata
 *.pdf
 *.hwp
 *.zip
+# Local admission upload snapshots must not be deployed
+.cache/admissions/
+
+# Local reviews, operational files and tooling
+.cache/
+outputs/
+화면구성_플로우별/
+docs/
+.agents/
+.codex/
+.cursor/
+.omx/
+skills/

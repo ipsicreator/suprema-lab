@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const pdfDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\.tmp\\adiga_seoul_priority1_unzipped';
+const pdfDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\.tmp\\adiga_seoul_priority1_unzipped';
 
 async function identify() {
     const files = fs.readdirSync(pdfDir).filter(f => f.endsWith('.pdf'));

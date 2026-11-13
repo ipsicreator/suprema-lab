@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { useMemo, useState } from "react";
 import { FULL_QUESTIONS_24, type FullChoice } from "../../../../lib/ipsidna/fullQuestions";
 import { buildFullProfile } from "../../../../lib/ipsidna/fullScoring";
@@ -12,11 +14,12 @@ function clampIndex(index: number, max: number) {
   return Math.min(Math.max(index, 0), max);
 }
 
-function saveLocal(key: string, value: any) {
+function saveLocal(key: string, value: unknown) {
   try {
     window.localStorage.setItem(key, JSON.stringify(value));
+    return true;
   } catch {
-    // ignore
+    return false;
   }
 }
 
@@ -24,6 +27,7 @@ export default function PrismFullQuestionsPage() {
   const total = FULL_QUESTIONS_24.length;
   const [index, setIndex] = useState(0);
   const [answers, setAnswers] = useState<FullAnswers>({});
+  const [saveError, setSaveError] = useState("");
   const engineType = useMemo(() => getEngineTypeFromUrl() ?? getLastPrismEngineType(), []);
 
   const current = FULL_QUESTIONS_24[index];
@@ -39,8 +43,10 @@ export default function PrismFullQuestionsPage() {
 
   const finish = () => {
     const profile = buildFullProfile(answers);
-    saveLocal("prism_full_answers", answers);
-    saveLocal("prism_full_profile", profile);
+    if (!saveLocal("prism_full_answers", answers) || !saveLocal("prism_full_profile", profile)) {
+      setSaveError("브라우저에 결과를 저장하지 못했습니다. 저장 공간과 개인정보 보호 설정을 확인한 뒤 다시 시도해 주세요.");
+      return;
+    }
     window.location.href = engineType ? `/ipsidna-prism/full/result?type=${engineType}` : "/ipsidna-prism/full/result";
   };
 
@@ -48,7 +54,7 @@ export default function PrismFullQuestionsPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.brandRow}>
-          <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+          <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
           <div className={styles.brandText}>입시DNA프리즘 · 본 진단</div>
         </div>
         <div className={styles.progressWrap}>
@@ -57,6 +63,7 @@ export default function PrismFullQuestionsPage() {
       </header>
 
       <section className={styles.card}>
+        {saveError && <p role="alert">{saveError}</p>}
         <div className={styles.cardTop}>
           <div className={styles.kicker}>
             {index + 1}/{total}

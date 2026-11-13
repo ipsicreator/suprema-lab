@@ -12,7 +12,7 @@ from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from openpyxl.styles import Font
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 TESSERACT = Path(r"C:\Program Files\Tesseract-OCR\tesseract.exe")
 TMP_DIR = ROOT / ".tmp" / "adiga_ocr_pages_extract"
 

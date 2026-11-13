@@ -51,5 +51,5 @@ const ws = XLSX.utils.json_to_sheet(masterData);
 ws['!cols'] = Array(18).fill({ wch: 22 });
 
 XLSX.utils.book_append_sheet(wb, ws, "2028_수시_통합_마스터");
-const outputPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\2028_수시_정밀정리_최종.xlsx";
+const outputPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\2028_수시_정밀정리_최종.xlsx";
 XLSX.writeFile(wb, outputPath);

@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
 
-const sourceDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const sourceDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const common_cols = (base) => ({
     "광역": (base.dept.includes("학부") || base.dept.includes("계열") || base.dept.includes("광역")) ? "O" : "-",

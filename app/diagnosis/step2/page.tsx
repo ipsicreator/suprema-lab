@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useSyncExternalStore } from "react";
+import { normalizeSavedUserInfo } from "@/app/components/UserInfoForm";
 import {
   Bar,
   BarChart,
@@ -9,11 +10,6 @@ import {
   Legend,
   Line,
   LineChart,
-  PolarAngleAxis,
-  PolarGrid,
-  PolarRadiusAxis,
-  Radar,
-  RadarChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -30,38 +26,37 @@ type SubjectRow = {
   subject: string;
   grade: number;
   term: string;
-  rawScore: number;
-  scoreAverage: number;
+  rawScore: number | null;
+  scoreAverage: number | null;
 };
 
+function subscribeToStoredInfo(callback: () => void) {
+  window.addEventListener("storage", callback);
+  return () => window.removeEventListener("storage", callback);
+}
+function readStoredInfo() { try { return sessionStorage.getItem("suprema_user_info"); } catch { return null; } }
+
 export default function DiagnosisStep2Page() {
-  const [info, setInfo] = useState<Partial<UserInfo> | null>(null);
+  const storedInfo = useSyncExternalStore(subscribeToStoredInfo, readStoredInfo, () => null);
+  const info = useMemo<Partial<UserInfo> | null>(() => {
+    try { return storedInfo ? normalizeSavedUserInfo(JSON.parse(storedInfo)) : null; } catch { return null; }
+  }, [storedInfo]);
   const [keyword, setKeyword] = useState("");
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState<string | null>(null);
+  const emailValue = email ?? info?.email ?? "";
   const [mailOpen, setMailOpen] = useState(false);
   const [status, setStatus] = useState("");
   const [sending, setSending] = useState(false);
 
-  useEffect(() => {
-    try {
-      const raw = sessionStorage.getItem("suprema_user_info");
-      const parsed = raw ? (JSON.parse(raw) as Partial<UserInfo>) : null;
-      setInfo(parsed);
-      setEmail(parsed?.email || "mary@example.com");
-    } catch {
-      setInfo(null);
-      setEmail("mary@example.com");
-    }
-  }, []);
 
   const reportData = useMemo(() => toStudentRecordReportData(info), [info]);
   const subjects = useMemo<SubjectRow[]>(() => {
-    return reportData.parsedSubjects.map((item, index) => ({
+    return reportData.parsedSubjects.map((item) => ({
       subject: item.subject,
       grade: Number(item.grade ?? 3),
-      term: `${item.year || Math.floor(index / 2) + 1}-${item.semester || (index % 2) + 1}`,
-      rawScore: Number(item.rawScore ?? 0),
-      scoreAverage: Number(item.scoreAverage ?? 0),
+      term: item.year && item.semester ? `${item.year}-${item.semester}` : "학기 미입력",
+      rawScore: typeof item.rawScore === "number" && Number.isFinite(item.rawScore) ? item.rawScore : null,
+      scoreAverage: typeof item.scoreAverage === "number" && Number.isFinite(item.scoreAverage) ? item.scoreAverage : null,
     }));
   }, [reportData.parsedSubjects]);
 
@@ -76,31 +71,14 @@ export default function DiagnosisStep2Page() {
     return [...map.entries()].map(([term, row]) => ({
       term,
       student: Number((row.total / row.count).toFixed(2)),
-      peer: Number((row.total / row.count + 1.1).toFixed(2)),
     }));
   }, [subjects]);
 
-  const radarData = useMemo(() => {
-    const averageGrade = subjects.length
-      ? subjects.reduce((sum, item) => sum + item.grade, 0) / subjects.length
-      : 0;
-    const academic = averageGrade ? Math.max(1, Math.min(4, 5 - averageGrade)) : 0;
-    const keywordScore = Math.min(4, (reportData.studentAnalysis?.keyKeywords?.length || 0) + 1);
-    return [
-      { axis: "학업역량", value: Number(academic.toFixed(1)) },
-      { axis: "진로역량", value: reportData.studentAnalysis?.majorSuitability ? 3.4 : keywordScore },
-      { axis: "탐구역량", value: reportData.studentAnalysis?.seTeukAnalysis ? 3.6 : keywordScore },
-      { axis: "성장가능성", value: reportData.studentAnalysis?.comprehensiveOpinion ? 3.5 : keywordScore },
-      { axis: "공동체역량", value: reportData.studentRecord?.behaviorSummary?.items?.length ? 3.2 : keywordScore },
-    ];
-  }, [reportData.studentAnalysis, reportData.studentRecord, subjects]);
-
-  const distributionData = subjects
-    .filter((item) => item.rawScore > 0 && item.scoreAverage > 0)
-    .map((item) => ({
-      subject: item.subject,
-      diff: Number((item.rawScore - item.scoreAverage).toFixed(1)),
-    }));
+  const distributionData = subjects.flatMap((item) =>
+    item.rawScore !== null && item.scoreAverage !== null
+      ? [{ subject: item.subject, diff: Number((item.rawScore - item.scoreAverage).toFixed(1)) }]
+      : [],
+  );
 
   const keywords = reportData.studentAnalysis?.keyKeywords || [];
   const mappingRows = useMemo(
@@ -129,7 +107,7 @@ export default function DiagnosisStep2Page() {
   );
 
   async function handleSendEmail() {
-    const trimmed = email.trim();
+    const trimmed = emailValue.trim();
     if (!trimmed) {
       setStatus("메일주소를 입력하세요.");
       return;
@@ -283,22 +261,15 @@ export default function DiagnosisStep2Page() {
                 <LineChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="term" />
-                  <YAxis domain={[1, 6]} reversed />
+                  <YAxis domain={[1, 9]} reversed />
                   <Tooltip />
                   <Line type="monotone" dataKey="student" name="학생 평균" stroke="#38a3e8" strokeWidth={3} />
                 </LineChart>
               </ResponsiveContainer>
               {!trendData.length ? <EmptyChartMessage text="교과 성적 데이터가 없습니다." /> : null}
             </ChartPanel>
-            <ChartPanel title="성취도 시각화(육각형·레이더)" badge="A=4, B=3, C=2, D=1">
-              <ResponsiveContainer width="100%" height={260}>
-                <RadarChart data={radarData}>
-                  <PolarGrid />
-                  <PolarAngleAxis dataKey="axis" />
-                  <PolarRadiusAxis domain={[0, 4]} />
-                  <Radar dataKey="value" stroke="#4f46e5" fill="#4f46e5" fillOpacity={0.22} />
-                </RadarChart>
-              </ResponsiveContainer>
+            <ChartPanel title="역량 정량 평가" badge="평가 자료 필요">
+              <EmptyChartMessage text="검증된 역량 점수 자료가 없습니다. 학생부 분석 의견과 핵심 키워드를 참고해 주세요." />
             </ChartPanel>
             <Panel title="핵심 키워드">
               <div className="flex flex-wrap gap-2">
@@ -312,23 +283,22 @@ export default function DiagnosisStep2Page() {
           <aside className="space-y-4">
             <div>
               <h3 className="text-lg font-black text-slate-900">3분면 · 비교·분포·평가</h3>
-              <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">유사집단 평균, 성취도 분포, 입학사정관 메모를 표시합니다.</p>
+              <p className="mt-1 text-xs font-semibold leading-5 text-slate-500">입력 성적의 추이와 실제 비교 자료, 평가 메모를 표시합니다.</p>
             </div>
-            <ChartPanel title="선택 과목 조합 평균 추이" badge="조합: 수학 I, 수학 II, 미적분">
+            <ChartPanel title="전체 과목 평균 추이" badge="입력 성적 기준">
               <ResponsiveContainer width="100%" height={210}>
                 <LineChart data={trendData}>
                   <CartesianGrid strokeDasharray="3 3" />
                   <XAxis dataKey="term" />
-                  <YAxis domain={[1, 6]} reversed />
+                  <YAxis domain={[1, 9]} reversed />
                   <Tooltip />
                   <Legend />
                   <Line type="monotone" dataKey="student" name="학생 평균" stroke="#38a3e8" strokeWidth={3} />
-                  <Line type="monotone" dataKey="peer" name="유사집단 평균" stroke="#fb7185" strokeWidth={2} strokeDasharray="6 6" />
                 </LineChart>
               </ResponsiveContainer>
               {!trendData.length ? <EmptyChartMessage text="비교 가능한 과목 조합 데이터가 없습니다." /> : null}
             </ChartPanel>
-            <ChartPanel title="과목 성취도 분포" badge="A/B/C 비율">
+            <ChartPanel title="과목별 원점수·평균 차이" badge="실제 비교 자료 기준">
               <ResponsiveContainer width="100%" height={230}>
                 <BarChart data={distributionData}>
                   <CartesianGrid strokeDasharray="3 3" />
@@ -365,7 +335,7 @@ export default function DiagnosisStep2Page() {
             <div className="mt-4 flex flex-wrap gap-2">
               <input
                 type="email"
-                value={email}
+                value={emailValue}
                 onChange={(event) => setEmail(event.target.value)}
                 placeholder="메일주소 입력"
                 className="min-w-[260px] flex-1 rounded-xl border border-[#d9c8b3] bg-white px-4 py-3 text-sm font-semibold text-slate-700"

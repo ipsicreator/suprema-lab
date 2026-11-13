@@ -3,7 +3,7 @@ const path = require('path');
 const pdf = require('pdf-parse');
 
 // 사용자님의 명령: 동일한 포맷의 검색 가능한 원천 소스 문서 생성
-const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
+const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
 const keywords = ["모집인원", "최저학력기준", "전형방법", "모집단위", "지원자격", "반영비율", "진로선택"];
 
 async function buildStandardizedSource(univName, pdfPath) {

@@ -1,7 +1,7 @@
 # 수프리마 24/7 무중단 구동 작업 스케줄러 등록 스크립트
 $TaskName = "Suprema_247_Watchdog"
-$ActionPath = "C:\Users\chris\Desktop\suprema-platform\start_suprima_247.bat"
-$WorkingDirectory = "C:\Users\chris\Desktop\suprema-platform"
+$ActionPath = "C:\Users\chris\Desktop\수프리마랩\start_suprima_247.bat"
+$WorkingDirectory = "C:\Users\chris\Desktop\수프리마랩"
 
 # 기존 작업이 있으면 삭제
 Unregister-ScheduledTask -TaskName $TaskName -Confirm:$false -ErrorAction SilentlyContinue

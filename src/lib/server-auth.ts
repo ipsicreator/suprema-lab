@@ -28,17 +28,15 @@ export async function getCurrentUserOrThrow() {
 }
 
 export async function requireAdminOrThrow() {
-  const currentUser = await getCurrentUserOrThrow();
-  const allowlist = (process.env.ADMIN_EMAILS ?? "")
-    .split(",")
-    .map((v) => v.trim().toLowerCase())
-    .filter(Boolean);
-
-  if (allowlist.length === 0) {
-    throw new Error("ADMIN_NOT_CONFIGURED");
-  }
-  if (!currentUser.email || !allowlist.includes(currentUser.email.toLowerCase())) {
-    throw new Error("FORBIDDEN");
-  }
-  return currentUser;
+  if (process.env.NODE_ENV === "production" && !process.env.AUTH_SECRET && !process.env.NEXTAUTH_SECRET) throw new Error("AUTH_NOT_CONFIGURED");
+  const session = await auth();
+  if (!session?.user?.email) throw new Error("UNAUTHORIZED");
+  const allowlist = (process.env.ADMIN_EMAILS || "").split(",").map(value => value.trim().toLowerCase()).filter(Boolean);
+  if (!allowlist.length) throw new Error("ADMIN_NOT_CONFIGURED");
+  if (!allowlist.includes(session.user.email.toLowerCase())) throw new Error("FORBIDDEN");
+  return {
+    userId: `${session.user.email}:${(session.user as { provider?: string }).provider || "unknown"}`,
+    email: session.user.email,
+    name: session.user.name ?? undefined,
+  };
 }

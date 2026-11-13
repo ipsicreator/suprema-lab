@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const XLSX = require('xlsx');
 
-const sourceDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const sourceDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const files = fs.readdirSync(sourceDir).filter(f => f.endsWith('_Source.md'));
 

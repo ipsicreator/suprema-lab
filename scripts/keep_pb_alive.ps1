@@ -1,8 +1,8 @@
 # 수프리마 플랫폼: PocketBase 서버 무중단 운영 스크립트
 # Rule 6: PB 자동 재시작 (서비스 등록 대안)
 
-$PB_PATH = "C:\Users\chris\Desktop\suprema-platform\backend\backend\pocketbase.exe"
-$PB_DIR = "C:\Users\chris\Desktop\suprema-platform\backend\backend"
+$PB_PATH = "C:\Users\chris\Desktop\수프리마랩\backend\backend\pocketbase.exe"
+$PB_DIR = "C:\Users\chris\Desktop\수프리마랩\backend\backend"
 
 Write-Host "Suprema PocketBase Monitoring Started..." -ForegroundColor Cyan
 

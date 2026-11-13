@@ -39,6 +39,27 @@ interface Props {
   serviceType: "setuk" | "diagnosis";
 }
 
+export function normalizeSavedUserInfo(value: unknown): Partial<UserInfo> | null {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return null;
+  const raw = value as Record<string, unknown>;
+  const result: Partial<UserInfo> = {};
+  for (const key of ["consultantName", "studentName", "schoolName", "grade", "studentPhone", "parentPhone", "email", "careerHint", "hopeDepartment"] as const) {
+    if (typeof raw[key] === "string") result[key] = raw[key];
+  }
+  if (typeof raw.studentIndex === "number" && Number.isFinite(raw.studentIndex)) result.studentIndex = raw.studentIndex;
+  if (raw.gradingSystem === "5-level" || raw.gradingSystem === "9-level") result.gradingSystem = raw.gradingSystem;
+  if (Array.isArray(raw.parsedSubjects)) result.parsedSubjects = raw.parsedSubjects.filter((item): item is ExtractedSubject => Boolean(item && typeof item === "object" && typeof item.subject === "string" && Number.isFinite(item.grade) && Number.isFinite(item.unit)));
+  if (raw.studentAnalysis && typeof raw.studentAnalysis === "object" && !Array.isArray(raw.studentAnalysis)) {
+    const analysis = raw.studentAnalysis as Record<string, unknown>;
+    result.studentAnalysis = {};
+    for (const key of ["majorField", "majorSuitability", "academicCapacity", "seTeukAnalysis", "comprehensiveOpinion"] as const) {
+      if (typeof analysis[key] === "string") result.studentAnalysis[key] = analysis[key];
+    }
+    if (Array.isArray(analysis.keyKeywords)) result.studentAnalysis.keyKeywords = analysis.keyKeywords.filter((item): item is string => typeof item === "string");
+  }
+  return result;
+}
+
 const gradeOptions = ["고1", "고2", "고3", "N수", "검정고시", "재수", "그 이상"];
 
 export default function UserInfoForm({ onNext, serviceType }: Props) {
@@ -66,22 +87,23 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
 
   useEffect(() => {
     const bootstrap = async () => {
-      const saved = sessionStorage.getItem("suprema_user_info");
-      if (saved) {
-        try {
-          const parsed = JSON.parse(saved) as UserInfo;
+      try {
+        const saved = sessionStorage.getItem("suprema_user_info");
+        const parsed = saved ? normalizeSavedUserInfo(JSON.parse(saved)) : null;
+        if (parsed) {
           setInfo((prev) => ({ ...prev, ...parsed }));
           setHasSavedInfo(Boolean(parsed.studentName && parsed.schoolName));
-        } catch {}
-      }
+        }
+      } catch { /* Browser storage may be unavailable or malformed. */ }
 
       try {
         const res = await fetch("/api/platform/profile", { method: "GET" });
         const data = await res.json();
-        if (data?.success && data?.profile) {
-          setInfo((prev) => ({ ...prev, ...data.profile }));
-          setHasSavedInfo(Boolean(data.profile.studentName && data.profile.schoolName));
-          sessionStorage.setItem("suprema_user_info", JSON.stringify(data.profile));
+        const profile = data?.success ? normalizeSavedUserInfo(data.profile) : null;
+        if (profile) {
+          setInfo((prev) => ({ ...prev, ...profile }));
+          setHasSavedInfo(Boolean(profile.studentName && profile.schoolName));
+          sessionStorage.setItem("suprema_user_info", JSON.stringify(profile));
         }
       } catch {}
 
@@ -118,12 +140,11 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
       }
 
       setPdfProgressText("원본 PDF 업로드 중...");
-      await fetch("/api/diagnosis/upload-configure", { method: "POST" }).catch(() => null);
 
       const initRes = await fetch("/api/diagnosis/upload-init", { method: "GET" });
       const init = await initRes.json().catch(() => null);
       if (!initRes.ok || !init?.ok || !init?.uploadUrl) {
-        setPdfError("업로드 초기화에 실패했습니다.");
+        setPdfError("PDF 업로드 환경이 준비되지 않았습니다. 관리자에게 저장소 설정 확인을 요청해 주세요.");
         return;
       }
 
@@ -135,7 +156,7 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
       const uploadRes = await fetch(init.uploadUrl, { method: "POST", body: uploadFd });
       const uploadJson = await uploadRes.json().catch(() => null);
       if (!uploadRes.ok || !uploadJson?.id) {
-        setPdfError(uploadJson?.message || uploadJson?.error || "PDF 업로드에 실패했습니다.");
+        setPdfError(uploadRes.status === 404 ? "PDF 업로드 저장소가 없습니다. 관리자에게 업로드 환경 설정을 요청해 주세요." : uploadJson?.message || uploadJson?.error || "PDF 업로드에 실패했습니다.");
         return;
       }
 
@@ -199,9 +220,10 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isLoadingPDF) return;
     const finalInfo = { ...info };
 
-    sessionStorage.setItem("suprema_user_info", JSON.stringify(finalInfo));
+    try { sessionStorage.setItem("suprema_user_info", JSON.stringify(finalInfo)); } catch { /* Continue with the in-memory form when browser storage is unavailable. */ }
 
     fetch("/api/platform/profile", {
       method: "POST",
@@ -415,7 +437,7 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
       </div>
 
       <div className={styles.formFooter}>
-        <button type="submit" className={styles.submitBtn}>
+        <button type="submit" className={styles.submitBtn} disabled={isLoadingPDF}>
           다음 단계로 이동
         </button>
       </div>
@@ -423,21 +445,33 @@ export default function UserInfoForm({ onNext, serviceType }: Props) {
   );
 }
 
-function loadPDFJS(): Promise<any> {
+type PDFViewport = { width: number; height: number };
+type PDFPage = {
+  getTextContent(): Promise<{ items: Array<{ str?: string }> }>;
+  getViewport(options: { scale: number }): PDFViewport;
+  render(options: { canvasContext: CanvasRenderingContext2D; viewport: PDFViewport }): { promise: Promise<unknown> };
+};
+type PDFJSLibrary = {
+  GlobalWorkerOptions: { workerSrc: string };
+  getDocument(options: { data: ArrayBuffer }): { promise: Promise<{ numPages: number; getPage(index: number): Promise<PDFPage> }> };
+};
+function loadPDFJS(): Promise<PDFJSLibrary> {
   return new Promise((resolve, reject) => {
     if (typeof window === "undefined") {
       reject(new Error("window is not defined"));
       return;
     }
-    if ((window as any).pdfjsLib) {
-      resolve((window as any).pdfjsLib);
+    const browser = window as Window & { pdfjsLib?: PDFJSLibrary };
+    if (browser.pdfjsLib) {
+      resolve(browser.pdfjsLib);
       return;
     }
 
     const script = document.createElement("script");
     script.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
     script.onload = () => {
-      const pdfjsLib = (window as any).pdfjsLib;
+      const pdfjsLib = browser.pdfjsLib;
+      if (!pdfjsLib) { reject(new Error("PDF 라이브러리를 초기화하지 못했습니다.")); return; }
       try {
         const workerCode = "importScripts('https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js');";
         const blob = new Blob([workerCode], { type: "application/javascript" });
@@ -465,7 +499,7 @@ async function extractTextFromPDFClient(file: File, onProgress: (status: string)
   for (let i = 1; i <= numPages; i += 1) {
     const page = await pdf.getPage(i);
     const textContent = await page.getTextContent();
-    const pageText = textContent.items.map((item: any) => item.str).join(" ");
+    const pageText = textContent.items.map((item) => item.str || "").join(" ");
     fullText += `\n--- Page ${i} ---\n${pageText}`;
   }
 
@@ -478,11 +512,9 @@ async function extractTextFromPDFClient(file: File, onProgress: (status: string)
   fullText = "";
   const { createWorker } = await import("tesseract.js");
   onProgress("[2/2] OCR 분석 중...");
-  const worker = await createWorker("kor+eng", 1, {
-    langPath: window.location.origin,
-    gzip: false,
-  });
+  const worker = await createWorker("kor+eng");
 
+  try {
   for (let i = 1; i <= numPages; i += 1) {
     onProgress(`[2/2] OCR 처리 중... (${i}/${numPages})`);
     const page = await pdf.getPage(i);
@@ -502,6 +534,6 @@ async function extractTextFromPDFClient(file: File, onProgress: (status: string)
     fullText += `\n--- Page ${i} ---\n${text}`;
   }
 
-  await worker.terminate();
+  } finally { await worker.terminate(); }
   return fullText;
 }

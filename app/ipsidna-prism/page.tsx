@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import Link from "next/link";
 import styles from "./prism.module.css";
 
@@ -8,7 +10,7 @@ export default function IpsiDnaPrismLanding() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.brandRow}>
-          <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+          <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
           <div className={styles.brandText}>대치수프리마</div>
         </div>
       </header>

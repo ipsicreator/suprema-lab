@@ -64,6 +64,6 @@ ws['!cols'] = [
 
 XLSX.utils.book_append_sheet(wb, ws, "서울대학교_2028_수시");
 
-const outputPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\2028_입시_마스터_수작업_1차.xlsx";
+const outputPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\2028_입시_마스터_수작업_1차.xlsx";
 XLSX.writeFile(wb, outputPath);
 console.log(`Professional Excel file created: ${outputPath}`);

@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 const path = require('path');
 
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 // 연세대학교 2028 수시 전형 전수 데이터 (Source.md L283~L483 기반)
 const yonseiFullDepts = [

@@ -1,7 +1,7 @@
 const XLSX = require('xlsx');
 const path = require('path');
 
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const sogangData = [
     { dept: "인문학부", q: { "지역균형": 12, "일반I": 10, "일반II": 8, "기회균형": 7, "서강가치": 3, "논술": 15 }, category: "인문" },

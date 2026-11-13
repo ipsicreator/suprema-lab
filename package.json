@@ -6,9 +6,12 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
-    "update:admissions": "node scripts/update_admission.js && node scripts/sync_consultant_app.js",
-    "sync:consultant": "node scripts/sync_consultant_app.js"
+    "lint": "eslint app lib src auth.ts",
+    "update:admissions": "node scripts/update_admission.js",
+    "sync:consultant": "node scripts/sync_consultant_app.js",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test scripts/*.test.cjs",
+    "test:integration": "node scripts/admissions-upload.integration.cjs"
   },
   "dependencies": {
     "@google/generative-ai": "^0.24.1",

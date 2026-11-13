@@ -36,14 +36,15 @@ function normalizeTokens(text: string): string[] {
     .filter((t) => t.length > 1);
 }
 
-let universityGuides: any = null;
+type UniversityGuides = { universities: Record<string, { focus: string[]; majors: Record<string, { recommended_subjects: string[] }> }> };
+let universityGuides: UniversityGuides | null = null;
 
-function loadUniversityGuides(): any {
+function loadUniversityGuides(): UniversityGuides {
   if (universityGuides) return universityGuides;
   try {
     const dataPath = path.join(process.cwd(), 'data', 'university_guides.json');
     const data = fs.readFileSync(dataPath, 'utf-8');
-    universityGuides = JSON.parse(data);
+    universityGuides = JSON.parse(data) as UniversityGuides;
     return universityGuides;
   } catch (error) {
     console.error('Failed to load university guides:', error);

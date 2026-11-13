@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import Link from "next/link";
 import { useMemo } from "react";
 import { ENGINE_LABEL, type EngineType } from "../../../lib/ipsidna/questions";
@@ -21,7 +23,7 @@ export default function PrismToolkitPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.brandRow}>
-          <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+          <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
           <div className={styles.brandText}>입시DNA프리즘 · 상담 툴킷</div>
         </div>
       </header>

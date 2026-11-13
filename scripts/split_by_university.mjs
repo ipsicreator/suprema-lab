@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { Workbook, SpreadsheetFile } from '@oai/artifact-tool';
 
-const ROOT = 'C:\\Users\\chris\\Desktop\\suprema-platform';
+const ROOT = 'C:\\Users\\chris\\Desktop\\수프리마랩';
 const SOURCE_XLSX = path.join(ROOT, 'outputs', '2028_입시계획', '2028_최종결과.xlsx');
 const OUTPUT_DIR = path.join(ROOT, 'outputs', '대학별파일');
 const MANIFEST_PATH = path.join(OUTPUT_DIR, '_manifest.json');

@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\public\\uploads';
-const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
+const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\public\\uploads';
+const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
 
 const keywords = ["모집인원", "최저학력기준", "전형방법", "모집단위"];
 

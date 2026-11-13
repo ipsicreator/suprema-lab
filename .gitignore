@@ -71,3 +71,12 @@ scratch/
 *.log
 *.out
 
+# Local admission upload snapshots
+.cache/admissions/
+
+# Local operational data and agent state
+/.cache/
+/.agents/
+/.codex/
+/.omx/
+

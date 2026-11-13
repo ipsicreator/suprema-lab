@@ -14,7 +14,7 @@ from pathlib import Path
 import fitz
 import openpyxl
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 PYLIBS = ROOT / ".cache" / "pylibs"
 if str(PYLIBS) not in sys.path:
     sys.path.insert(0, str(PYLIBS))

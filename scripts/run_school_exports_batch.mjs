@@ -2,7 +2,7 @@ import fs from 'node:fs/promises';
 import path from 'node:path';
 import { spawn } from 'node:child_process';
 
-const ROOT = 'C:\\Users\\chris\\Desktop\\suprema-platform';
+const ROOT = 'C:\\Users\\chris\\Desktop\\수프리마랩';
 const NODE = 'C:\\Users\\chris\\.cache\\codex-runtimes\\codex-primary-runtime\\dependencies\\node\\bin\\node.exe';
 const OUTPUT_ROOT = path.join(ROOT, 'outputs', 'batch_runs');
 

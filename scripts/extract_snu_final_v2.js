@@ -158,6 +158,6 @@ rawData.forEach(item => {
 const wb = XLSX.utils.book_new();
 const ws = XLSX.utils.json_to_sheet(snuFullList);
 XLSX.utils.book_append_sheet(wb, ws, "서울대_2028_수시_전수조사");
-const outputPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\서울대학교_2028_수시_최종완성.xlsx";
+const outputPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\서울대학교_2028_수시_최종완성.xlsx";
 XLSX.writeFile(wb, outputPath);
 console.log(`[작업완료] 서울대학교 전체 모집단위(총 ${snuFullList.length}개 행) 완료: ${outputPath}`);

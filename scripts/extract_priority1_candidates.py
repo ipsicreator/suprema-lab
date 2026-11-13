@@ -11,7 +11,7 @@ from openpyxl.cell.cell import ILLEGAL_CHARACTERS_RE
 from openpyxl.styles import Font
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 SUMMARY_JSON = ROOT / "outputs" / "adiga_2028_keyword_pages_priority1.json"
 OUTPUT_XLSX = ROOT / "outputs" / "adiga_2028_priority1_candidates.xlsx"
 TMP_DIR = ROOT / ".tmp" / "adiga_ocr_pages_extract"

@@ -1,8 +1,8 @@
 "use client";
 
+import Image from "next/image";
+
 import { 
-  Sparkles, 
-  CheckCircle2, 
   TrendingUp, 
   Zap, 
   Search, 
@@ -30,7 +30,7 @@ export default function LeafletPage() {
               Official Service Guide
             </div>
             <div className="flex items-center gap-4 mb-8">
-              <img src="/suprima_logo_final.png" alt="Suprima Logo" className="h-12 w-auto" />
+              <Image src="/suprema-logo.svg" alt="Suprima Logo" width={160} height={48} className="h-12 w-auto" />
               <div className="w-px h-8 bg-sky-500/30 mx-2"></div>
               <h1 className="text-6xl font-black tracking-tighter leading-none">
                 SUPRIMA<br />
@@ -63,9 +63,9 @@ export default function LeafletPage() {
           <div className="bg-slate-50 p-12 rounded-[3rem] border-2 border-slate-100 shadow-inner">
              <Quote className="w-12 h-12 text-sky-200 mb-6" />
              <h3 className="text-3xl font-black leading-tight mb-6">
-               "입시는 데이터라는 나침반과 <br />
+               &quot;입시는 데이터라는 나침반과 <br />
                기록이라는 지도가 필요한 <br />
-               여정입니다."
+               여정입니다.&quot;
              </h3>
              <p className="text-slate-500 leading-relaxed italic">
                단순한 합불 판정을 넘어, 학생의 고유한 스토리를 입체적으로 분석하여 
@@ -129,7 +129,7 @@ export default function LeafletPage() {
                 <div className="p-6 rounded-2xl bg-white/10 border border-white/20 text-center backdrop-blur-md">
                    <p className="text-[10px] font-black uppercase tracking-widest mb-2 opacity-60">Success Case</p>
                    <p className="text-lg font-bold">#인공지능 + #확률과통계 ➔</p>
-                   <p className="text-xl font-black mt-2 text-amber-300">"알고리즘 공정성 검증 탐구"</p>
+                   <p className="text-xl font-black mt-2 text-amber-300">&quot;알고리즘 공정성 검증 탐구&quot;</p>
                 </div>
               </div>
             </div>
@@ -155,8 +155,8 @@ export default function LeafletPage() {
             </div>
             <div className="p-8 rounded-3xl bg-sky-50 border border-sky-100">
               <p className="text-sm text-sky-800 leading-relaxed font-medium">
-                "수프리마의 최종 보고서는 단순한 결과지가 아닙니다. 
-                그것은 학생의 3년 과정을 합격이라는 마침표로 이끄는 가장 완벽한 설계도입니다."
+                &quot;수프리마의 최종 보고서는 단순한 결과지가 아닙니다. 
+                그것은 학생의 3년 과정을 합격이라는 마침표로 이끄는 가장 완벽한 설계도입니다.&quot;
               </p>
               <div className="mt-4 flex items-center gap-2">
                 <div className="w-6 h-6 bg-sky-500 rounded flex items-center justify-center text-[10px] font-black text-white">S</div>

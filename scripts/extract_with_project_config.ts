@@ -3,8 +3,8 @@ import path from 'path';
 import XLSX from 'xlsx';
 import { model } from '../lib/ai/gemini'; // Use the project's own model instance
 
-const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\university_admissions_2028_integrated.xlsx';
+const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\university_admissions_2028_integrated.xlsx';
 
 async function extractUniversityData(schoolDir: string) {
   const infoPath = path.join(schoolDir, 'source_info.json');

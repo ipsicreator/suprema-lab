@@ -13,8 +13,8 @@ export type StudentRecordReportData = {
   parsedSubjects: Array<{
     subject: string;
     grade: number;
-    rawScore: number;
-    scoreAverage: number;
+    rawScore: number | null;
+    scoreAverage: number | null;
     year?: number;
     semester?: number;
   }>;
@@ -31,11 +31,22 @@ export type StudentRecordReportData = {
 
 const section = (title: string, items: string[]): StudentRecordSection => ({ title, items });
 
-export function toStudentRecordReportData(info: Partial<UserInfo> | null): StudentRecordReportData {
+type ReportInput = Omit<Partial<UserInfo>, "parsedSubjects"> & {
+  parsedSubjects?: Array<NonNullable<UserInfo["parsedSubjects"]>[number] & { rawScore?: unknown; scoreAverage?: unknown }>;
+};
+
+function suppliedScore(value: unknown): number | null {
+  if (typeof value !== "number" && typeof value !== "string") return null;
+  if (typeof value === "string" && !value.trim()) return null;
+  const number = Number(value);
+  return Number.isFinite(number) ? number : null;
+}
+
+export function toStudentRecordReportData(info: ReportInput | null): StudentRecordReportData {
   const parsedSubjects = (info?.parsedSubjects ?? []).map((subject, index) => {
     const grade = Number(subject.grade ?? 0);
-    const rawScore = Math.max(0, 100 - grade * 18 - index * 2);
-    const scoreAverage = Math.max(0, rawScore - 6);
+    const rawScore = suppliedScore(subject.rawScore);
+    const scoreAverage = suppliedScore(subject.scoreAverage);
     return {
       subject: subject.subject || `과목 ${index + 1}`,
       grade,

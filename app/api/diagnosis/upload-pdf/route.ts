@@ -9,13 +9,14 @@ export async function POST(req: NextRequest) {
     const file = formData.get("file") as File | null;
     const gradingSystem = (formData.get("gradingSystem") as "5-level" | "9-level") || "9-level";
 
-    if (!file) {
+    if (!(file instanceof File)) {
       return NextResponse.json(
-        { success: false, error: "?낅줈?쒕맂 ?뚯씪???놁뒿?덈떎." },
+        { success: false, error: "PDF 파일을 선택해 주세요." },
         { status: 400 }
       );
     }
 
+    if (!file.name.toLowerCase().endsWith('.pdf') || file.size > 20 * 1024 * 1024) return NextResponse.json({ success: false, error: "20MB 이하의 PDF 파일을 선택해 주세요." }, { status: 400 });
     const arrayBuffer = await file.arrayBuffer();
     const buffer = Buffer.from(arrayBuffer);
 
@@ -38,10 +39,10 @@ export async function POST(req: NextRequest) {
       studentAnalysis: result.studentAnalysis,
       message: result.message,
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("PDF upload and analysis failed:", error);
     return NextResponse.json(
-      { success: false, error: error.message || "PDF 遺꾩꽍 ?꾩쨷 ?쒕쾭 ?ㅻ쪟媛 諛쒖깮?덉뒿?덈떎." },
+      { success: false, error: error instanceof Error ? error.message : "PDF 분석 중 오류가 발생했습니다." },
       { status: 500 }
     );
   }

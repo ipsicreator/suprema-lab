@@ -2,8 +2,8 @@ const fs = require('fs');
 const path = require('path');
 const pdf = require('pdf-parse');
 
-const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\public\\uploads';
-const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\unified_sources';
+const RAW_PDF_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\public\\uploads';
+const OUTPUT_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\unified_sources';
 
 // 18개 항목 추출을 위한 핵심 키워드
 const keywords = ["모집인원", "모집단위", "최저학력기준", "전형방법", "지원자격", "반영비율", "진로선택", "배점"];

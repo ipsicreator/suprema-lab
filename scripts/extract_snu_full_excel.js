@@ -46,6 +46,6 @@ const snuFullData = [
 const wb = XLSX.utils.book_new();
 const ws = XLSX.utils.json_to_sheet(snuFullData);
 XLSX.utils.book_append_sheet(wb, ws, "서울대_2028_수시_전수조사");
-const outputPath = "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\서울대학교_2028_수시_전체모집단위_정리.xlsx";
+const outputPath = "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\서울대학교_2028_수시_전체모집단위_정리.xlsx";
 XLSX.writeFile(wb, outputPath);
 console.log(`[작업완료] 서울대학교 전체 모집단위 산출물 생성: ${outputPath}`);

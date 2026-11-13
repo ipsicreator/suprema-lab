@@ -1,0 +1,763 @@
+{
+  "date": "2026-11-13",
+  "sourceRoot": "C:\\Users\\chris\\Desktop\\suprema-platform",
+  "destinationRoot": "C:/Users/chris/Desktop/수프리마랩",
+  "backup": "C:/Users/chris/.codex/visualizations/2026/11/13/01a1d332-7c78-78d1-8e0c-5114f0ba3abc/수프리마랩_정리전백업.zip",
+  "deleteFiles": [
+    {
+      "path": "scripts/check_models_brute.js",
+      "bytes": 1264,
+      "sha256": "c3783cc68ad8581ed2c4fee6558e22ea216e0c8b8c107adad40951326307ebdd",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/find_working_model.js",
+      "bytes": 1225,
+      "sha256": "a4f4b6b69ee5d022bb0831911f338d94db5d618cf09f0b32af28374010352e8c",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/list_models_direct.js",
+      "bytes": 659,
+      "sha256": "e623e31b7f4aa3c14694de025fdf0ca6de1c469f7b6818d1c1da34d047f15098",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/list_names_only.js",
+      "bytes": 758,
+      "sha256": "7f9a3324bcf44eed5d9d2af2e73ab5c907fa6b9acbed8c3af0db01f0fc35f526",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/list_unzipped_files.js",
+      "bytes": 339,
+      "sha256": "f18fe3ae7ecaef3dd3fb70dd6ba88a89281fcb6e4fae79158e74ed9c3b94eea6",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_all_v2.js",
+      "bytes": 5302,
+      "sha256": "dfaa1d8e8a3245bec8e19345f2ac6e415fcd55a515e6ab423d628652daa42720",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_v3_refined.js",
+      "bytes": 5891,
+      "sha256": "117720913d9dbfeadda945e88fc93392ee6a38d9aabc3a3eb78f32abc5242c8c",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_v4_perfect.js",
+      "bytes": 6709,
+      "sha256": "e738d758fb2aaffba17701f164c9bca8f48850714f33519a88589d9bfbfe0dea",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_v5_final.js",
+      "bytes": 5650,
+      "sha256": "f721ebecc92d046199dc7b9f610ec074202e14adbeb8183e9f3431f4aa7a0fe9",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_v6_refined.js",
+      "bytes": 5198,
+      "sha256": "9d7dbd417d799e58682733565707c8b7e17b591bd85962669e9a4c01b42e8760",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/master_census_v7_final.js",
+      "bytes": 6735,
+      "sha256": "5663cdab8a9ec1939acb2d4d84f9223fe3cba6e02711f647d8e90832a3efa3a5",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/perfect_restoration_v10.js",
+      "bytes": 3737,
+      "sha256": "30aa1aee133fa6eda416d5160e509388ac1bd2671989e5dfa80e7779ab678d53",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/perfect_restoration_v11.js",
+      "bytes": 4399,
+      "sha256": "c12a805e327de4b134826e5412ac2fab4ea738351e082eed600f3b195e834ec6",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/perfect_restoration_v12_final.js",
+      "bytes": 5196,
+      "sha256": "9ed2df287746c2ec54f8a25a514d075b1873b9225728935ac824648a4d0e7648",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/perfect_restoration_v9.js",
+      "bytes": 3816,
+      "sha256": "c419399aff8c75a9316d79c4b9637c421207235e50d549f484692cbcf8a52226",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/test_final_hope.js",
+      "bytes": 893,
+      "sha256": "bcded75ef5794a17c7b70e6fef2128bff8a92da0338a4bfc38e52768337c8ed7",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/test_free_models.js",
+      "bytes": 972,
+      "sha256": "6a3cbc4bc0d1eb41b25b6ca479dd369ea5cb196dd749dd7d3049434a89b5e65a",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "scripts/file_list.txt",
+      "bytes": 4698,
+      "sha256": "d16cc24d0b8494a8f8c9a60c2831bf71675107d67608005f21c595e9d4558742",
+      "reason": "미참조 중간 버전 또는 탐색용 임시 도구"
+    },
+    {
+      "path": "src/app/page.tsx",
+      "bytes": 2142,
+      "sha256": "a942a67c44dd3a667eed4e878472c31e40fc907f7e14681b657aed18a1e6f45e",
+      "reason": "루트 app과 별개인 초기 템플릿"
+    },
+    {
+      "path": "src/app/page.module.css",
+      "bytes": 2574,
+      "sha256": "39838c6279b10f0e663858f414848e2f20c0eddeb6af16c35371ed8fe89bb441",
+      "reason": "루트 app과 별개인 초기 템플릿"
+    },
+    {
+      "path": "src/app/layout.tsx",
+      "bytes": 676,
+      "sha256": "67d36b6a14f7fd3ec97bbd457f6ad867638896684b56405b3f0fd9c784455eb6",
+      "reason": "루트 app과 별개인 초기 템플릿"
+    },
+    {
+      "path": "src/app/globals.css",
+      "bytes": 746,
+      "sha256": "83849395bfd5934fa3317eaa5393924f06fb1c8cd3f2437c948d78e6e50fb521",
+      "reason": "루트 app과 별개인 초기 템플릿"
+    },
+    {
+      "path": "src/app/favicon.ico",
+      "bytes": 25931,
+      "sha256": "2b8ad2d33455a8f736fc3a8ebf8f0bdea8848ad4c0db48a2833bd0f9cd775932",
+      "reason": "루트 app과 별개인 초기 템플릿"
+    },
+    {
+      "path": "next.config.ts",
+      "bytes": 140,
+      "sha256": "a972c4f0ffa6dd714e7909b02d1ac19d2f2fe3d01f191efd2c5054bd6f142ec1",
+      "reason": "비어 있는 중복 Next 설정"
+    }
+  ],
+  "preserved": [
+    {
+      "path": "app/admin/pricing/page.tsx",
+      "sha256": "ebd2ed212a8f8c207694f9931c4bca09f24a9d5b7cb613fa7a01f393afbd2646"
+    },
+    {
+      "path": "app/api/auth/[...nextauth]/route.ts",
+      "sha256": "d47e3f6d42a59be805bb6f972a8765a607a2644b41ddaf379d43491119bfcdfd"
+    },
+    {
+      "path": "app/api/auth/[provider]/route.ts",
+      "sha256": "303eb4a9b9e4c8c3a0cc649340a15e804e69c5a4cb248ca68578c7bf5555b073"
+    },
+    {
+      "path": "app/api/diagnosis/exploration-topics/route.ts",
+      "sha256": "3ee9684d3326e24769afb54032b7dda8b1cee00cec972893f7e7d7f872a68d1b"
+    },
+    {
+      "path": "app/api/diagnosis/route.ts",
+      "sha256": "b9205a23e3903702b992f43647ce3afa2aaf9067f47cf8c9cfdac405dd1ea29f"
+    },
+    {
+      "path": "app/api/diagnosis/upload-configure/route.ts",
+      "sha256": "2469b054f02657c211b2b11ee2c8568cc7240310c1b4673720ad0c617dc6bcca"
+    },
+    {
+      "path": "app/api/diagnosis/upload-init/route.ts",
+      "sha256": "f2daa3fb3c7a4c5f3b089e4b8cd4d79635116212aa9b3b6b756c5b838782fcdb"
+    },
+    {
+      "path": "app/api/diagnosis/upload-pdf/route.ts",
+      "sha256": "30f019f1f2ddc85ef66e70f87831d31cea8cc291821114942dea6e79da0d5e77"
+    },
+    {
+      "path": "app/api/diagnosis/upload-pdf-record/route.ts",
+      "sha256": "dca38e98248c8624ac2524cd54e17783fc63a47d928ad10d6feff37dbc39b6fd"
+    },
+    {
+      "path": "app/api/health/route.ts",
+      "sha256": "c0d013e485b032bb76691a5473f9b17a4f8379bcd8d8c11840605d6e7cc45d1f"
+    },
+    {
+      "path": "app/api/ipsidna-prism/assessment/route.ts",
+      "sha256": "fc5b82e2fefff79ebc744f87490499ecb372ddcc2ca694e87afa9ce3f810ef2f"
+    },
+    {
+      "path": "app/api/ipsidna-prism/lead/route.ts",
+      "sha256": "2cf8df4654685d44695fd2aaa75a28d802e64a964eed495244088009b1ab0456"
+    },
+    {
+      "path": "app/api/ipsidna-prism/result/[id]/route.ts",
+      "sha256": "cc47d27758fea3c0293c48fe3963a503cc97e3e9026b520a9c67b342b5010f05"
+    },
+    {
+      "path": "app/api/platform/admin/orders/route.ts",
+      "sha256": "feae74fb8ad4a8f9865874dcd1956da81762fc8abd57447494890a2f436817ce"
+    },
+    {
+      "path": "app/api/platform/billing/confirm/route.ts",
+      "sha256": "8a41237f4bc54eb05abe19d641d74a803cbf1ac8aebe158cdec9dbcfb3b528e8"
+    },
+    {
+      "path": "app/api/platform/billing/route.ts",
+      "sha256": "b5356d64789e312e0c02cfac40851d01a3619d8b4479cdca53d870d4390c50a4"
+    },
+    {
+      "path": "app/api/platform/history/route.ts",
+      "sha256": "a5e4935dc3e2f77ff6d69ea3d0a1ff63b7e4d48729e5480ddfe988b6096d9381"
+    },
+    {
+      "path": "app/api/platform/keywords/route.ts",
+      "sha256": "917d2206e477a7876cc2df3e41f570667822aecd3e6a6ca823792aa677a9283e"
+    },
+    {
+      "path": "app/api/platform/materials/route.ts",
+      "sha256": "51de54782f1435c9753ce9008b8fdd0279dec3a82f386305344d590131d73db2"
+    },
+    {
+      "path": "app/api/platform/profile/route.ts",
+      "sha256": "8a9c04459f1320d8c5d9471c7578aa047286d2c3f4a84e65c6a732c02dab3513"
+    },
+    {
+      "path": "app/api/platform/topics/route.ts",
+      "sha256": "21c6d91b89accd20efbecd9d9d971509e9274e9558e8e7ef395ab307e2defe4d"
+    },
+    {
+      "path": "app/api/platform/usage/route.ts",
+      "sha256": "5df76660bb37f0db3091fdf95ae37a964aeb6f6795f50178f4c388adb17fb368"
+    },
+    {
+      "path": "app/api/send-email/route.ts",
+      "sha256": "6c4aa880c7c28b8f25938d4ba6e7482ae4cacee99d2c72f8e6e07e215cd30f62"
+    },
+    {
+      "path": "app/api/solution/route.ts",
+      "sha256": "bd1baec3219da9afe3cbe90866a790865a4da13c75f0a5f1f56ed49327d40991"
+    },
+    {
+      "path": "app/api/universities/route.ts",
+      "sha256": "7db1b2f93b4eed2aba5352c3325ff0d89705ea8c05d180ac5c85a78081933d71"
+    },
+    {
+      "path": "app/api/webhooks/toss/route.ts",
+      "sha256": "cf6ce37b846ceec0a84318699e2d86b7d3a3ae325943d0baaaa05eec02868f7b"
+    },
+    {
+      "path": "app/billing/fail/page.tsx",
+      "sha256": "caf43ef60870727c109d34bbc24369696c33c37ebf905a9421d58af04aa88b86"
+    },
+    {
+      "path": "app/billing/page.tsx",
+      "sha256": "4ead62af15002eeae36ac70dc6065427cbdb83eedac8008a4281c43d559caa82"
+    },
+    {
+      "path": "app/billing/success/page.tsx",
+      "sha256": "b20f2eb02f7ba6aa7ea6100a7598e8d8654b837e59e7e3794def7d0bf3617d4f"
+    },
+    {
+      "path": "app/components/admission/AdmissionOfficerEvaluation.tsx",
+      "sha256": "1c8f1287bd19541a9b0406f64eb270466f15633ab8f24bd6d8b3ce90059a3079"
+    },
+    {
+      "path": "app/components/admission/charts/AdmissionTierChart.tsx",
+      "sha256": "088c37378f97d1a22f6f873995840f155cbec7837f2dff9a41ca319eca9afe24"
+    },
+    {
+      "path": "app/components/admission/charts/GradeDistributionBar.tsx",
+      "sha256": "018c918f96c87c9356872fe31f420cd99d08a0200bfc03c66dbe204321b43515"
+    },
+    {
+      "path": "app/components/admission/charts/GradeTrendChart.tsx",
+      "sha256": "34c61ebe1f297313fa51def96f5baba58e23ccb2847ad4369d3de6d4ae518aca"
+    },
+    {
+      "path": "app/components/admission/charts/RadarEvaluationChart.tsx",
+      "sha256": "6f9192bbeb7d146932ffa1dd1fb2f7dd378756ea757e52651cbb753a5c8959fb"
+    },
+    {
+      "path": "app/components/admission/data/admissionData.ts",
+      "sha256": "a8a39ec89334fa3d0f6b0e6e1254b2a6fee9c8a8b7b90c8727a4fb0c7be65b2e"
+    },
+    {
+      "path": "app/components/admission/data/index.ts",
+      "sha256": "bd940fb4cc2212b754f99c6da4650c8a36f28513407305d4dc21f07d4903538f"
+    },
+    {
+      "path": "app/components/admission/evaluation/RubricPanel.tsx",
+      "sha256": "51b5afc4997ea6ec8f8c14b09d85a873404325ba969645e16fb162bc0794f3a3"
+    },
+    {
+      "path": "app/components/admission/evaluation/SepecViewer.tsx",
+      "sha256": "03a2364cd493161d9c01e972dbfc5cd3c1224bed015cd858fd9a53503b7acef9"
+    },
+    {
+      "path": "app/components/admission/index.ts",
+      "sha256": "ac86d066ab02e77849e6b6df624e2ed01ae1cee0c2aaeffbc08622a05c977fcb"
+    },
+    {
+      "path": "app/components/admission/screens/EvaluationSimulation.tsx",
+      "sha256": "9194ab738d6e5016d684654f685713fd9ad6c99ccc16e774316b998f99f54b32"
+    },
+    {
+      "path": "app/components/admission/screens/index.ts",
+      "sha256": "6e002d7befa5fd7a30c54e36e20ba539c902d17140252a3ac887a9335891eeb2"
+    },
+    {
+      "path": "app/components/admission/screens/PositionDiagnosis.tsx",
+      "sha256": "c6e990ff4c3753a5650e6b31548c470be59137dd8b5f73abf6f2f7819db915f6"
+    },
+    {
+      "path": "app/components/auth/AdminOnly.tsx",
+      "sha256": "e5707a7e1b7816b2e1615e234dbab802e78ad523528440f374cbe31d936d43f2"
+    },
+    {
+      "path": "app/components/auth/AuthButtons.tsx",
+      "sha256": "b56b70da147fdb1ed99ac415b234aeb1542b1ddb174adefe71a4fd0fb86fb225"
+    },
+    {
+      "path": "app/components/auth/RequireAuth.tsx",
+      "sha256": "df6849a6010284adfde6f71e1776dec8992573da21a6dfd9de55b53e1ab8c80d"
+    },
+    {
+      "path": "app/components/auth/SessionProviders.tsx",
+      "sha256": "d27f1a09b200f4271ac3634ae53b54d5e444d99ccd67a136c80556907fa731d7"
+    },
+    {
+      "path": "app/components/FlowShell.tsx",
+      "sha256": "32b86b04bfecc59191b44cf9b2fe9bb308735727e2187a67e2a185d06db67c29"
+    },
+    {
+      "path": "app/components/StepProgress.tsx",
+      "sha256": "0ef51b1c4d6cd3c2ed694929efb512bfca48d751451a240ca66788bcb778c6ea"
+    },
+    {
+      "path": "app/components/UserInfoForm.module.css",
+      "sha256": "06dbb6a98fda1f2ec58d17f57b8b7a23c01b1e166ee37e0ff66be02c45470838"
+    },
+    {
+      "path": "app/components/UserInfoForm.tsx",
+      "sha256": "1413cd8eea634a04e073ce9af1506b746a1e741d5b5b9bbebe626206b28b85da"
+    },
+    {
+      "path": "app/diagnosis/content.ts",
+      "sha256": "03546886714d83d53f6ec004fd019c0624668bf99254f07c61deff60f1c96fbb"
+    },
+    {
+      "path": "app/diagnosis/diagnosis.module.css",
+      "sha256": "021268b5e995b5c7788b69698b9cf90297ebdf607f04b58a1d68cb510c7771ab"
+    },
+    {
+      "path": "app/diagnosis/entry.module.css",
+      "sha256": "01d12d215fed85d4072eacaf725d09eb6531c811d4aa5e3dc10649263ce6873a"
+    },
+    {
+      "path": "app/diagnosis/gradeUtils.ts",
+      "sha256": "16e060fc6622b51ac2e17154efda864102bc404dbda1c29914b36a2c94c15758"
+    },
+    {
+      "path": "app/diagnosis/page.module.css",
+      "sha256": "05956c2327954463adaec366d6da9ec39b5d3c62f52a3be9fff7d8dff43ef2ff"
+    },
+    {
+      "path": "app/diagnosis/page.tsx",
+      "sha256": "5e47769bb107b53144cce124bb6f07a6ad5310af0fb50979233cf70c3d120724"
+    },
+    {
+      "path": "app/diagnosis/report.tsx",
+      "sha256": "ea2da9be5e53cd3675a4b3514f4f01b61b2b7515e8179275f6072cdd448ee81c"
+    },
+    {
+      "path": "app/diagnosis/step1/evaluation/page.tsx",
+      "sha256": "b55e327370fab4f343afd1cf03975fb209000609714288d0be8263a65dc0eba0"
+    },
+    {
+      "path": "app/diagnosis/step1/page.tsx",
+      "sha256": "af3dbdcb410fd0921166ff38ac34761068295c4ac1663a6b84818ce54380822e"
+    },
+    {
+      "path": "app/diagnosis/step1/Step1.tsx",
+      "sha256": "cfed2f0fdfc9e66cf9cdfdbb6eaf09ea36ff60280920a49f3b4bbdd09e47c3da"
+    },
+    {
+      "path": "app/diagnosis/step2/page.tsx",
+      "sha256": "4faad04ee80962aeb37722ef09d49f1b565700fd46c7618a5e24bc3041d9d5f0"
+    },
+    {
+      "path": "app/diagnosis/step2/Step2.tsx",
+      "sha256": "54b78140606bf0dc6809629419677f2139bfc97d6f7d516c8ca3179eb9acfa05"
+    },
+    {
+      "path": "app/diagnosis/step3/page.tsx",
+      "sha256": "ac08850b5df0f90467752fe6e0fcf5096113168d024f2d4c92d9018a4cb57226"
+    },
+    {
+      "path": "app/diagnosis/step3/Step3.tsx",
+      "sha256": "49fae617be336e85335901e738657cd79b16b26928d40138e84e125e70f2f0fa"
+    },
+    {
+      "path": "app/diagnosis/step4/page.tsx",
+      "sha256": "8f65fe0fec3ef089c42d9679a379d8ebd51c216ac7370ca6975f3cb0f58283c6"
+    },
+    {
+      "path": "app/diagnosis/step4/Step4.tsx",
+      "sha256": "8f84133faf44947d95dc0efdf107f9fac25a054eddac02e988835c129e4ec2be"
+    },
+    {
+      "path": "app/diagnosis/steps.ts",
+      "sha256": "4e14b41c739884c6de0b6e5b5e68a7d676991afe62767d51b47edbdb250bd882"
+    },
+    {
+      "path": "app/exploration/page.tsx",
+      "sha256": "cf9252f28696d82939b6d5ea71e43bdff2369cb525fdb741937174f8c8fbec86"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "2a48b88a6ee27dda27b168158decaeafee5458d09c32a64e4ce896184a64a9d1"
+    },
+    {
+      "path": "app/intro/intro.module.css",
+      "sha256": "b8f236f9f3ecfa64f145c9caeec3307bb5c6f867141a14a4ea8cb7a10783f67d"
+    },
+    {
+      "path": "app/intro/page.module.css",
+      "sha256": "fe8d21ea3b92e2616d043b332bc019e5ef930ff88716ffd068fd8340057164a7"
+    },
+    {
+      "path": "app/intro/page.tsx",
+      "sha256": "3d185ddb97200de7548688e7468fb99956a2ab9d09f695e51658beabcdac0cbf"
+    },
+    {
+      "path": "app/ipsidna-prism/diagnosis/page.tsx",
+      "sha256": "61a6b75e6fef8d4800fd9d97a8e512e466ef949a5e080bc7e83a073eb912480f"
+    },
+    {
+      "path": "app/ipsidna-prism/full/page.tsx",
+      "sha256": "9b0a5378ca9d2c19c2eb6542839b72a512e93d9084e4164eb5b04807949e362b"
+    },
+    {
+      "path": "app/ipsidna-prism/full/questions/page.tsx",
+      "sha256": "07cf69368a406b9d540505d414d12f657680c32e01fb2551e773333dcd53d06d"
+    },
+    {
+      "path": "app/ipsidna-prism/full/result/page.tsx",
+      "sha256": "1746744f718415ffe7c8932d7929d41586ba69aff44034848e0bc441c14d9d8d"
+    },
+    {
+      "path": "app/ipsidna-prism/page.tsx",
+      "sha256": "330290f85341f021b0c9d819d4738a013e25904cefe56ef3d3e3e92525508dd5"
+    },
+    {
+      "path": "app/ipsidna-prism/prism.module.css",
+      "sha256": "8b9d2f0e1aca559adf21512367737353bab0cf209bfbe25cb5b001f3c99dc521"
+    },
+    {
+      "path": "app/ipsidna-prism/result/page.tsx",
+      "sha256": "11b8f50fa9cfdfa40b7c6dc62c7a82afb9a3e42deed713e39646b9c22b242b5c"
+    },
+    {
+      "path": "app/ipsidna-prism/toolkit/page.tsx",
+      "sha256": "993f73a509a5ef942a0ecc4e4d7ceb1afd3a3d53c9e50deef4cb7d3dfbc0c0e5"
+    },
+    {
+      "path": "app/layout.tsx",
+      "sha256": "2ac852e2c1cf6109daac12e278dba30ca66f538fec41c0a963b6df2c61527d92"
+    },
+    {
+      "path": "app/leaflet/page.tsx",
+      "sha256": "f44ae84c6274d18222cc8674111521e4f71e31d52079a660f3cd869802714095"
+    },
+    {
+      "path": "app/page.module.css",
+      "sha256": "ce086ab05bda4e7f9622fa2f2acf3015fd6d7ad664a4b0ea6f1cdf0586a37ea8"
+    },
+    {
+      "path": "app/page.tsx",
+      "sha256": "33afc02a6e72c626bcd0c1cbc91eda56ddfd2b66671fff6463df6f975eaf7924"
+    },
+    {
+      "path": "app/report/page.tsx",
+      "sha256": "c676b7f8569548e323b4b466b05f26c02080569513409e14b83b5634c8a1683b"
+    },
+    {
+      "path": "app/report/report.module.css",
+      "sha256": "46711d2530563b7bd0ecfcbbc77cb44df72046ec4ce3015d5e61d5d47d8c0c36"
+    },
+    {
+      "path": "app/setuk/page.module.css",
+      "sha256": "92d7b2ab4c6b8be16804381d37ba2f1a4bdaca5abd01587ba0243262683acbbe"
+    },
+    {
+      "path": "app/setuk/page.tsx",
+      "sha256": "bd19e5ed73e2a2744bfa909074b9c9ac8fd7e5ca81a6857bf644b26be23a4c72"
+    },
+    {
+      "path": "app/setuk/step1/Step1.tsx",
+      "sha256": "f23db0eb39eb873e76a0be4ea3506f9f3459014fef44e56cf0f334c67a0f41bb"
+    },
+    {
+      "path": "app/setuk/step2/Step2.tsx",
+      "sha256": "7fe6a64edda05e7950d65f30cf665ff08370b51a4ba004701574148cdbb7ab39"
+    },
+    {
+      "path": "app/setuk/step3/Step3.tsx",
+      "sha256": "6294465b0cbd2c93780f058f3a450bc9a4865e7934b691cb3b156585adf3e9f6"
+    },
+    {
+      "path": "app/setuk/step4/Step4.tsx",
+      "sha256": "bcb0c3d826bd1a215101e1199a8951f9318ae0c9519ac5919979c46e041bb99d"
+    },
+    {
+      "path": "app/solution/page.tsx",
+      "sha256": "e51f5d49ae418e30d82bdf91142f5f53301d926391cc9a193d8eb8642fec7ef5"
+    },
+    {
+      "path": "lib/ai/gemini.ts",
+      "sha256": "2bec5c9973cddedad2fd7952359299344cf2ef6b4a3c76e30a115ef3de742269"
+    },
+    {
+      "path": "lib/auth.ts",
+      "sha256": "2b9a02ec88ae154ad926c5e020f8ca6927f730faa2a665640425fb7e90294c1a"
+    },
+    {
+      "path": "lib/engines/ai_generator.py",
+      "sha256": "cc0ccb7479ea39d7d95890b788a6d8f930f3b2e3c8a2a1cf7362424455709d55"
+    },
+    {
+      "path": "lib/engines/diagnosis_engine.py",
+      "sha256": "5bc6f0969c1fee1f66fb1fa191f3d887a60ba43447b61d07255993b16d2b462e"
+    },
+    {
+      "path": "lib/ipsidna/api.ts",
+      "sha256": "bcaeb0e23d930923cb6f5ed4cb6d6e79b459dc7a361315556deebc7673b4674c"
+    },
+    {
+      "path": "lib/ipsidna/fullQuestions.ts",
+      "sha256": "205ff129f288d3fb3a942caeb6fd638ea51d53ab084b82c1a7203ffb6840b866"
+    },
+    {
+      "path": "lib/ipsidna/fullScoring.ts",
+      "sha256": "68365023166a7a37ec2dd48bbcc7e73ee981867567bc0ad378ded03a2ab99b5c"
+    },
+    {
+      "path": "lib/ipsidna/questions.ts",
+      "sha256": "79cabc463e537d8f1adfec532cba32e83595c9e9cd68b3ac663cb7b2e7cdd575"
+    },
+    {
+      "path": "lib/ipsidna/storage.ts",
+      "sha256": "56e1a20fd12078534c827c974fe62e5bb29c63204bdf587ab9acb6853536fc19"
+    },
+    {
+      "path": "lib/ipsidna/toolkit.ts",
+      "sha256": "c37a182645460bbb7df3dc9f3518b6eefc73612503d950f8945c23bc6f90b51d"
+    },
+    {
+      "path": "lib/pdf-parser.ts",
+      "sha256": "ef1795e7ffcbb260785f98a3a4e112f7645bf9cc513e5550a390d6d2e59b1a34"
+    },
+    {
+      "path": "lib/pocketbase.ts",
+      "sha256": "17c153910da1721a159ab0e2e549cbd5fa7db7fc6a590761adb3b985e245f94a"
+    },
+    {
+      "path": "lib/pocketbaseAdmin.ts",
+      "sha256": "4a577c0f05331f868ae92f9c6bb1f6a7afed1ba5529bfd95e49cb45c731ba30f"
+    },
+    {
+      "path": "lib/report-data.ts",
+      "sha256": "3ce58706b2badee4922969fff675ea46e0bee2ccba0b6659126f93f72bde7b34"
+    },
+    {
+      "path": "lib/student-record-mapping.ts",
+      "sha256": "410e47296a338a5cd2ccb85a5024141d671d2e2c494b71580662572015f8ae96"
+    },
+    {
+      "path": "lib/topicRecommender.ts",
+      "sha256": "553c823b67834b0d12da4196ea3d8e3406bc496fdb46734dea196ab25b49da48"
+    },
+    {
+      "path": "lib/user-info.ts",
+      "sha256": "6a76163c956b901fc7a0d80cb04219a1163633cf33358837ad344ae70a124b80"
+    },
+    {
+      "path": "lib/utils/admission/admissionDiagnosis.ts",
+      "sha256": "566c185a004825b5b034e64e0e0ed76474fd037ba383acfac9b096a2e3ee88e7"
+    },
+    {
+      "path": "lib/utils/admission/admissionLines.ts",
+      "sha256": "a963ad3809d24926ad707afb16e7f9a58dc7ecaba24e740934964fa9ea12f97c"
+    },
+    {
+      "path": "lib/utils/evaluationLogic.ts",
+      "sha256": "3d633ca77d62a3e01bb2e24b0d002d15fb7efcc0f6e7bcf093381fb091a39dab"
+    },
+    {
+      "path": "src/lib/platform-store.ts",
+      "sha256": "14a1e3c7752ba28f002afb0d0c940358e35b596fe4a3fa13095c6b4dfd2a4d67"
+    },
+    {
+      "path": "src/lib/server-auth.ts",
+      "sha256": "9ee6dadce65476193d74747cd543d1a9e7098d18c13462a91dc528950cb985a8"
+    },
+    {
+      "path": "data/admission/admissionData.json",
+      "sha256": "e30fb63703072f8fd4eaab6d63bef4458a79a452ffc43a72ba8d5a46ec08317a"
+    },
+    {
+      "path": "data/admission_cutoffs.csv",
+      "sha256": "8adae141affdbfc27e1e316931356110682e1ae8c54794632c1f81ea1467dfba"
+    },
+    {
+      "path": "data/admission_cutoffs_2027.csv",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "data/admission_diag.db",
+      "sha256": "9b3fa23bd80a1675ce010b311ff7a86932e021bd4ad94cb8af0103302fb5ef01"
+    },
+    {
+      "path": "data/holistic_criteria.csv",
+      "sha256": "9d3b4ef4139b3e39e61d31e96f2c0fe9a92377cb5ebfc62b3312b9237b7a30ee"
+    },
+    {
+      "path": "data/source_materials.json",
+      "sha256": "6754b95952725175dcf2fe36d6fe26f21b1f43a53aebd6263ecb243564adaee4"
+    },
+    {
+      "path": "data/susi_explorer.csv",
+      "sha256": "558b8c387b4478fd233a7a06b958a064c4c0cb29548412a0637009805f73fe4b"
+    },
+    {
+      "path": "data/susi_explorer_2027.csv",
+      "sha256": "fa3edc3a8621f8866fce465fbafcf068b224820a7d0774675bb3c9d24a4d85f2"
+    },
+    {
+      "path": "data/susi_explorer_fixed.csv",
+      "sha256": "034ff9e20ff1f3c225f21068d200abb0ec156d4094d82a5b5218391863be3f17"
+    },
+    {
+      "path": "data/topic_bank.json",
+      "sha256": "f237e144bdf06ecc2360df246ffc7dd8b0d32187de4fbd2a8683948c8945cd3d"
+    },
+    {
+      "path": "data/universities.json",
+      "sha256": "ab1d0e24e7c3be6488b10f0fd2d1a4c7518b688e5fe0093fecfdecdec9dbe37f"
+    },
+    {
+      "path": "data/university_guides.json",
+      "sha256": "aa0c0099018654c36d93484337000f1eb7fbc6d4d986990b87d2663017e501df"
+    },
+    {
+      "path": "config/adiga_regional_schools.json",
+      "sha256": "5f2854e27e6de54cd75fb7ee467eb8742b4587deb1a4902e8241b27ade545a44"
+    },
+    {
+      "path": "auth.ts",
+      "sha256": "fb847bc912d776995ac204711884595e445a3113baa7bab7c68fb12afd8a3453"
+    },
+    {
+      "path": "package.json",
+      "sha256": "f0237325875e1b102a9820d2e728d31963964b87f076bf5e8bd5ff9518dc02bd"
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "e232ccc4f60f3422d99df8e8b368a1eb0e0b8f3781f00ea381cfc14fc980b3d2"
+    },
+    {
+      "path": "next.config.mjs",
+      "sha256": "951f613f0b894efc0535c1b10b9b6ce6c281bec808f09e76e5c22c52e0275f75"
+    },
+    {
+      "path": "vercel.json",
+      "sha256": "3e8e51b82cc622634248fe0c1b23e331b707f9e1f366847fdec9d1e5f3e21e12"
+    },
+    {
+      "path": "tsconfig.json",
+      "sha256": "5925cfae3a8ba7e2c4e6d2aeaa281dd3b579be8bbcd2a55c5adf334279fe626b"
+    }
+  ],
+  "changedScriptPaths": [
+    "scripts/build_source_truth.ts",
+    "scripts/build_unified_source_v2.js",
+    "scripts/census_snu_perfect.js",
+    "scripts/census_sogang_perfect.js",
+    "scripts/census_yonsei_perfect.js",
+    "scripts/consistency_fix_v14.js",
+    "scripts/create_professional_excel.js",
+    "scripts/dump_all_raw_census.js",
+    "scripts/expand_final_excel.js",
+    "scripts/extract_adiga_raw.py",
+    "scripts/extract_all_major.js",
+    "scripts/extract_all_remaining.js",
+    "scripts/extract_all_rest.js",
+    "scripts/extract_and_integrate.ts",
+    "scripts/extract_candidates_from_summary.py",
+    "scripts/extract_for_notebooklm.js",
+    "scripts/extract_korea_excel.js",
+    "scripts/extract_priority1_candidates.py",
+    "scripts/extract_raw_for_notebooklm.js",
+    "scripts/extract_snu_excel.js",
+    "scripts/extract_snu_final_v2.js",
+    "scripts/extract_snu_full_excel.js",
+    "scripts/extract_sogang_census.js",
+    "scripts/extract_with_project_config.ts",
+    "scripts/extract_yonsei_census.js",
+    "scripts/extract_yonsei_excel.js",
+    "scripts/fill_remaining_moc_from_source_maps.py",
+    "scripts/final_extract.js",
+    "scripts/final_gen_pure.js",
+    "scripts/final_notebooklm_gen.ts",
+    "scripts/final_task_execution.js",
+    "scripts/fix_source_filenames.js",
+    "scripts/generate_final_excel_v1.js",
+    "scripts/identify_univs.js",
+    "scripts/keep_pb_alive.ps1",
+    "scripts/make_error_report.py",
+    "scripts/manual_data_entry_snu.js",
+    "scripts/master_census_v8_final.js",
+    "scripts/merge_all_final.js",
+    "scripts/normalize_adiga_sources.py",
+    "scripts/normalize_adiga_sources_v2.py",
+    "scripts/numeric_moc_extractor.py",
+    "scripts/perfect_restoration_v15.js",
+    "scripts/rebuild_unified_source.js",
+    "scripts/register_boot_trigger.ps1",
+    "scripts/repair_moc_column.py",
+    "scripts/repair_moc_column_v2.py",
+    "scripts/restore_source_truth.js",
+    "scripts/run_school_exports_batch.mjs",
+    "scripts/snu_full_entry.js",
+    "scripts/split_by_university.mjs",
+    "scripts/standardize_sources.js",
+    "scripts/standardize_sources_v3.js",
+    "scripts/test_snu_extraction.js"
+  ],
+  "verification": {
+    "preservedFiles": 134,
+    "coreHashesMatch": true,
+    "deletedFiles": 24,
+    "javascriptSyntax": "passed",
+    "productionBuild": "passed_after_relocation",
+    "typecheck": "passed_as_part_of_next_build",
+    "targetedLint": "passed",
+    "fullLint": "not_clean_in_existing_source_45_errors_observed_before_cleanup",
+    "deletedCaches": [
+      ".next",
+      "tsconfig.tsbuildinfo"
+    ],
+    "oldRootStatus": "empty_directory_locked_by_current_application",
+    "githubRemote": "https://github.com/ipsicreator/suprema-platform.git"
+  },
+  "currentRoot": "C:\\Users\\chris\\Desktop\\수프리마랩"
+}

@@ -6,7 +6,7 @@ import zipfile
 from pathlib import Path
 
 
-ROOT = Path(r"C:\Users\chris\Desktop\suprema-platform")
+ROOT = Path(r"C:\Users\chris\Desktop\수프리마랩")
 ZIP_DIR = ROOT / ".tmp" / "adiga_2028_zips"
 RAW_DIR = ROOT / "outputs" / "adiga_2028_raw"
 MANIFEST_PATH = ROOT / "outputs" / "adiga_2028_raw_manifest.json"

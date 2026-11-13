@@ -1,91 +1,38 @@
 import { NextResponse } from "next/server";
+import type { CollectionModel } from "pocketbase";
 import { hasPocketBaseAdmin, pbAdmin } from "@/lib/pocketbaseAdmin";
+import { requireAdminOrThrow } from "@/lib/server-auth";
 
 export const runtime = "nodejs";
-
 const COLLECTION = "suprema_pdf_uploads";
-
-async function findCollectionIdByName(pb: any, name: string): Promise<string | null> {
-  try {
-    const list = await pb.collections.getFullList();
-    const found = (list || []).find((c: any) => c?.name === name);
-    return found?.id || null;
-  } catch {
-    return null;
-  }
-}
+function missing(error: unknown) { return !!error && typeof error === "object" && "status" in error && error.status === 404; }
 
 export async function POST() {
   try {
-    if (!hasPocketBaseAdmin()) {
-      return NextResponse.json(
-        { ok: false, error: "pocketbase_admin_not_configured" },
-        { status: 500 },
-      );
-    }
-
+    await requireAdminOrThrow();
+    if (!hasPocketBaseAdmin()) return NextResponse.json({ ok: false, error: "pocketbase_admin_not_configured" }, { status: 503 });
     const pb = await pbAdmin();
-
-    let col: any;
-    const collectionId = (await findCollectionIdByName(pb, COLLECTION)) || COLLECTION;
-    try {
-      col = await pb.collections.getOne(collectionId);
-    } catch {
-      // Collection missing in this PocketBase instance: create it.
+    let col: CollectionModel;
+    try { col = await pb.collections.getOne(COLLECTION); }
+    catch (error) {
+      if (!missing(error)) throw error;
       col = await pb.collections.create({
-        name: COLLECTION,
-        type: "base",
-        listRule: "false",
-        viewRule: "false",
-        createRule: "true",
-        updateRule: "false",
-        deleteRule: "false",
+        name: COLLECTION, type: "base",
+        listRule: null, viewRule: null, createRule: "", updateRule: null, deleteRule: null,
         fields: [
-          {
-            name: "file",
-            type: "file",
-            required: true,
-            options: {
-              maxSelect: 1,
-              maxSize: 50 * 1024 * 1024,
-              mimeTypes: ["application/pdf"],
-            },
-          },
+          { name: "file", type: "file", required: true, maxSelect: 1, maxSize: 50 * 1024 * 1024, mimeTypes: ["application/pdf"], protected: true },
           { name: "student_name", type: "text", required: false },
           { name: "school_name", type: "text", required: false },
         ],
       });
     }
-
-    // Ensure direct browser upload works (bypass Vercel request size limits).
-    // Disallow list/view/update/delete to keep it private.
-    const desired = {
-      ...col,
-      listRule: "false",
-      viewRule: "false",
-      createRule: "true",
-      updateRule: "false",
-      deleteRule: "false",
-    };
-
-    const updateId = desired?.id || (await findCollectionIdByName(pb, COLLECTION)) || COLLECTION;
-    await pb.collections.update(updateId, desired as any);
-
-    return NextResponse.json({
-      ok: true,
-      collection: COLLECTION,
-      rules: {
-        listRule: desired.listRule,
-        viewRule: desired.viewRule,
-        createRule: desired.createRule,
-        updateRule: desired.updateRule,
-        deleteRule: desired.deleteRule,
-      },
-    });
-  } catch (e: any) {
-    return NextResponse.json(
-      { ok: false, error: "pocketbase_admin_configure_failed", message: e?.message || String(e) },
-      { status: 500 },
-    );
+    // Public create permits direct PDF upload; records and protected files remain private.
+    const fileFields = col.fields.map(field => field.name === "file" ? { ...field, protected: true } : field);
+    await pb.collections.update(col.id, { listRule: null, viewRule: null, createRule: "", updateRule: null, deleteRule: null, fields: fileFields });
+    return NextResponse.json({ ok: true, collection: COLLECTION, rules: { listRule: null, viewRule: null, createRule: "", updateRule: null, deleteRule: null } });
+  } catch (error: unknown) {
+    const code = error instanceof Error ? error.message : "server_error";
+    const status = code === "UNAUTHORIZED" ? 401 : code === "FORBIDDEN" ? 403 : ["ADMIN_NOT_CONFIGURED", "AUTH_NOT_CONFIGURED"].includes(code) ? 503 : 500;
+    return NextResponse.json({ ok: false, error: status === 500 ? "pocketbase_admin_configure_failed" : code }, { status });
   }
 }

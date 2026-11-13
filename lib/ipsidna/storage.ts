@@ -1,6 +1,6 @@
 import type { EngineType } from "./questions";
 
-function isEngineType(v: any): v is EngineType {
+function isEngineType(v: unknown): v is EngineType {
   return v === "SEDAN" || v === "SUV" || v === "SPORTS" || v === "OFFROAD";
 }
 
@@ -15,7 +15,7 @@ export function getLastPrismEngineType(): EngineType | null {
   try {
     const payload = window.localStorage.getItem("prism_last_payload");
     if (!payload) return null;
-    const parsed = JSON.parse(decodeURIComponent(payload)) as { type?: any };
+    const parsed = JSON.parse(decodeURIComponent(payload)) as { type?: unknown };
     return isEngineType(parsed?.type) ? parsed.type : null;
   } catch {
     return null;

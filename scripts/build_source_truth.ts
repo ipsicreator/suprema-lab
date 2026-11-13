@@ -2,9 +2,9 @@ import fs from 'fs';
 import path from 'path';
 import PDFParser from 'pdf2json';
 
-const SOURCE_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\seoul_priority1_exact_raw';
-const TARGET_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const MANUAL_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\manual_check';
+const SOURCE_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\seoul_priority1_exact_raw';
+const TARGET_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const MANUAL_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\manual_check';
 
 const KEYWORDS = ['모집단위', '모집인원', '최저학력기준', '전형방법', '지원자격', '반영비율'];
 

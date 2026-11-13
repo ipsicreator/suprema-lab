@@ -3,8 +3,8 @@ const path = require('path');
 const { GoogleGenerativeAI } = require("@google/generative-ai");
 const XLSX = require('xlsx');
 
-const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\source_truth';
-const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\university_admissions_2028_integrated.xlsx';
+const TRUTH_DIR = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\source_truth';
+const OUTPUT_FILE = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\university_admissions_2028_integrated.xlsx';
 
 // Manual env loading to avoid dependencies
 const envContent = fs.readFileSync('.env.local', 'utf8');

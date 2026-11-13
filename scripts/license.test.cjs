@@ -1,0 +1,7 @@
+const {test}=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),Module=require('node:module'),path=require('node:path'),ts=require('typescript');let fail=true,calls=0,active=true,params;
+const pb={filter:(_expression,p)=>{params=p;return JSON.stringify(p);},collection:()=>({getFirstListItem:async()=>{calls++;if(fail)throw Error('offline');return {active};}})};
+const f=path.resolve('lib/auth.ts'),m=new Module(f,module);m.paths=module.paths;m.require=id=>id==='./pocketbase'?{__esModule:true,default:pb}:require(id);m._compile(ts.transpileModule(fs.readFileSync(f,'utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,esModuleInterop:true}}).outputText,f);
+test('a license lookup failure cannot grant access even for a named academy',async()=>{assert.equal(await m.exports.checkLicense('수프리마'),false);});
+test('blank academy identity is not a license',async()=>{assert.equal(await m.exports.checkLicense(''),false);});
+test('explicit demo remains isolated from real academy license lookup',async()=>{const before=calls;assert.equal(await m.exports.checkLicense('demo_academy'),true);assert.equal(calls,before);});
+test('real academy filtering is escaped and active flag is required',async()=>{fail=false;active=true;const id='academy" || active=false';assert.equal(await m.exports.checkLicense(id),true);assert.equal(params.academyId,id);active=false;assert.equal(await m.exports.checkLicense('academy'),false);});

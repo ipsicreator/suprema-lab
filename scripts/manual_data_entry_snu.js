@@ -34,5 +34,5 @@ const universityData = [
 const wb = XLSX.utils.book_new();
 const ws = XLSX.utils.json_to_sheet(universityData);
 XLSX.utils.book_append_sheet(wb, ws, "서울대학교_2028");
-XLSX.writeFile(wb, "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\SNU_2028_Manual_Detail.xlsx");
+XLSX.writeFile(wb, "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\SNU_2028_Manual_Detail.xlsx");
 console.log("서울대학교 수작업 정밀 데이터 생성 완료");

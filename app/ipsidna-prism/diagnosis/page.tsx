@@ -1,21 +1,13 @@
 "use client";
 
+import Image from "next/image";
+
 import { useMemo, useState } from "react";
 import { PRISM_QUESTIONS, PrismAnswers, scoreAnswers, resolveEngineType } from "../../../lib/ipsidna/questions";
 import styles from "../prism.module.css";
 
 function clampIndex(index: number, max: number) {
   return Math.min(Math.max(index, 0), max);
-}
-
-function getClientId(): string {
-  if (typeof window === "undefined") return "web";
-  const key = "prism_client_id";
-  const existing = window.localStorage.getItem(key);
-  if (existing) return existing;
-  const created = `pr_${Math.random().toString(16).slice(2)}_${Date.now().toString(16)}`;
-  window.localStorage.setItem(key, created);
-  return created;
 }
 
 export default function PrismDiagnosisPage() {
@@ -25,7 +17,7 @@ export default function PrismDiagnosisPage() {
   const [submitting, setSubmitting] = useState(false);
   const [leadId, setLeadId] = useState<string>(() => {
     if (typeof window === "undefined") return "";
-    return window.localStorage.getItem("prism_lead_id") || "";
+    try { return window.localStorage.getItem("prism_lead_id") || ""; } catch { return ""; }
   });
   const [leadForm, setLeadForm] = useState({
     name: "",
@@ -102,7 +94,7 @@ export default function PrismDiagnosisPage() {
       <main className={styles.page}>
         <header className={styles.header}>
           <div className={styles.brandRow}>
-            <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+            <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
             <div className={styles.brandText}>입시DNA프리즘 · 약식진단</div>
           </div>
         </header>
@@ -164,7 +156,7 @@ export default function PrismDiagnosisPage() {
     <main className={styles.page}>
       <header className={styles.header}>
         <div className={styles.brandRow}>
-          <img className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
+          <Image width={320} height={96} className={styles.logo} src="/suprema-logo.svg" alt="대치수프리마" />
           <div className={styles.brandText}>입시DNA프리즘 · 약식진단</div>
         </div>
         <div className={styles.progressWrap}>

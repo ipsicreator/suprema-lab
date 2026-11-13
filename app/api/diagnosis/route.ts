@@ -1,169 +1,41 @@
-import { NextRequest, NextResponse } from 'next/server';
-import crypto from 'crypto';
-import { diagnoseAdmissionRange, type YearCutoff } from '@/lib/utils/admission/admissionDiagnosis';
-import admissionData from '@/data/admission/admissionData.json';
+import { NextRequest, NextResponse } from "next/server";
+import { diagnoseAdmissionRange } from "@/lib/utils/admission/admissionDiagnosis";
+import { getActiveAdmissions } from "@/lib/admissions/store";
+import { buildYearCutoffs, resolveAdmissionRow, validateDiagnosisInput } from "@/lib/admissions/diagnosis";
 
 export const runtime = "nodejs";
-
-type AdmissionDataRow = {
-  univ: string;
-  dept?: string;
-  type?: string;
-  name?: string;
-  cutoff24?: number | string | null;
-  cutoff25?: number | string | null;
-  cutoff26_50?: number | string | null;
-  cutoff26_70?: number | string | null;
-};
-
-type DiagnosisChoice = {
-  university?: string;
-  univ?: string;
-  department?: string;
-  dept?: string;
-  admission_type?: string;
-  type?: string;
-  track_name?: string;
-  track?: string;
-  [key: string]: unknown;
-};
-
-type DiagnosisRequestBody = {
-  studentIndex?: string | number;
-  choices?: DiagnosisChoice[];
-  academyId?: string;
-  grade?: string;
-  gradingSystem?: string;
-};
-
-const cachedAdmissionData = admissionData as unknown as AdmissionDataRow[];
-
-function generateHash(data: unknown) {
-  return crypto.createHash('md5').update(JSON.stringify(data)).digest('hex');
+function convert5To9Grade(grade: number) {
+  if (grade <= 2) return 1 + (grade - 1) * 2.6;
+  if (grade <= 3) return 3.6 + (grade - 2) * 2.2;
+  if (grade <= 4) return 5.8 + (grade - 3) * 2;
+  return 7.8 + (grade - 4) * 1.2;
 }
-
-function normalizeUniversityName(name: string): string {
-  let value = (name || "").trim().replace(/\s/g, "");
-  if (value.includes("(")) value = value.split("(")[0];
-  return value;
-}
-
-function parseNumber(value: unknown): number | null {
-  if (value === null || value === undefined || value === '') return null;
-  if (typeof value === 'number' && Number.isFinite(value)) return value;
-  const parsed = String(value).replace(/,/g, '').match(/-?\d+(?:\.\d+)?/);
-  return parsed ? Number(parsed[0]) : null;
-}
-
-function convert5To9Grade(g5: number): number {
-  if (g5 <= 1.0) return 1.0;
-  if (g5 <= 2.0) return 1.0 + (g5 - 1.0) * 2.6;
-  if (g5 <= 3.0) return 3.6 + (g5 - 2.0) * 2.2;
-  if (g5 <= 4.0) return 5.8 + (g5 - 3.0) * 2.0;
-  if (g5 <= 5.0) return 7.8 + (g5 - 4.0) * 1.2;
-  return 9.0;
-}
-
-function resolveRow(choice: DiagnosisChoice, fullData: AdmissionDataRow[]) {
-  const university = String(choice.university ?? choice.univ ?? '').trim();
-  const department = String(choice.department ?? choice.dept ?? '').trim();
-  const admissionType = String(choice.admission_type ?? choice.type ?? '').trim();
-  const trackName = String(choice.track_name ?? choice.track ?? '').trim();
-  const uniNorm = normalizeUniversityName(university);
-
-  const exact = fullData.find((row) =>
-    normalizeUniversityName(row.univ) === uniNorm &&
-    String(row.dept ?? '').trim() === department &&
-    String(row.type ?? '').trim() === admissionType &&
-    String(row.name ?? '').trim() === trackName,
-  );
-  if (exact) return exact;
-
-  const typeMatch = fullData.find((row) =>
-    normalizeUniversityName(row.univ) === uniNorm &&
-    String(row.dept ?? '').trim() === department &&
-    String(row.type ?? '').trim() === admissionType,
-  );
-  if (typeMatch) return typeMatch;
-
-  return fullData.find((row) =>
-    normalizeUniversityName(row.univ) === uniNorm &&
-    String(row.dept ?? '').trim() === department,
-  ) ?? null;
-}
-
-function formatCutoff(value: number | null) {
-  return value === null ? null : Number(value.toFixed(2));
-}
-
 export async function POST(req: NextRequest) {
+  let input: ReturnType<typeof validateDiagnosisInput>;
+  try { input = validateDiagnosisInput(await req.json()); }
+  catch (error) { return NextResponse.json({ error: error instanceof SyntaxError ? "올바른 진단 요청을 보내 주세요." : error instanceof Error ? error.message : "진단 입력을 확인해 주세요." }, { status: 400 }); }
   try {
-    const body = (await req.json()) as DiagnosisRequestBody;
-    const { studentIndex, choices, academyId, grade, gradingSystem } = body;
-
-    if (studentIndex === undefined || studentIndex === null || !choices?.length) {
-      return NextResponse.json({ error: 'Invalid diagnosis request' }, { status: 400 });
-    }
-
-    let evalIndex = parseFloat(studentIndex.toString());
-    const is5Level = gradingSystem === '5-level' || grade === '5' || grade === 'five' || grade === '5-level';
-    if (is5Level) {
-      evalIndex = convert5To9Grade(evalIndex);
-    }
-
-    const { checkLicense } = await import('@/lib/auth');
-    const isLicensed = process.env.NODE_ENV === 'development' || await checkLicense(academyId || "demo_academy");
-    if (!isLicensed) {
-      return NextResponse.json({ error: '유효한 라이선스가 없습니다.' }, { status: 403 });
-    }
-
-    generateHash({ studentIndex: evalIndex, choices });
-
-    const fullData = cachedAdmissionData;
-
-    const results = choices.map((choice) => {
-      const row = resolveRow(choice, fullData);
-      const diagnosis = row
-        ? diagnoseAdmissionRange(evalIndex, [
-            {
-              year: 2026,
-              cutoff50: parseNumber(row.cutoff26_50),
-              cutoff70: parseNumber(row.cutoff26_70),
-            },
-            {
-              year: 2025,
-              cutoff50: parseNumber(row.cutoff25),
-              cutoff70: parseNumber(row.cutoff25),
-            },
-            {
-              year: 2024,
-              cutoff50: parseNumber(row.cutoff24),
-              cutoff70: parseNumber(row.cutoff24),
-            },
-          ] as YearCutoff[])
-        : diagnoseAdmissionRange(evalIndex, []);
-
-      const yearMap = new Map(diagnosis.yearly.map((item) => [item.year, item]));
-      const year2026 = yearMap.get(2026);
-      const year2025 = yearMap.get(2025);
-      const year2024 = yearMap.get(2024);
-
+    const { checkLicense } = await import("@/lib/auth");
+    if (process.env.NODE_ENV !== "development" && !await checkLicense(input.academyId || "demo_academy")) return NextResponse.json({ error: "유효한 이용권을 확인하지 못했습니다." }, { status: 403 });
+    const rows = await getActiveAdmissions();
+    const evalIndex = input.gradingSystem === "5-level" ? convert5To9Grade(input.studentIndex) : input.studentIndex;
+    const results = input.choices.map(choice => {
+      const row = resolveAdmissionRow(choice, rows);
+      const diagnosis = diagnoseAdmissionRange(evalIndex, row ? buildYearCutoffs(row) : []);
+      const yearText = (year: number) => {
+        const entry = diagnosis.yearly.find(item => item.year === year);
+        const value = entry?.cutoff70 ?? entry?.cutoff50;
+        return value == null ? "-" : value.toFixed(2);
+      };
       return {
-        ...choice,
-        level: diagnosis.finalLevel,
-        comment: diagnosis.finalComment,
-        safeCutoff: formatCutoff(diagnosis.safeCutoff),
-        reachCutoff: formatCutoff(diagnosis.reachCutoff),
-        spread: formatCutoff(diagnosis.spread),
-        y26: year2026?.cutoff70 !== null && year2026?.cutoff70 !== undefined ? year2026.cutoff70.toFixed(2) : '-',
-        y25: year2025?.cutoff70 !== null && year2025?.cutoff70 !== undefined ? year2025.cutoff70.toFixed(2) : '-',
-        y24: year2024?.cutoff70 !== null && year2024?.cutoff70 !== undefined ? year2024.cutoff70.toFixed(2) : '-',
-        yearly: diagnosis.yearly,
+        ...choice, matched: Boolean(row), level: diagnosis.finalLevel,
+        comment: `${!row ? "선택한 대학·캠퍼스·전형에 일치하는 유일한 근거를 찾지 못했습니다. " : ""}${diagnosis.finalComment}${input.gradingSystem === "5-level" ? " 5등급제 환산은 참고용 비교값이며 대학의 공식 환산점수가 아닙니다." : ""}`,
+        safeCutoff: diagnosis.safeCutoff, reachCutoff: diagnosis.reachCutoff, spread: diagnosis.spread,
+        y26: yearText(2026), y25: yearText(2025), y24: yearText(2024), yearly: diagnosis.yearly,
       };
     });
-
-    return NextResponse.json({ results });
+    return NextResponse.json({ results, studentIndex: input.studentIndex, comparisonIndex: evalIndex, gradingSystem: input.gradingSystem }, { headers: { "Cache-Control": "no-store" } });
   } catch {
-    return NextResponse.json({ error: 'Diagnosis Accumulation Error' }, { status: 500 });
+    return NextResponse.json({ error: "입시 근거를 불러오지 못했습니다. 기존 결과를 유지하고 잠시 후 다시 시도해 주세요." }, { status: 503 });
   }
 }

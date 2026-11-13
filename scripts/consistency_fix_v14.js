@@ -3,8 +3,8 @@ const path = require('path');
 const pdf = require('pdf-parse');
 const XLSX = require('xlsx');
 
-const pdfDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\.tmp\\all_univs';
-const outputDir = 'C:\\Users\\chris\\Desktop\\suprema-platform\\outputs';
+const pdfDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\.tmp\\all_univs';
+const outputDir = 'C:\\Users\\chris\\Desktop\\수프리마랩\\outputs';
 
 const TARGET_LIST = [
     { name: "가천대학교", key: "가천" },

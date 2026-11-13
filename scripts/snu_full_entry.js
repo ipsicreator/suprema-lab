@@ -28,4 +28,4 @@ const snuFullData = [
 const wb = XLSX.utils.book_new();
 const ws = XLSX.utils.json_to_sheet(snuFullData);
 XLSX.utils.book_append_sheet(wb, ws, "SNU_2028");
-XLSX.writeFile(wb, "C:\\Users\\chris\\Desktop\\suprema-platform\\outputs\\SNU_2028_Full_Report.xlsx");
+XLSX.writeFile(wb, "C:\\Users\\chris\\Desktop\\수프리마랩\\outputs\\SNU_2028_Full_Report.xlsx");

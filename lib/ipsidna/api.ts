@@ -27,12 +27,13 @@ export async function submitPrismAnswers(args: { clientId: string; answers: Pris
   }
 }
 
-export async function fetchPrismResult(args: { resultId: number }): Promise<any | null> {
+export async function fetchPrismResult(args: { resultId: number }): Promise<Record<string, unknown> | null> {
   if (!API_BASE) return null;
   try {
     const res = await fetch(`${cleanBase(API_BASE)}/ipsidna-prism/result/${args.resultId}`, { cache: "no-store" });
     if (!res.ok) return null;
-    return (await res.json()) as any;
+    const data: unknown = await res.json();
+    return data && typeof data === "object" && !Array.isArray(data) ? data as Record<string, unknown> : null;
   } catch {
     return null;
   }
