@@ -23,7 +23,7 @@ function singleRelation(collection: CollectionModel, name: string, destination: 
   if (!value || value.type !== "relation" || value.collectionId !== destination || value.maxSelect !== 1) bad();
 }
 function equal(a: unknown, b: unknown): boolean { return JSON.stringify(a) === JSON.stringify(b); }
-export function buildAcademySecurityPlan(collections: CollectionModel[], quarantine = false): Patch[] {
+export function buildAcademySecurityPlan(collections: CollectionModel[], quarantine = false, includeUnchanged = false): Patch[] {
   const find = (name: string) => { const value = collections.find(item => item.name === name); if (!value) bad(); return value; };
   const users = find("users"), profiles = find("suprima_profiles"), licenses = find("suprima_licenses"), students = find("suprima_students"), analyses = find("suprima_pdf_analyses");
   if (users.type !== "auth" || [profiles, licenses, students, analyses].some(item => item.type !== "base")) bad();
@@ -82,7 +82,7 @@ export function buildAcademySecurityPlan(collections: CollectionModel[], quarant
     for (const structure of ["fields", "schema"]) if (structure in after) before[structure] = rawFields(collection);
     if ("indexes" in after) before.indexes = Array.isArray(collection.indexes) ? collection.indexes : [];
     return { name, id: collection.id, before, after };
-  }).filter(patch => !equal(patch.before, patch.after));
+  }).filter(patch => includeUnchanged || !equal(patch.before, patch.after));
 }
 type ProfileRepair = { profileId: string; user: string };
 async function canonicalLinkRepair(db: PocketBase, profiles: CollectionModel, actorEmail: string) {
@@ -110,16 +110,31 @@ async function canonicalLinkRepair(db: PocketBase, profiles: CollectionModel, ac
   }
   return { ambiguous, repairs };
 }
-async function configureAcademySecurityInner(db: PocketBase, context: { phase: string; collection?: string }, actorEmail: string) {
+type SecurityContext = { phase: string; collection?: string; schemaKind?: string; attemptedDetachedProfiles?: number; remainingDuplicates?: number; quarantined?: boolean; studentFieldPresentAfterRelationAdd?: boolean };
+async function lockCollections(db: PocketBase, collections: CollectionModel[]): Promise<boolean> {
+  const locked = Object.fromEntries(rules.map(rule => [rule, null]));
+  let complete = true;
+  for (const collection of collections.filter(item => targets.includes(item.name as typeof targets[number]))) {
+    try { await db.collections.update(collection.id, locked, options()); } catch { complete = false; }
+  }
+  for (const collection of collections.filter(item => targets.includes(item.name as typeof targets[number]))) {
+    try { const current = await db.collections.getOne(collection.id, options()); if (rules.some(rule => current[rule] !== null)) complete = false; } catch { complete = false; }
+  }
+  return complete;
+}
+async function configureAcademySecurityInner(db: PocketBase, context: SecurityContext, actorEmail: string) {
   context.phase = "schema";
   const collections = await Promise.all(["users", ...targets].map(name => db.collections.getOne(name, options())));
-  // Validate all schema assumptions before creating a revision collection or changing any setting.
   buildAcademySecurityPlan(collections);
+  context.schemaKind = key(collections.find(item => item.name === "suprima_students")!);
   context.phase = "profile-links";
   const { ambiguous: ambiguousProfiles, repairs } = await canonicalLinkRepair(db, collections.find(item => item.name === "suprima_profiles")!, actorEmail);
-  const patches = buildAcademySecurityPlan(collections, ambiguousProfiles > 0);
+  context.attemptedDetachedProfiles = repairs.length; context.remainingDuplicates = ambiguousProfiles; context.quarantined = ambiguousProfiles > 0;
+  const changed = buildAcademySecurityPlan(collections, ambiguousProfiles > 0);
   const result = { success: true, version: SECURITY_VERSION, ambiguousProfiles, quarantined: ambiguousProfiles > 0, detachedProfiles: repairs.length };
-  if (!patches.length && !repairs.length) return { ...result, changedCollections: 0, alreadyConfigured: true };
+  if (!changed.length && !repairs.length) return { ...result, changedCollections: 0, alreadyConfigured: true };
+  // Full plan is needed because lockdown temporarily locks even unchanged collections.
+  const patches = buildAcademySecurityPlan(collections, ambiguousProfiles > 0, true);
   context.phase = "backup-schema";
   let revisionCollection: CollectionModel;
   try { revisionCollection = await db.collections.getOne(SECURITY_REVISION_COLLECTION, options()); }
@@ -132,23 +147,32 @@ async function configureAcademySecurityInner(db: PocketBase, context: { phase: s
   if (revisionCollection.type !== "base" || rules.some(rule => revisionCollection[rule] !== null)) throw new Error("ACADEMY_BACKUP_REQUIRES_REVIEW");
   context.phase = "backup-save";
   const backup = await db.collection(SECURITY_REVISION_COLLECTION).create({ version: SECURITY_VERSION, state: "prepared", snapshot: { collections: patches.map(({ name, id, before }) => ({ name, id, before })), profileLinks: repairs } }, options());
-  const applied: Patch[] = [];
   const repaired: ProfileRepair[] = [];
   try {
+    // null means locked/superuser-only. Confirm minimal lockdown BEFORE schema/index/link updates.
+    context.phase = "lockdown"; context.collection = undefined;
+    if (!await lockCollections(db, collections)) throw new Error("ACADEMY_LOCKDOWN_REQUIRED");
     for (const repair of repairs) {
       context.phase = "profile-link-repair"; context.collection = "suprima_profiles";
       const current = await db.collection("suprima_profiles").getOne(repair.profileId, { ...options(), fields: "id,user,role,admin_id" });
       if (current.user !== repair.user || current.role !== "consultant" || current.admin_id !== repair.user) throw new Error("ACADEMY_PROFILE_CHANGED");
       await db.collection("suprima_profiles").update(repair.profileId, { user: "" }, options()); repaired.push(repair);
     }
-    const studentPatch = patches.find(patch => patch.name === "suprima_students");
-    const structure = studentPatch && ("fields" in studentPatch.after ? "fields" : "schema");
-    // Add only the optional relation first so later rules can reference it; no student is assigned here.
-    if (studentPatch && structure && !equal(studentPatch.before[structure], studentPatch.after[structure])) { context.phase = "relation-add"; context.collection = studentPatch.name; await db.collections.update(studentPatch.id, { [structure]: studentPatch.after[structure] }, options()); applied.push(studentPatch);
-      // PocketBase assigns IDs/defaults to new fields; reuse its canonical schema for the rules update.
-      const refreshed = await db.collections.getOne(studentPatch.id, options()); studentPatch.after[structure] = rawFields(refreshed); }
-    for (const patch of patches) { context.phase = "rules"; context.collection = patch.name; await db.collections.update(patch.id, patch.after, options()); if (!applied.includes(patch)) applied.push(patch); }
-    for (const patch of patches) { context.phase = "verify"; context.collection = patch.name; const current = await db.collections.getOne(patch.id, options()); for (const rule of rules) if (current[rule] !== patch.after[rule]) throw new Error("ACADEMY_VERIFY_FAILED");
+    const studentPatch = patches.find(patch => patch.name === "suprima_students")!;
+    const structure = "fields" in studentPatch.after ? "fields" : "schema";
+    if (!equal(studentPatch.before[structure], studentPatch.after[structure])) {
+      context.phase = "relation-add"; context.collection = studentPatch.name;
+      await db.collections.update(studentPatch.id, { [structure]: studentPatch.after[structure] }, options());
+      const refreshed = await db.collections.getOne(studentPatch.id, options()); studentPatch.after[structure] = rawFields(refreshed);
+    }
+    const actualStudents = await db.collections.getOne(studentPatch.id, options());
+    context.studentFieldPresentAfterRelationAdd = !!field(actualStudents, SECURITY_ASSIGNMENT_FIELD);
+    singleRelation(actualStudents, SECURITY_ASSIGNMENT_FIELD, collections.find(item => item.name === "suprima_profiles")!.id);
+    for (const patch of patches) { context.phase = "rules"; context.collection = patch.name; await db.collections.update(patch.id, patch.after, options()); }
+    for (const patch of patches) {
+      context.phase = "verify"; context.collection = patch.name;
+      const current = await db.collections.getOne(patch.id, options());
+      for (const rule of rules) if (current[rule] !== patch.after[rule]) throw new Error("ACADEMY_VERIFY_FAILED");
       if (patch.name === "suprima_students") singleRelation(current, SECURITY_ASSIGNMENT_FIELD, collections.find(item => item.name === "suprima_profiles")!.id);
       if (patch.name === "suprima_profiles" && Array.isArray(patch.after.indexes) && patch.after.indexes.some(index => !current.indexes?.includes(index))) throw new Error("ACADEMY_VERIFY_FAILED");
       if (patch.name === "suprima_pdf_analyses" && fields(current).some(item => item.type === "file" && item.protected !== true)) throw new Error("ACADEMY_VERIFY_FAILED");
@@ -156,34 +180,46 @@ async function configureAcademySecurityInner(db: PocketBase, context: { phase: s
     for (const repair of repaired) { const current = await db.collection("suprima_profiles").getOne(repair.profileId, { ...options(), fields: "id,user" }); if (current.user) throw new Error("ACADEMY_VERIFY_FAILED"); }
     context.phase = "revision-finalize"; context.collection = SECURITY_REVISION_COLLECTION;
     await db.collection(SECURITY_REVISION_COLLECTION).update(backup.id, { state: "applied" }, options());
-    return { ...result, changedCollections: patches.length, alreadyConfigured: false };
+    return { ...result, changedCollections: changed.length, alreadyConfigured: false };
   } catch (cause) {
-    let restored = true;
-    for (const patch of [...applied].reverse()) { try { await db.collections.update(patch.id, patch.before, options()); } catch { restored = false; } }
-    for (const repair of [...repaired].reverse()) { try { await db.collection("suprima_profiles").update(repair.profileId, { user: repair.user }, options()); } catch { restored = false; } }
-    try { await db.collection(SECURITY_REVISION_COLLECTION).update(backup.id, { state: restored ? "rolled_back" : "restore_required" }, options()); } catch { /* Private backup remains available to the operator. */ }
-    throw Object.assign(new Error(restored ? "ACADEMY_CONFIGURATION_ROLLED_BACK" : "ACADEMY_RESTORE_REQUIRED"), { cause });
+    // Never restore known-public rules after a failed configuration. Keep ordinary access locked.
+    const locked = await lockCollections(db, collections);
+    let linksRestored = true;
+    const profilePatch = patches.find(patch => patch.name === "suprima_profiles");
+    if (repaired.length && profilePatch) { try { await db.collections.update(profilePatch.id, { indexes: profilePatch.before.indexes }, options()); } catch { linksRestored = false; } }
+    for (const repair of [...repaired].reverse()) { try { await db.collection("suprima_profiles").update(repair.profileId, { user: repair.user }, options()); } catch { linksRestored = false; } }
+    try { await db.collection(SECURITY_REVISION_COLLECTION).update(backup.id, { state: locked ? linksRestored ? "locked_failed" : "locked_link_restore_required" : "lockdown_required" }, options()); } catch { /* Private backup remains available. */ }
+    throw Object.assign(new Error(locked ? "ACADEMY_CONFIGURATION_LOCKED" : "ACADEMY_LOCKDOWN_REQUIRED"), { cause, locked, linksRestored });
   }
 }
-
+function safeBackendMessage(value: unknown): string | undefined {
+  if (typeof value !== "string") return undefined;
+  if (/password|secret|authorization|bearer|api.?key|access.?token|refresh.?token/i.test(value)) return "[redacted]";
+  return value.replace(/https?:\/\/\S+/gi, "[redacted-url]").replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[redacted-email]").replace(/\beyJ[A-Za-z0-9_-]{20,}(?:\.[A-Za-z0-9_-]+){1,2}\b/g, "[redacted-token]").slice(0, 512);
+}
 export async function configureAcademySecurity(db: PocketBase, actorEmail = "") {
-  const context: { phase: string; collection?: string } = { phase: "start" };
+  const context: SecurityContext = { phase: "start" };
   try { return await configureAcademySecurityInner(db, context, actorEmail); }
   catch (error) {
     const source = error && typeof error === "object" && "cause" in error ? error.cause : error;
-    const object = source && typeof source === "object" ? source as Record<string, unknown> : {};
-    const response = object.response && typeof object.response === "object" ? object.response as Record<string, unknown> : object;
+    const object = source && typeof source === "object" ? source as Data : {};
+    const response = object.response && typeof object.response === "object" ? object.response as Data : object;
     const data = response.data && typeof response.data === "object" ? response.data : {};
     const invalidFields = Object.keys(data).filter(name => /^[a-zA-Z0-9_.-]{1,70}$/.test(name));
     const validationCodes: string[] = [];
-    const collectCodes = (value: unknown, depth: number) => { if (depth > 5 || !value || typeof value !== "object") return; for (const [name, item] of Object.entries(value)) { if (name === "code" && typeof item === "string" && /^[a-zA-Z0-9_.-]{1,70}$/.test(item)) validationCodes.push(item); else if (name !== "message") collectCodes(item, depth + 1); } }; collectCodes(data, 0);
+    const validationDetails: { field: string; code?: string; message?: string }[] = [];
+    const collect = (value: unknown, path: string, depth: number) => {
+      if (depth > 5 || !value || typeof value !== "object") return;
+      const item = value as Data;
+      const code = typeof item.code === "string" && /^[a-zA-Z0-9_.-]{1,70}$/.test(item.code) ? item.code : undefined;
+      if (code) validationCodes.push(code);
+      if (/^(schema|fields|listRule|viewRule|createRule|updateRule|deleteRule|indexes)(\.|$)/.test(path) && (code || typeof item.message === "string")) validationDetails.push({ field: path, code, message: safeBackendMessage(item.message) });
+      for (const [name, nested] of Object.entries(item)) if (!["message", "code"].includes(name) && /^[a-zA-Z0-9_.-]{1,70}$/.test(name)) collect(nested, path ? path + "." + name : name, depth + 1);
+    };
+    collect(data, "", 0);
     const rawCode = error instanceof Error ? error.message : "";
-    const code = ["ACADEMY_SCHEMA_REQUIRES_REVIEW", "ACADEMY_BACKUP_REQUIRES_REVIEW", "ACADEMY_CONFIGURATION_ROLLED_BACK", "ACADEMY_RESTORE_REQUIRED"].includes(rawCode) ? rawCode : "ACADEMY_CONFIGURE_FAILED";
-    throw Object.assign(new Error(code), { phase: context.phase, collection: context.collection, backendStatus: typeof object.status === "number" ? object.status : undefined, invalidFields, validationCodes: [...new Set(validationCodes)] });
+    const code = ["ACADEMY_SCHEMA_REQUIRES_REVIEW", "ACADEMY_BACKUP_REQUIRES_REVIEW", "ACADEMY_CONFIGURATION_LOCKED", "ACADEMY_LOCKDOWN_REQUIRED"].includes(rawCode) ? rawCode : "ACADEMY_CONFIGURE_FAILED";
+    const recovery = error && typeof error === "object" ? error as { locked?: boolean; linksRestored?: boolean } : {};
+    throw Object.assign(new Error(code), { ...context, locked: recovery.locked, linksRestored: recovery.linksRestored, backendStatus: typeof object.status === "number" ? object.status : undefined, backendMessage: safeBackendMessage(response.message ?? object.message), invalidFields, validationCodes: [...new Set(validationCodes)], validationDetails });
   }
 }
-
-
-
-
-

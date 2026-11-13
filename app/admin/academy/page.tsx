@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import AccountsPanel from "./AccountsPanel";
 import { useState } from "react";
 import AdminOnly from "../../components/auth/AdminOnly";
-import RequireAuth from "../../components/auth/RequireAuth";
+import MasterAccess from "./MasterAccess";
 
 type LinkCounts = { populated: number; matchingUsers: number };
 type RoleCounts = { profiles: number; canonicalUser: number; canonicalUserMatching: number; legacyOnly: number; sameUserBoth: number; distinctLinks: number };
@@ -92,6 +93,7 @@ function AcademyAudit() {
     {error && <p role="alert" style={{ color: "#a52424", marginTop: 20 }}>{error}</p>}
     {configuration && <ActionResult title="접근 권한·배정 구조 적용 결과" value={configuration} />}
     {verification && <ActionResult title="실제 권한·배정 검증 결과" value={verification} />}
+    <AccountsPanel />
     {audit && <>
       <p style={{ marginTop: 12, color: "#71665e" }}>운영 상태 확인 시각: {new Date(audit.checkedAt).toLocaleString("ko-KR")}</p>
       <section style={panel}>
@@ -124,5 +126,5 @@ function AcademyAudit() {
 }
 
 export default function AcademyPage() {
-  return <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px" }}><RequireAuth><AdminOnly><AcademyAudit /></AdminOnly></RequireAuth></main>;
+  return <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px" }}><MasterAccess><AdminOnly><AcademyAudit /></AdminOnly></MasterAccess></main>;
 }
