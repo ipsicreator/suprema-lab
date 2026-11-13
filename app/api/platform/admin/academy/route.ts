@@ -38,9 +38,9 @@ export async function GET() {
     const profileFields = new Set(profilesSchema?.fields.map(field => field.name));
     const studentFields = new Set(studentsSchema?.fields.map(field => field.name));
     const relationFields = studentsSchema?.fields.filter(field => field.type === "relation" && "collectionId" in field && field.collectionId === profilesSchema?.id).map(field => field.name) || [];
-    const configuredAssignment = process.env.ACADEMY_STUDENT_CONSULTANT_FIELD || "";
+    const configuredAssignment = process.env.ACADEMY_STUDENT_CONSULTANT_FIELD || "assigned_consultant";
     const profiles = profilesSchema?.exists ? await pb.collection("suprima_profiles").getFullList({ ...options, fields: ["id", "academy_id", "role", "admin_id", "user"].filter(name => name === "id" || profileFields.has(name)).join(",") }) : [];
-    const students = studentsSchema?.exists ? await pb.collection("suprima_students").getFullList({ ...options, fields: ["id", "academy_id", ...relationFields].filter(name => name === "id" || studentFields.has(name)).join(",") }) : [];
+    const students = studentsSchema?.exists ? await pb.collection("suprima_students").getFullList({ ...options, fields: ["id", "academy_id", "consultant_id", ...relationFields].filter(name => name === "id" || studentFields.has(name)).join(",") }) : [];
     const academies = new Map<string, { academyId: string; profiles: number; roles: Record<string, number>; students: number; assignedStudents: Record<string, number> }>();
     const academy = (value: unknown) => {
       const id = typeof value === "string" && value.trim() ? value : "(미지정)";
@@ -56,8 +56,26 @@ export async function GET() {
     const users = usersSchema?.exists ? await pb.collection("users").getFullList({ ...options, fields: "id" }) : [];
     const userIds = new Set(users.map(user => user.id));
     const linkCounts = new Map<string, number>();
+    const canonicalCounts = new Map<string, number>();
+    const fieldLinks = { user: { populated: 0, matchingUsers: 0 }, admin_id: { populated: 0, matchingUsers: 0 } };
+    const roles: Record<string, { profiles: number; canonicalUser: number; canonicalUserMatching: number; legacyOnly: number; sameUserBoth: number; distinctLinks: number }> = {};
+    const linkValue = (value: unknown) => typeof value === "string" && value.trim() ? value : "";
     let unlinkedProfiles = 0, unknownUserLinks = 0, conflictingProfileLinks = 0;
     for (const profile of profiles) {
+      const canonical = linkValue(profile.user), legacy = linkValue(profile.admin_id);
+      for (const field of ["user", "admin_id"] as const) {
+        const id = linkValue(profile[field]);
+        if (id) { fieldLinks[field].populated++; if (userIds.has(id)) fieldLinks[field].matchingUsers++; }
+      }
+      if (canonical) canonicalCounts.set(canonical, (canonicalCounts.get(canonical) || 0) + 1);
+      const role = ["master", "admin", "consultant"].includes(profile.role) ? profile.role : "미확인";
+      const counts = roles[role] ||= { profiles: 0, canonicalUser: 0, canonicalUserMatching: 0, legacyOnly: 0, sameUserBoth: 0, distinctLinks: 0 };
+      counts.profiles++;
+      if (canonical) counts.canonicalUser++;
+      if (canonical && userIds.has(canonical)) counts.canonicalUserMatching++;
+      if (!canonical && legacy) counts.legacyOnly++;
+      if (canonical && legacy && canonical === legacy) counts.sameUserBoth++;
+      if (canonical && legacy && canonical !== legacy) counts.distinctLinks++;
       const links = [...new Set([profile.admin_id, profile.user].filter((value): value is string => typeof value === "string" && !!value))];
       if (!links.length) unlinkedProfiles++;
       if (links.length > 1) conflictingProfileLinks++;
@@ -69,6 +87,18 @@ export async function GET() {
     const ambiguousUsers = [...linkCounts.values()].filter(count => count > 1).length;
     let invalidAssignments = 0;
     const profileById = new Map(profiles.map(profile => [profile.id, profile]));
+    const legacyAssignment = { fieldExists: studentFields.has("consultant_id"), fieldType: studentsSchema?.fields.find(field => field.name === "consultant_id")?.type || null, populated: 0, validProfileAssignments: 0, invalidProfileAssignments: 0, noUniqueCanonicalUser: 0, usableAssignments: 0 };
+    for (const student of students) {
+      const raw = student.consultant_id;
+      if (raw === undefined || raw === null || raw === "" || (Array.isArray(raw) && !raw.length)) continue;
+      legacyAssignment.populated++;
+      const profile = typeof raw === "string" ? profileById.get(raw) : undefined;
+      if (!profile || profile.academy_id !== student.academy_id || profile.role !== "consultant") { legacyAssignment.invalidProfileAssignments++; continue; }
+      legacyAssignment.validProfileAssignments++;
+      const canonical = linkValue(profile.user);
+      if (!canonical || !userIds.has(canonical) || canonicalCounts.get(canonical) !== 1) legacyAssignment.noUniqueCanonicalUser++;
+      else legacyAssignment.usableAssignments++;
+    }
     for (const student of students) {
       const entry = academy(student.academy_id); entry.students++;
       for (const field of relationFields) {
@@ -81,8 +111,8 @@ export async function GET() {
       }
     }
     return NextResponse.json({ success: true, checkedAt: new Date().toISOString(), collections,
-      assignment: { configuredField: configuredAssignment || null, relationCandidates: relationFields, configuredFieldVerified: !!configuredAssignment && relationFields.includes(configuredAssignment), invalidAssignments },
-      profileLinks: { unlinkedProfiles, unknownUserLinks, conflictingProfileLinks, ambiguousUsers },
+      assignment: { configuredField: configuredAssignment || null, relationCandidates: relationFields, configuredFieldVerified: !!configuredAssignment && relationFields.includes(configuredAssignment), invalidAssignments, legacyAssignment },
+      profileLinks: { unlinkedProfiles, unknownUserLinks, conflictingProfileLinks, ambiguousUsers, fields: fieldLinks, roles, canonicalAmbiguousUsers: [...canonicalCounts.values()].filter(count => count > 1).length },
       academies: [...academies.values()].sort((a, b) => a.academyId.localeCompare(b.academyId)).map((entry, index) => ({ ...entry, academyId: entry.academyId === "(미지정)" ? "소속 미지정" : "학원 " + (index + 1) })) }, { headers: { "Cache-Control": "no-store" } });
   } catch (error) {
     const code = error instanceof Error ? error.message : "SERVER_ERROR";
@@ -90,3 +120,4 @@ export async function GET() {
     return NextResponse.json({ success: false, error: status === 401 ? "로그인이 필요합니다." : status === 403 ? "본사 관리자 권한이 필요합니다." : status === 503 ? "관리자 또는 저장소 연결 설정을 확인해 주세요." : "학원 운영 상태를 확인하지 못했습니다. 기존 설정은 유지됩니다." }, { status, headers: { "Cache-Control": "no-store" } });
   }
 }
+

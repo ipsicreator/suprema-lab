@@ -29,25 +29,27 @@ async function withBackend(run) { const old = process.env.PB_URL; process.env.PB
 const req = () => new Request('https://suprema-lab.vercel.app/api/academy/ai', { headers: { Authorization: 'Bearer verified-token' } });
 const profile = { id: 'profile1', admin_id: uid, user: uid, academy_id: 'academy1', role: 'consultant' };
 
-test('distinct profile links across admin_id and user reject ambiguous academy selection', () => withBackend(async () => {
-  const context = setup({ admin: [{ ...profile, user: undefined }], user: [{ ...profile, id: 'profile2', admin_id: undefined, academy_id: 'academy2' }] });
+test('legacy creator admin_id never grants academy login ownership', () => withBackend(async () => {
+  const context = setup({ admin: [{ ...profile, user: undefined }], user: [] });
   await assert.rejects(context.bridge.requireAcademyUser(req()), error => error.status === 403);
-  assert.deepEqual(context.queries, ['admin_id', 'user']); assert.equal(context.licenseReads(), 0);
+  assert.deepEqual(context.queries, ['user']); assert.equal(context.licenseReads(), 0);
 }));
-test('same profile linked through both fields is deduplicated by profile ID', () => withBackend(async () => {
-  const context = setup({ admin: [profile], user: [profile] });
+test('canonical user relation accepts one profile regardless of legacy creator text', () => withBackend(async () => {
+  const context = setup({ admin: [{ ...profile, id: 'other' }], user: [{ ...profile, admin_id: 'shared-creator' }] });
   assert.equal((await context.bridge.requireAcademyUser(req())).academyId, 'academy1');
-  assert.deepEqual(context.queries, ['admin_id', 'user']); assert.equal(context.licenseReads(), 1);
+  assert.deepEqual(context.queries, ['user']); assert.equal(context.licenseReads(), 1);
 }));
-test('unknown mapping field can use the other explicit mapping, permission and network failures cannot', () => withBackend(async () => {
-  const supported = setup({ adminError: 400, user: [{ ...profile, admin_id: undefined }] });
-  assert.equal((await supported.bridge.requireAcademyUser(req())).academyId, 'academy1');
-  for (const [status, expected] of [[403, 403], [0, 503]]) {
-    const denied = setup({ adminError: status, user: [profile] });
-    await assert.rejects(denied.bridge.requireAcademyUser(req()), error => error.status === expected);
-    assert.deepEqual(denied.queries, ['admin_id']); assert.equal(denied.licenseReads(), 0);
+test('duplicate user profiles and inconsistent returned user ownership fail closed', () => withBackend(async () => {
+  for (const user of [[profile, { ...profile, id: 'profile2' }], [{ ...profile, user: 'someone-else' }]]) {
+    const context = setup({ user });
+    await assert.rejects(context.bridge.requireAcademyUser(req()), error => error.status === 403);
+    assert.deepEqual(context.queries, ['user']); assert.equal(context.licenseReads(), 0);
   }
-  const secondaryDenied = setup({ admin: [profile], userError: 403 });
-  await assert.rejects(secondaryDenied.bridge.requireAcademyUser(req()), error => error.status === 403);
-  assert.equal(secondaryDenied.licenseReads(), 0);
+}));
+test('missing user schema, permission and network failures never fall back to admin_id', () => withBackend(async () => {
+  for (const [status, expected] of [[400, 503], [404, 403], [403, 403], [0, 503]]) {
+    const context = setup({ userError: status, admin: [profile] });
+    await assert.rejects(context.bridge.requireAcademyUser(req()), error => error.status === expected);
+    assert.deepEqual(context.queries, ['user']); assert.equal(context.licenseReads(), 0);
+  }
 }));
