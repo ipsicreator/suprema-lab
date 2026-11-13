@@ -110,12 +110,55 @@ async function canonicalLinkRepair(db: PocketBase, profiles: CollectionModel, ac
   }
   return { ambiguous, repairs };
 }
+export type CollectionWriteTiming = { now: () => number; wait: (milliseconds: number) => Promise<void> };
+const defaultTiming: CollectionWriteTiming = { now: () => Date.now(), wait: milliseconds => new Promise(resolve => setTimeout(resolve, milliseconds)) };
+function exactSpecifiedProperties(actual: unknown, expected: unknown): boolean {
+  if (expected === null || typeof expected !== "object") return actual === expected;
+  if (Array.isArray(expected)) return Array.isArray(actual) && equal(actual, expected);
+  if (!actual || typeof actual !== "object" || Array.isArray(actual)) return false;
+  return Object.entries(expected).every(([name, value]) => Object.hasOwn(actual, name) && exactSpecifiedProperties((actual as Data)[name], value));
+}
+function exactIntendedMetadata(actual: CollectionModel, patch: Data): boolean {
+  return Object.entries(patch).every(([name, expected]) => {
+    if ((name === "fields" || name === "schema") && Array.isArray(expected)) {
+      const current = actual[name];
+      if (!Array.isArray(current) || current.length !== expected.length) return false;
+      if (new Set(current.map(item => objectFieldName(item))).size !== current.length) return false;
+      return expected.every(value => { const name = objectFieldName(value); return !!name && exactSpecifiedProperties(current.find(item => objectFieldName(item) === name), value); });
+    }
+    return equal(actual[name], expected);
+  });
+}
+function objectFieldName(value: unknown): string { return value && typeof value === "object" && "name" in value && typeof value.name === "string" ? value.name : ""; }
+export function createCollectionWriter(db: PocketBase, collections: CollectionModel[], timing: CollectionWriteTiming = defaultTiming) {
+  const completed = new Map<string, number>();
+  for (const collection of collections) {
+    if (typeof collection.updated !== "string") continue;
+    const timestamp = Date.parse(collection.updated.replace(" ", "T") + (/Z$|[+-]\d\d:\d\d$/.test(collection.updated) ? "" : "Z"));
+    const age = timing.now() - timestamp;
+    if (Number.isFinite(timestamp) && age >= -1100 && age < 1100) completed.set(collection.id, Math.min(timestamp, timing.now()));
+  }
+  return async (id: string, patch: Data): Promise<CollectionModel> => {
+    const last = completed.get(id);
+    if (last !== undefined) { const remaining = 1100 - (timing.now() - last); if (remaining > 0) await timing.wait(Math.min(1100, remaining)); }
+    try { return await db.collections.update(id, patch, options()); }
+    catch (error) {
+      const status = error && typeof error === "object" && "status" in error ? error.status : undefined;
+      if (status === 400) {
+        // Legacy automigration bookkeeping can fail AFTER the collection transaction commits.
+        // An error is accepted only when a fresh read proves every intended metadata value.
+        try { const current = await db.collections.getOne(id, options()); if (exactIntendedMetadata(current, patch)) return current; } catch { /* Preserve the original write failure if readback is unavailable. */ }
+      }
+      throw error;
+    } finally { completed.set(id, timing.now()); }
+  };
+}
 type SecurityContext = { phase: string; collection?: string; schemaKind?: string; attemptedDetachedProfiles?: number; remainingDuplicates?: number; quarantined?: boolean; studentFieldPresentAfterRelationAdd?: boolean; verifyCheck?: Record<string, unknown>; lockWriteErrors?: { collection: string; status?: number }[] };
-async function lockCollections(db: PocketBase, collections: CollectionModel[], context?: SecurityContext): Promise<boolean> {
+async function lockCollections(db: PocketBase, collections: CollectionModel[], writeCollection: ReturnType<typeof createCollectionWriter>, context?: SecurityContext): Promise<boolean> {
   const locked = Object.fromEntries(rules.map(rule => [rule, null]));
   const writeErrors: { collection: string; status?: number }[] = [];
   for (const collection of collections.filter(item => targets.includes(item.name as typeof targets[number]))) {
-    try { await db.collections.update(collection.id, locked, options()); } catch (error) { const failure = error && typeof error === "object" ? error as { status?: number } : {}; writeErrors.push({ collection: collection.name, status: typeof failure.status === "number" ? failure.status : undefined }); }
+    try { await writeCollection(collection.id, locked); } catch (error) { const failure = error && typeof error === "object" ? error as { status?: number } : {}; writeErrors.push({ collection: collection.name, status: typeof failure.status === "number" ? failure.status : undefined }); }
   }
   if (context) context.lockWriteErrors = writeErrors;
   let complete = true;
@@ -125,9 +168,10 @@ async function lockCollections(db: PocketBase, collections: CollectionModel[], c
   }
   return complete;
 }
-async function configureAcademySecurityInner(db: PocketBase, context: SecurityContext, actorEmail: string) {
+async function configureAcademySecurityInner(db: PocketBase, context: SecurityContext, actorEmail: string, timing: CollectionWriteTiming) {
   context.phase = "schema";
   const collections = await Promise.all(["users", ...targets].map(name => db.collections.getOne(name, options())));
+  const writeCollection = createCollectionWriter(db, collections, timing);
   buildAcademySecurityPlan(collections);
   context.schemaKind = key(collections.find(item => item.name === "suprima_students")!);
   context.phase = "profile-links";
@@ -154,7 +198,7 @@ async function configureAcademySecurityInner(db: PocketBase, context: SecurityCo
   try {
     // null means locked/superuser-only. Confirm minimal lockdown BEFORE schema/index/link updates.
     context.phase = "lockdown"; context.collection = undefined;
-    if (!await lockCollections(db, collections, context)) throw new Error("ACADEMY_LOCKDOWN_REQUIRED");
+    if (!await lockCollections(db, collections, writeCollection, context)) throw new Error("ACADEMY_LOCKDOWN_REQUIRED");
     for (const repair of repairs) {
       context.phase = "profile-link-repair"; context.collection = "suprima_profiles";
       const current = await db.collection("suprima_profiles").getOne(repair.profileId, { ...options(), fields: "id,user,role,admin_id" });
@@ -165,13 +209,13 @@ async function configureAcademySecurityInner(db: PocketBase, context: SecurityCo
     const structure = "fields" in studentPatch.after ? "fields" : "schema";
     if (!equal(studentPatch.before[structure], studentPatch.after[structure])) {
       context.phase = "relation-add"; context.collection = studentPatch.name;
-      await db.collections.update(studentPatch.id, { [structure]: studentPatch.after[structure] }, options());
+      await writeCollection(studentPatch.id, { [structure]: studentPatch.after[structure] });
       const refreshed = await db.collections.getOne(studentPatch.id, options()); studentPatch.after[structure] = rawFields(refreshed);
     }
     const actualStudents = await db.collections.getOne(studentPatch.id, options());
     context.studentFieldPresentAfterRelationAdd = !!field(actualStudents, SECURITY_ASSIGNMENT_FIELD);
     singleRelation(actualStudents, SECURITY_ASSIGNMENT_FIELD, collections.find(item => item.name === "suprima_profiles")!.id);
-    for (const patch of patches) { context.phase = "rules"; context.collection = patch.name; await db.collections.update(patch.id, patch.after, options()); }
+    for (const patch of patches) { context.phase = "rules"; context.collection = patch.name; await writeCollection(patch.id, patch.after); }
     for (const patch of patches) {
       context.phase = "verify"; context.collection = patch.name;
       const current = await db.collections.getOne(patch.id, options());
@@ -197,10 +241,10 @@ async function configureAcademySecurityInner(db: PocketBase, context: SecurityCo
     return { ...result, changedCollections: changed.length, alreadyConfigured: false };
   } catch (cause) {
     // Never restore known-public rules after a failed configuration. Keep ordinary access locked.
-    const locked = await lockCollections(db, collections, context);
+    const locked = await lockCollections(db, collections, writeCollection, context);
     let linksRestored = true;
     const profilePatch = patches.find(patch => patch.name === "suprima_profiles");
-    if (repaired.length && profilePatch) { try { await db.collections.update(profilePatch.id, { indexes: profilePatch.before.indexes }, options()); } catch { linksRestored = false; } }
+    if (repaired.length && profilePatch) { try { await writeCollection(profilePatch.id, { indexes: profilePatch.before.indexes }); } catch { linksRestored = false; } }
     for (const repair of [...repaired].reverse()) { try { await db.collection("suprima_profiles").update(repair.profileId, { user: repair.user }, options()); } catch { linksRestored = false; } }
     try { await db.collection(SECURITY_REVISION_COLLECTION).update(backup.id, { state: locked ? linksRestored ? "locked_failed" : "locked_link_restore_required" : "lockdown_required" }, options()); } catch { /* Private backup remains available. */ }
     throw Object.assign(new Error(locked ? "ACADEMY_CONFIGURATION_LOCKED" : "ACADEMY_LOCKDOWN_REQUIRED"), { cause, locked, linksRestored });
@@ -211,9 +255,9 @@ function safeBackendMessage(value: unknown): string | undefined {
   if (/password|secret|authorization|bearer|api.?key|access.?token|refresh.?token/i.test(value)) return "[redacted]";
   return value.replace(/https?:\/\/\S+/gi, "[redacted-url]").replace(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi, "[redacted-email]").replace(/\beyJ[A-Za-z0-9_-]{20,}(?:\.[A-Za-z0-9_-]+){1,2}\b/g, "[redacted-token]").slice(0, 512);
 }
-export async function configureAcademySecurity(db: PocketBase, actorEmail = "") {
+export async function configureAcademySecurity(db: PocketBase, actorEmail = "", timing: CollectionWriteTiming = defaultTiming) {
   const context: SecurityContext = { phase: "start" };
-  try { return await configureAcademySecurityInner(db, context, actorEmail); }
+  try { return await configureAcademySecurityInner(db, context, actorEmail, timing); }
   catch (error) {
     const source = error && typeof error === "object" && "cause" in error ? error.cause : error;
     const object = source && typeof source === "object" ? source as Data : {};
@@ -237,6 +281,7 @@ export async function configureAcademySecurity(db: PocketBase, actorEmail = "") 
     throw Object.assign(new Error(code), { ...context, locked: recovery.locked, linksRestored: recovery.linksRestored, backendStatus: typeof object.status === "number" ? object.status : undefined, backendMessage: safeBackendMessage(response.message ?? object.message), invalidFields, validationCodes: [...new Set(validationCodes)], validationDetails });
   }
 }
+
 
 
 
