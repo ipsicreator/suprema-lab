@@ -54,18 +54,23 @@ export async function requireAcademyUser(request: Request) {
   }
   try {
     const db = hasPocketBaseAdmin() ? await pbAdmin() : userClient;
-    let profile: Record<string, unknown> | undefined;
+    const profiles = new Map<string, Record<string, unknown>>();
     for (const field of ["admin_id", "user"]) {
       try {
         const found = await db.collection("suprima_profiles").getList(1, 2, { ...requestOptions(), filter: db.filter(`${field}={:id}`, { id: userId }), fields: "id,admin_id,user,academy_id,role" });
         if (found.items.length > 1) fail(403, "소속 정보가 중복되어 있습니다. 관리자 확인이 필요합니다.");
-        if (found.items.length === 1) { profile = found.items[0]; break; }
+        for (const item of found.items) {
+          if (typeof item.id !== "string" || !item.id) fail(403, "소속 정보를 확인하지 못했습니다.");
+          profiles.set(item.id, item);
+        }
       } catch (error) {
         if (error instanceof AcademyBridgeError) throw error;
         const status = isObject(error) ? error.status : undefined;
         if (status !== 400 && status !== 404) throw error;
       }
     }
+    if (profiles.size > 1) fail(403, "소속 정보가 중복되어 있습니다. 관리자 확인이 필요합니다.");
+    const profile = profiles.values().next().value;
     const linked = profile && (profile.admin_id === userId || profile.user === userId);
     const academyId = typeof profile?.academy_id === "string" ? profile.academy_id.trim() : "";
     const role = typeof profile?.role === "string" ? profile.role : "";
