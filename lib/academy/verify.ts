@@ -138,6 +138,22 @@ export async function verifyAcademyAccess(db: PocketBase, makeClient: ClientFact
         (async () => equalIds(await list(foreignManager, "suprima_students"), [students[3].id]))(),
       ]);
     });
+    await check("master_requires_google_login", async () => {
+      await db.collection("suprima_profiles").update(profiles[3].id, { role: "master" }, options());
+      await group([
+        (async () => equalIds(await list(foreignManager, "suprima_students"), []))(),
+        (async () => equalIds(await list(foreignManager, "suprima_pdf_analyses"), []))(),
+        (async () => {
+          try {
+            await requireAcademyUser(new Request("https://suprema-lab.vercel.app/api/academy/assignments", { headers: { authorization: "Bearer " + foreignManager.authStore.token } }));
+          } catch (error) {
+            if (error && typeof error === "object" && "status" in error && error.status === 403) return;
+            throw error;
+          }
+          throw new VerificationFailure("master_password_access_not_denied");
+        })(),
+      ]);
+    });
   } catch (error) {
     const value = error && typeof error === "object" ? error as { status?: unknown; data?: { data?: unknown } } : {};
     const allowedFields = ["id", "email", "password", "passwordConfirm", "verified", "name", "user", "academy_id", "role", "active", "school", "grade", "enrollment_status", "assigned_consultant", "student_id", "content"];
@@ -153,6 +169,7 @@ export async function verifyAcademyAccess(db: PocketBase, makeClient: ClientFact
   const cleanup = { attempted: created.length, failed: cleanupFailures, complete: cleanupFailures === 0 };
   return { success: checks.length > 0 && checks.every(check => check.passed) && cleanup.complete, checkedAt: new Date().toISOString(), checks, cleanup, ...(failure ? { failure } : {}), isolatedSyntheticFixtures: true };
 }
+
 
 
 

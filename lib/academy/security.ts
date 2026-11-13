@@ -23,6 +23,21 @@ function singleRelation(collection: CollectionModel, name: string, destination: 
   if (!value || value.type !== "relation" || value.collectionId !== destination || value.maxSelect !== 1) bad();
 }
 function equal(a: unknown, b: unknown): boolean { return JSON.stringify(a) === JSON.stringify(b); }
+export function normalizeIndexSemantic(sql: string): string {
+  // Compare SQL tokens, preserving string literals and every non-formatting token.
+  const tokens = sql.match(/'(?:''|[^'])*'|"(?:""|[^"])*"|`(?:``|[^`])*`|\[[^\]]*\]|[A-Za-z_][A-Za-z0-9_]*|[0-9]+(?:\.[0-9]+)?|!=|<>|<=|>=|\S/g) || [];
+  if (tokens.at(-1) === ";") tokens.pop();
+  return tokens.map(token => {
+    if ((token.startsWith('"') && token.endsWith('"')) || (token.startsWith("`") && token.endsWith("`")) || (token.startsWith("[") && token.endsWith("]"))) {
+      const identifier = token.slice(1, -1);
+      if (/^[A-Za-z_][A-Za-z0-9_]*$/.test(identifier)) return identifier;
+    }
+    return token;
+  }).join(" ");
+}
+function indexArraysEqual(actual: unknown, expected: unknown): boolean {
+  return Array.isArray(actual) && Array.isArray(expected) && actual.length === expected.length && expected.every((sql, index) => typeof sql === "string" && typeof actual[index] === "string" && normalizeIndexSemantic(sql) === normalizeIndexSemantic(actual[index]));
+}
 export function buildAcademySecurityPlan(collections: CollectionModel[], quarantine = false, includeUnchanged = false): Patch[] {
   const find = (name: string) => { const value = collections.find(item => item.name === name); if (!value) bad(); return value; };
   const users = find("users"), profiles = find("suprima_profiles"), licenses = find("suprima_licenses"), students = find("suprima_students"), analyses = find("suprima_pdf_analyses");
@@ -67,8 +82,8 @@ export function buildAcademySecurityPlan(collections: CollectionModel[], quarant
   // https://pocketbase.io/docs/api-rules-and-filters/#api-rules
   const existingIndexes = Array.isArray(profiles.indexes) ? profiles.indexes : [];
   const canonicalIndex = `CREATE UNIQUE INDEX idx_suprema_profiles_user ON suprima_profiles (user) WHERE user != ''`;
-  if (!quarantine && links[0] === "user" && existingIndexes.some(index => /\bidx_suprema_profiles_user\b/.test(index) && index !== canonicalIndex)) bad();
-  const profileIndexes = !quarantine && links[0] === "user" && !existingIndexes.includes(canonicalIndex) ? [...existingIndexes, canonicalIndex] : existingIndexes;
+  if (!quarantine && links[0] === "user" && existingIndexes.some(index => /\bidx_suprema_profiles_user\b/.test(index) && normalizeIndexSemantic(index) !== normalizeIndexSemantic(canonicalIndex))) bad();
+  const profileIndexes = !quarantine && links[0] === "user" && !existingIndexes.some(index => normalizeIndexSemantic(index) === normalizeIndexSemantic(canonicalIndex)) ? [...existingIndexes, canonicalIndex] : existingIndexes;
   const newRules: Record<string, Data> = {
     suprima_profiles: { listRule: profileRead, viewRule: profileRead, createRule: null, updateRule: null, deleteRule: null, indexes: profileIndexes },
     suprima_licenses: { listRule: licenseRead, viewRule: licenseRead, createRule: null, updateRule: null, deleteRule: null },
@@ -120,6 +135,7 @@ function exactSpecifiedProperties(actual: unknown, expected: unknown): boolean {
 }
 function exactIntendedMetadata(actual: CollectionModel, patch: Data): boolean {
   return Object.entries(patch).every(([name, expected]) => {
+    if (name === "indexes") return indexArraysEqual(actual.indexes, expected);
     if ((name === "fields" || name === "schema") && Array.isArray(expected)) {
       const current = actual[name];
       if (!Array.isArray(current) || current.length !== expected.length) return false;
@@ -225,13 +241,10 @@ async function configureAcademySecurityInner(db: PocketBase, context: SecurityCo
         throw new Error("ACADEMY_VERIFY_FAILED");
       }
       if (patch.name === "suprima_students") singleRelation(current, SECURITY_ASSIGNMENT_FIELD, collections.find(item => item.name === "suprima_profiles")!.id);
-      if (patch.name === "suprima_profiles" && Array.isArray(patch.after.indexes)) {
-        const expected = patch.after.indexes.find(index => !current.indexes?.includes(index));
-        if (typeof expected === "string") {
-          const normalize = (sql: string) => sql.replace(/["`\[\]]/g, "").replace(/\s+/g, " ").trim().replace(/;$/, "");
-          context.verifyCheck = { kind: "index", indexName: /\bINDEX\s+(?:IF\s+NOT\s+EXISTS\s+)?["`\[]?([a-zA-Z0-9_]+)/i.exec(expected)?.[1], actualKeyPresent: Object.hasOwn(current, "indexes"), actualType: Array.isArray(current.indexes) ? "array" : typeof current.indexes, expectedType: "array", actualIndexesCount: current.indexes?.length, normalizedIndexMatch: current.indexes?.some(sql => normalize(sql) === normalize(expected)) || false };
-          throw new Error("ACADEMY_VERIFY_FAILED");
-        }
+      if (patch.name === "suprima_profiles" && Array.isArray(patch.after.indexes) && !indexArraysEqual(current.indexes, patch.after.indexes)) {
+        const expected = patch.after.indexes.find((sql, index) => typeof current.indexes?.[index] !== "string" || normalizeIndexSemantic(current.indexes[index]) !== normalizeIndexSemantic(sql)) || patch.after.indexes[0];
+        context.verifyCheck = { kind: "index", indexName: typeof expected === "string" ? /\bINDEX\s+(?:IF\s+NOT\s+EXISTS\s+)?["`\[]?([a-zA-Z0-9_]+)/i.exec(expected)?.[1] : undefined, actualKeyPresent: Object.hasOwn(current, "indexes"), actualType: Array.isArray(current.indexes) ? "array" : typeof current.indexes, expectedType: "array", actualIndexesCount: current.indexes?.length, expectedIndexesCount: patch.after.indexes.length, normalizedIndexMatch: false };
+        throw new Error("ACADEMY_VERIFY_FAILED");
       }
       if (patch.name === "suprima_pdf_analyses" && fields(current).some(item => item.type === "file" && item.protected !== true)) throw new Error("ACADEMY_VERIFY_FAILED");
     }
@@ -281,6 +294,7 @@ export async function configureAcademySecurity(db: PocketBase, actorEmail = "", 
     throw Object.assign(new Error(code), { ...context, locked: recovery.locked, linksRestored: recovery.linksRestored, backendStatus: typeof object.status === "number" ? object.status : undefined, backendMessage: safeBackendMessage(response.message ?? object.message), invalidFields, validationCodes: [...new Set(validationCodes)], validationDetails });
   }
 }
+
 
 
 

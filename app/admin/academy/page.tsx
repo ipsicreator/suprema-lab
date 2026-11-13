@@ -32,6 +32,7 @@ const checkLabels: Record<string, string> = {
   manager_reassignment_revokes_previous_consultant: "재배정 시 이전 담당자 접근 해제",
   foreign_and_consultant_assignment_rejected: "타 학원·담당자 배정 변경 차단",
   inactive_license_revokes_academy_access: "이용권 종료 학원 접근 차단",
+  master_requires_google_login: "마스터 Google 전용 접속",
 };
 
 function ActionResult({ title, value }: { title: string; value: Result }) {
@@ -128,3 +129,4 @@ function AcademyAudit() {
 export default function AcademyPage() {
   return <main style={{ maxWidth: 1080, margin: "0 auto", padding: "40px 24px" }}><MasterAccess><AdminOnly><AcademyAudit /></AdminOnly></MasterAccess></main>;
 }
+
