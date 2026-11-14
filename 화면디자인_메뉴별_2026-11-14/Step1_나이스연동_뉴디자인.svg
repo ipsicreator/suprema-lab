@@ -1,0 +1,270 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1950" viewBox="0 0 1200 1950">
+  <defs>
+    <style>
+      .bg { fill: #f8f6f2; }
+      .card { fill: #ffffff; stroke: #ebdcd0; stroke-width: 1.5; rx: 18; }
+      .inner-card { fill: #fdfaf7; stroke: #ebdcd0; stroke-width: 1.2; rx: 12; }
+      .title { font-family: sans-serif; font-weight: 900; fill: #1a0f08; }
+      .text-sub { font-family: sans-serif; font-size: 14px; fill: #6e6259; }
+      .label { font-family: sans-serif; font-size: 13px; font-weight: bold; fill: #382c22; }
+      .input-box { fill: #fdfcfb; stroke: #ebdcd0; stroke-width: 1.5; rx: 8; }
+      .input-val { font-family: sans-serif; font-size: 14px; font-weight: 600; fill: #1a0f08; }
+      .btn-primary { fill: #8b1a1a; rx: 30; }
+      .btn-dark { fill: #1a0f08; rx: 12; }
+      .tag-burgundy { fill: #fbf5f2; stroke: #f0ded6; stroke-width: 1; rx: 6; }
+      .tag-text { font-family: sans-serif; font-size: 12px; font-weight: bold; fill: #8b1a1a; }
+      .tag-green { fill: #f0fdf4; stroke: #bbf7d0; stroke-width: 1; rx: 6; }
+      .tag-green-text { font-family: sans-serif; font-size: 12px; font-weight: bold; fill: #15803d; }
+    </style>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="1950" class="bg" />
+
+  <!-- Top Brand Tag -->
+  <rect x="470" y="40" width="260" height="32" class="tag-burgundy" />
+  <text x="600" y="61" class="tag-text" text-anchor="middle">⚡ 수프리마 대입 종합 진단 솔루션</text>
+
+  <!-- Title & Subtitle -->
+  <text x="600" y="105" class="title" font-size="28" text-anchor="middle">학생 정보 및 생활기록부 등록</text>
+  <text x="600" y="132" class="text-sub" font-size="14" text-anchor="middle">나이스(NEIS) 간편인증 또는 학생부 PDF 등록으로 10초 만에 교과 성적과 세특을 자동 분석합니다.</text>
+
+  <!-- Stepper -->
+  <g transform="translate(260, 165)">
+    <!-- Step 1 Active -->
+    <circle cx="20" cy="15" r="14" fill="#8b1a1a" />
+    <text x="20" y="20" font-family="sans-serif" font-size="13" font-weight="bold" fill="#ffffff" text-anchor="middle">1</text>
+    <text x="42" y="20" font-family="sans-serif" font-size="14" font-weight="bold" fill="#8b1a1a">학생 정보 &amp; 학생부 연동</text>
+
+    <text x="230" y="20" font-family="sans-serif" font-size="13" fill="#cfc2b4">▶</text>
+
+    <!-- Step 2 -->
+    <circle cx="270" cy="15" r="14" fill="#e8e0d6" />
+    <text x="270" y="20" font-family="sans-serif" font-size="13" font-weight="bold" fill="#5c4e43" text-anchor="middle">2</text>
+    <text x="292" y="20" font-family="sans-serif" font-size="14" font-weight="bold" fill="#8c827a">교과 심층 진단</text>
+
+    <text x="430" y="20" font-family="sans-serif" font-size="13" fill="#cfc2b4">▶</text>
+
+    <!-- Step 3 -->
+    <circle cx="470" cy="15" r="14" fill="#e8e0d6" />
+    <text x="470" y="20" font-family="sans-serif" font-size="13" font-weight="bold" fill="#5c4e43" text-anchor="middle">3</text>
+    <text x="492" y="20" font-family="sans-serif" font-size="14" font-weight="bold" fill="#8c827a">대학 합격선 매칭</text>
+  </g>
+
+  <!-- Card 1: 기본 인적사항 -->
+  <g transform="translate(160, 225)">
+    <rect width="880" height="205" class="card" />
+    <text x="32" y="42" class="title" font-size="18">1. 기본 인적사항</text>
+    <text x="32" y="62" class="text-sub" font-size="13">성적 리포트 작성 및 본인 확인을 위한 학생 기본 인적사항입니다.</text>
+    <rect x="780" y="25" width="70" height="24" class="tag-burgundy" />
+    <text x="815" y="41" class="tag-text" text-anchor="middle">필수 입력</text>
+
+    <line x1="32" y1="78" x2="848" y2="78" stroke="#f4ede4" stroke-width="1" />
+
+    <!-- Row 1 -->
+    <text x="32" y="105" class="label">학생 이름 *</text>
+    <rect x="32" y="115" width="395" height="44" class="input-box" />
+    <text x="46" y="142" class="input-val">홍길동</text>
+
+    <text x="452" y="105" class="label">고등학교명 *</text>
+    <rect x="452" y="115" width="395" height="44" class="input-box" />
+    <text x="466" y="142" class="input-val">수프리고등학교 (일반고)</text>
+
+    <!-- Row 2 -->
+    <text x="32" y="180" class="label">현재 학년: 고등학교 3학년 | 담당 컨설턴트: 수프리마 대입전략팀 수석컨설턴트</text>
+  </g>
+
+  <!-- Card 2: 진로 목표 & 분석 기준 -->
+  <g transform="translate(160, 450)">
+    <rect width="880" height="200" class="card" />
+    <text x="32" y="42" class="title" font-size="18">2. 목표 진로 및 분석 기준 설정</text>
+    <text x="32" y="62" class="text-sub" font-size="13">목표 학과와 전형에 따라 대학별 유불리 산출 공식과 정성평가 가중치가 달라집니다.</text>
+    <rect x="780" y="25" width="70" height="24" class="tag-burgundy" />
+    <text x="815" y="41" class="tag-text" text-anchor="middle">사전 기준</text>
+
+    <line x1="32" y1="78" x2="848" y2="78" stroke="#f4ede4" stroke-width="1" />
+
+    <text x="32" y="105" class="label">희망 진로 / 목표 학과 *</text>
+    <rect x="32" y="115" width="530" height="44" class="input-box" />
+    <text x="46" y="142" class="input-val">컴퓨터공학과 / 인공지능(AI) 소프트웨어학과</text>
+
+    <text x="582" y="105" class="label">내신 등급 체계 *</text>
+    <rect x="582" y="115" width="265" height="44" class="input-box" />
+    <text x="596" y="142" class="input-val">현행 9등급제 (고3)</text>
+
+    <text x="32" y="180" class="label">분석 희망 전형: [✔ 학생부종합전형]  [학생부교과전형]  [종합+교과 동시진단]</text>
+  </g>
+
+  <!-- Card 3: 학생부 연동 (나이스 간편인증 & PDF) -->
+  <g transform="translate(160, 670)">
+    <rect width="880" height="850" class="card" />
+    <text x="32" y="42" class="title" font-size="18">3. 학교생활기록부 연동 및 성적 분석 (나이스 / PDF)</text>
+    <text x="32" y="62" class="text-sub" font-size="13">나이스(NEIS) 간편인증으로 10초 만에 바로 불러오거나, 기 발급된 PDF 파일을 올리세요.</text>
+    <rect x="750" y="25" width="100" height="24" class="tag-burgundy" />
+    <text x="800" y="41" class="tag-text" text-anchor="middle">실시간 연동</text>
+
+    <line x1="32" y1="78" x2="848" y2="78" stroke="#f4ede4" stroke-width="1" />
+
+    <!-- Tab 1: NEIS (Active) -->
+    <rect x="32" y="95" width="400" height="64" rx="14" fill="#ffffff" stroke="#8b1a1a" stroke-width="2" />
+    <text x="52" y="132" font-size="22">⚡</text>
+    <text x="84" y="122" font-family="sans-serif" font-size="15" font-weight="bold" fill="#8b1a1a">나이스(NEIS) 간편인증 연동</text>
+    <text x="84" y="142" class="text-sub" font-size="12">정부24·나이스 10초 직송 (추천)</text>
+    <rect x="375" y="103" width="42" height="18" rx="4" fill="#8b1a1a" />
+    <text x="396" y="116" font-family="sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">추천</text>
+
+    <!-- Tab 2: PDF Upload -->
+    <rect x="448" y="95" width="400" height="64" rx="14" fill="#fcf9f5" stroke="#ebdcd0" stroke-width="1.5" />
+    <text x="468" y="132" font-size="22">📄</text>
+    <text x="500" y="122" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a0f08">학생부 PDF 파일 업로드</text>
+    <text x="500" y="142" class="text-sub" font-size="12">발급받은 대입전형용 PDF 등록</text>
+
+    <!-- NEIS Info Banner -->
+    <rect x="32" y="175" width="816" height="60" rx="10" fill="#f4ede6" stroke="#ebdcd0" stroke-width="1" />
+    <text x="50" y="202" font-size="18">🔒</text>
+    <text x="78" y="198" font-family="sans-serif" font-size="13" font-weight="bold" fill="#8b1a1a">교육부 나이스(NEIS) 대국민서비스 공식 연계</text>
+    <text x="78" y="218" class="text-sub" font-size="12">별도로 학생부를 다운로드할 필요 없이, 카카오·PASS 등 간편인증 1회로 학생부(II) 교과 성적과 세특을 즉시 불러옵니다.</text>
+
+    <!-- Role Selection -->
+    <text x="32" y="260" class="label">인증 주체:  [✔ 학생 본인 인증 (만 14세 이상)]    [학부모(법정대리인) 대리 인증]</text>
+
+    <!-- 4 Providers -->
+    <!-- Kakao (Selected) -->
+    <g transform="translate(32, 280)">
+      <rect width="195" height="85" rx="12" fill="#fbf5f2" stroke="#8b1a1a" stroke-width="2" />
+      <rect x="16" y="18" width="40" height="40" rx="10" fill="#FEE500" />
+      <text x="36" y="43" font-family="sans-serif" font-size="12" font-weight="900" fill="#191919" text-anchor="middle">카톡</text>
+      <text x="68" y="38" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1a0f08">카카오톡</text>
+      <text x="68" y="55" class="text-sub" font-size="11">국민 간편인증</text>
+      <circle cx="178" cy="18" r="8" fill="#8b1a1a" />
+      <text x="178" y="22" font-family="sans-serif" font-size="10" font-weight="bold" fill="#ffffff" text-anchor="middle">✓</text>
+    </g>
+
+    <!-- PASS -->
+    <g transform="translate(239, 280)">
+      <rect width="195" height="85" rx="12" fill="#ffffff" stroke="#ebdcd0" stroke-width="1.5" />
+      <rect x="16" y="18" width="40" height="40" rx="10" fill="#E60000" />
+      <text x="36" y="43" font-family="sans-serif" font-size="11" font-weight="900" fill="#ffffff" text-anchor="middle">PASS</text>
+      <text x="68" y="38" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1a0f08">통신사 PASS</text>
+      <text x="68" y="55" class="text-sub" font-size="11">SKT / KT / LGU+</text>
+    </g>
+
+    <!-- Toss -->
+    <g transform="translate(446, 280)">
+      <rect width="195" height="85" rx="12" fill="#ffffff" stroke="#ebdcd0" stroke-width="1.5" />
+      <rect x="16" y="18" width="40" height="40" rx="10" fill="#0064FF" />
+      <text x="36" y="43" font-family="sans-serif" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">토스</text>
+      <text x="68" y="38" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1a0f08">토스 (Toss)</text>
+      <text x="68" y="55" class="text-sub" font-size="11">토스 앱 원클릭</text>
+    </g>
+
+    <!-- Naver -->
+    <g transform="translate(653, 280)">
+      <rect width="195" height="85" rx="12" fill="#ffffff" stroke="#ebdcd0" stroke-width="1.5" />
+      <rect x="16" y="18" width="40" height="40" rx="10" fill="#03C75A" />
+      <text x="36" y="43" font-family="sans-serif" font-size="12" font-weight="900" fill="#ffffff" text-anchor="middle">네이버</text>
+      <text x="68" y="38" font-family="sans-serif" font-size="14" font-weight="bold" fill="#1a0f08">네이버 인증</text>
+      <text x="68" y="55" class="text-sub" font-size="11">네이버 앱 알림</text>
+    </g>
+
+    <!-- Connect Action Button -->
+    <rect x="32" y="385" width="816" height="52" class="btn-dark" />
+    <text x="440" y="417" font-family="sans-serif" font-size="16" font-weight="bold" fill="#ffffff" text-anchor="middle">⚡ 나이스 간편인증으로 학생부 10초 만에 불러오기</text>
+    <text x="440" y="455" class="text-sub" font-size="12" text-anchor="middle">* 개인정보는 학생부 수신 즉시 파기되며 서버에 저장되지 않습니다. (교육부 개인정보보호 지침 준수)</text>
+
+    <!-- PRE-CHECK CARD (사전 확인 영역) -->
+    <g transform="translate(32, 480)">
+      <rect width="816" height="340" rx="14" fill="#fdfaf7" stroke="#ebdcd0" stroke-width="1.5" />
+
+      <!-- Pre-check Header -->
+      <rect x="24" y="20" width="160" height="24" class="tag-green" />
+      <text x="104" y="36" class="tag-green-text" text-anchor="middle">⚡ 나이스(NEIS) 동기화 완료</text>
+
+      <text x="24" y="68" class="title" font-size="16">사전 확인: 추출된 학생부 성적이 올바른지 확인해 주세요</text>
+      <text x="24" y="88" class="text-sub" font-size="13">분석의 신뢰도를 위해 아래 기본 정보와 성적이 실제와 일치하는지 사전에 점검합니다.</text>
+
+      <!-- 3 Summary Columns -->
+      <g transform="translate(24, 105)">
+        <rect width="245" height="85" rx="10" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="14" y="24" class="text-sub" font-size="12">학생 인적사항</text>
+        <text x="14" y="46" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a0f08">홍길동 (수프리고, 고3)</text>
+        <text x="14" y="68" class="text-sub" font-size="12">목표: 컴퓨터공학과</text>
+      </g>
+
+      <g transform="translate(285, 105)">
+        <rect width="245" height="85" rx="10" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="14" y="24" class="text-sub" font-size="12">전과목 평균 내신</text>
+        <text x="14" y="52" font-family="sans-serif" font-size="24" font-weight="900" fill="#8b1a1a">1.54 <tspan font-size="14" fill="#5c4e43">등급</tspan></text>
+        <text x="14" y="72" class="text-sub" font-size="12">총 13개 과목 자동 계산</text>
+      </g>
+
+      <g transform="translate(546, 105)">
+        <rect width="245" height="85" rx="10" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="14" y="24" class="text-sub" font-size="12">데이터 출처 및 상태</text>
+        <text x="14" y="46" font-family="sans-serif" font-size="15" font-weight="bold" fill="#1a0f08">교육부 나이스 대국민서비스</text>
+        <text x="14" y="68" class="text-sub" font-size="12">연동일시: 2026.11.14 (정상)</text>
+      </g>
+
+      <!-- Subject Badges -->
+      <text x="24" y="215" class="label">추출된 교과목 성적 리스트 (13과목)</text>
+      <g transform="translate(24, 228)">
+        <rect x="0" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="72" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#3b2c20" text-anchor="middle">국어 (4단위/2등급)</text>
+
+        <rect x="153" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="225" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#8b1a1a" text-anchor="middle">수학 (4단위/1등급)</text>
+
+        <rect x="306" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="378" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#3b2c20" text-anchor="middle">영어 (4단위/2등급)</text>
+
+        <rect x="459" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="531" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#8b1a1a" text-anchor="middle">통합과학 (4단위/1등급)</text>
+
+        <rect x="612" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="684" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#8b1a1a" text-anchor="middle">물리학I (3단위/1등급)</text>
+      </g>
+
+      <g transform="translate(24, 264)">
+        <rect x="0" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="72" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#8b1a1a" text-anchor="middle">수학I (4단위/1등급)</text>
+
+        <rect x="153" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="225" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#8b1a1a" text-anchor="middle">정보 (2단위/1등급)</text>
+
+        <rect x="306" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="378" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#3b2c20" text-anchor="middle">독서 (4단위/2등급)</text>
+
+        <rect x="459" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="531" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#3b2c20" text-anchor="middle">화학I (3단위/2등급)</text>
+
+        <rect x="612" y="0" width="145" height="28" rx="6" fill="#ffffff" stroke="#ebdcd0" />
+        <text x="684" y="18" font-family="sans-serif" font-size="12" font-weight="bold" fill="#3b2c20" text-anchor="middle">한국사 (3단위/1등급)</text>
+      </g>
+
+      <text x="24" y="318" class="text-sub" font-size="12">✓ 세특 및 창체 활동 28개 항목 분석 완료 (전공적합성 S등급, 이공계열 핵심교과 1등급 집중)</text>
+    </g>
+  </g>
+
+  <!-- Card 4: 리포트 수령 연락처 -->
+  <g transform="translate(160, 1540)">
+    <rect width="880" height="150" class="card" />
+    <text x="32" y="38" class="title" font-size="18">4. 분석 리포트 수신 연락처</text>
+    <rect x="780" y="20" width="70" height="24" class="tag-burgundy" />
+    <text x="815" y="36" class="tag-text" text-anchor="middle">결과 수신</text>
+
+    <line x1="32" y1="58" x2="848" y2="58" stroke="#f4ede4" stroke-width="1" />
+
+    <text x="32" y="85" class="label">학생 연락처: 010-1234-5678</text>
+    <text x="300" y="85" class="label">학부모 연락처: 010-9876-5432</text>
+    <text x="570" y="85" class="label">수신 이메일: student@suprema.kr</text>
+    <text x="32" y="125" class="text-sub" font-size="12">🔒 결과 리포트 PDF가 완성되면 위 연락처와 이메일로 암호화 발송됩니다.</text>
+  </g>
+
+  <!-- Final CTA Button -->
+  <g transform="translate(360, 1720)">
+    <rect width="480" height="60" class="btn-primary" />
+    <text x="240" y="36" font-family="sans-serif" font-size="18" font-weight="bold" fill="#ffffff" text-anchor="middle">위 사전 확인 정보로 정밀 분석 시작하기 →</text>
+  </g>
+
+  <text x="600" y="1810" class="text-sub" font-size="12" text-anchor="middle">수프리마랩 입시 빅데이터 엔진 v7.24 • 교육부 대입전형 기준 준수</text>
+</svg>

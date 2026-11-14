@@ -26,8 +26,8 @@ export const diagnosisContent: DiagnosisContent = {
     },
     {
       no: "3",
-      title: "탐구·세특·입시",
-      description: "학생부 추출 주제와 연결해 탐구, 세특, 입시문장을 구성합니다.",
+      title: "독서·탐구·세특",
+      description: "필수 연계 독서를 출발점으로 심화 탐구와 나이스 세특 문장을 구성합니다.",
     },
     {
       no: "4",
@@ -45,6 +45,10 @@ export const diagnosisScreenText = {
   step2: {
     title: "학생부 분석",
     subtitle: "학생부 상세 분석결과를 리포트로 제공합니다.",
+  },
+  step3: {
+    title: "독서 연계 탐구·세특",
+    subtitle: "필수 권장 도서를 출발점으로 심화 탐구 주제, 핵심 이론 요약 및 나이스 세특 문장을 완성합니다.",
   },
   step4: {
     title: "입시위치 진단",

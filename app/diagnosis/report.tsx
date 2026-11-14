@@ -1,9 +1,12 @@
-﻿"use client";
+"use client";
 
 import Image from "next/image";
 import { reportBadgeStyle } from "./reportPresentation";
 import Link from "next/link";
-import { Minus, Printer, TrendingDown, TrendingUp } from "lucide-react";
+import { useState } from "react";
+import { Minus, Printer, TrendingDown, TrendingUp, Mail, CheckCircle2 } from "lucide-react";
+import { convert5To9Grade } from "@/lib/utils/admission/admissionDiagnosis";
+import OfficialFooter from "../components/OfficialFooter";
 
 type ParsedSubject = {
   subject: string;
@@ -33,6 +36,7 @@ interface ReportProps {
     name: string;
     grade: string;
     score: string;
+    email?: string;
     parsedSubjects?: ParsedSubject[];
     studentAnalysis?: StudentAnalysis;
     gradingSystem?: string;
@@ -47,40 +51,216 @@ export default function ReportComponent({ studentInfo, results, onBack }: Report
   const parsedSubjects = studentInfo.parsedSubjects || [];
   const is5Level = studentInfo.gradingSystem === "5-level" || studentInfo.grade === "5" || studentInfo.grade === "5단계";
 
+  // 개인 메일 보내기 상태
+  const [showEmailModal, setShowEmailModal] = useState(false);
+  const [targetEmail, setTargetEmail] = useState(() => {
+    if (studentInfo.email) return studentInfo.email;
+    try {
+      const saved = sessionStorage.getItem("suprema_user_info");
+      if (saved) {
+        const parsed = JSON.parse(saved);
+        if (parsed.email) return parsed.email;
+      }
+    } catch {}
+    return "";
+  });
+  const [isSendingEmail, setIsSendingEmail] = useState(false);
+  const [emailStatus, setEmailStatus] = useState<"idle" | "success" | "error">("idle");
+  const [emailMessage, setEmailMessage] = useState("");
+
+  const handleSendEmail = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!targetEmail.trim()) return;
+
+    setIsSendingEmail(true);
+    setEmailStatus("idle");
+    setEmailMessage("");
+
+    try {
+      const res = await fetch("/api/send-email", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          email: targetEmail.trim(),
+          subject: `[수프리마 나의 입시멘토] ${studentInfo.name} 학생 대입 위치 진단 보고서`,
+          reportData: {
+            studentName: studentInfo.name,
+            grade: studentInfo.grade,
+            averageScore: studentInfo.score,
+            diagnosisDate: new Date().toLocaleDateString("ko-KR"),
+            targetUniversityResults: results.map((r) => ({
+              university: r.university,
+              department: r.department,
+              track: r.track_name || "일반",
+              pastCutoffs: { "2024": r.y24, "2025": r.y25, "2026_expected": r.y26 },
+              evaluationLevel: r.level,
+              consultantComment: r.comment,
+            })),
+            parsedSubjectsCount: parsedSubjects.length,
+          },
+        }),
+      });
+
+      const data = await res.json().catch(() => null);
+      if (res.ok && data?.ok) {
+        setEmailStatus("success");
+        setEmailMessage(`보고서가 ${targetEmail} 로 성공적으로 발송되었습니다.`);
+        setTimeout(() => setShowEmailModal(false), 3000);
+      } else {
+        setEmailStatus("error");
+        setEmailMessage(data?.message || data?.error || "이메일 발송에 실패했습니다.");
+      }
+    } catch {
+      setEmailStatus("error");
+      setEmailMessage("네트워크 오류가 발생했습니다. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setIsSendingEmail(false);
+    }
+  };
+
   return (
     <div style={{ color: "#111827", padding: 0 }} className="print-p-0">
       <div className="print-hidden" style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: "12px", marginBottom: "20px" }}>
         <Link href="/" style={{ display: "inline-flex", alignItems: "center" }}>
-          <Image src="/suprema-logo.svg" alt="수프리마" width={160} height={48} priority style={{ width: "160px", height: "auto" }} />
+          <Image src="/suprema-official-logo.png" alt="대치 수프리마 공식 로고" width={140} height={48} priority style={{ width: "140px", height: "auto" }} />
         </Link>
-        <span style={{ fontSize: "11px", fontWeight: 900, color: "#9CA3AF", letterSpacing: "0.2em" }}>SUPREMA REPORT</span>
+        <span style={{ fontSize: "11px", fontWeight: 900, color: "#8b1a1a", letterSpacing: "0.15em" }}>나의 입시멘토 리포트</span>
       </div>
 
       <div style={{ width: "100%", maxWidth: "100%", boxSizing: "border-box" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: "20px" }} className="print-mb-6">
           <div>
-            <div style={{ display: "inline-block", padding: "6px 14px", backgroundColor: "rgba(139, 26, 26, 0.05)", color: "var(--suprima-burgundy)", borderRadius: "9999px", fontSize: "10px", fontWeight: 800, letterSpacing: "0.15em", textTransform: "uppercase", marginBottom: "12px" }} className="print-hidden">
-              Analysis Report
+            <div style={{ display: "inline-block", padding: "5px 12px", backgroundColor: "#fbf5f2", color: "#8b1a1a", borderRadius: "4px", fontSize: "11px", fontWeight: 800, letterSpacing: "0.05em", marginBottom: "8px", border: "1px solid #ebdcd0" }} className="print-hidden">
+              대입 심층 진단 보고서
             </div>
-            <h1 className="heading-premium" style={{ fontSize: "2rem", fontWeight: 950, letterSpacing: "-0.05em", marginBottom: "6px", color: "#1a0f08" }}>
-              입시 위치 진단 보고서
+            <h1 className="heading-premium" style={{ fontSize: "1.85rem", fontWeight: 950, letterSpacing: "-0.04em", marginBottom: "6px", color: "#1a0f08" }}>
+              입시 위치 진단 결과 보고서
             </h1>
-            <p style={{ color: "#6B7280", fontSize: "12px", fontWeight: 600, margin: 0 }}>
-              선택한 대학·전형의 확인 가능한 입결과 입력 성적을 비교한 보고서입니다.
+            <p style={{ color: "#796e65", fontSize: "13px", fontWeight: 600, margin: 0 }}>
+              목표 대학·전형의 누적 입결 데이터와 입력된 학생부 성적을 정밀 교차 분석한 공식 진단서입니다.
             </p>
           </div>
 
-          <div style={{ display: "flex", gap: "12px" }} className="print-hidden">
+          {/* 상단 액션 바: 메일 보내기 탭 신설 */}
+          <div style={{ display: "flex", gap: "10px", alignItems: "center" }} className="print-hidden">
             {onBack && (
-              <button onClick={onBack} style={{ padding: "12px 24px", backgroundColor: "white", border: "1px solid #D1D5DB", color: "#4B5563", borderRadius: "14px", fontWeight: 800, fontSize: "13px", cursor: "pointer" }}>
-                돌아가기
+              <button onClick={onBack} style={{ padding: "10px 18px", backgroundColor: "white", border: "1px solid #D1D5DB", color: "#4B5563", borderRadius: "6px", fontWeight: 700, fontSize: "13px", cursor: "pointer" }}>
+                ← 이전 단계
               </button>
             )}
-            <button onClick={handlePrint} className="btn-premium" style={{ padding: "12px 24px", fontSize: "13px", display: "flex", alignItems: "center", gap: "8px", cursor: "pointer" }}>
+
+            {/* 신설: 개인 메일로 보내기 탭 버튼 */}
+            <button
+              onClick={() => setShowEmailModal((prev) => !prev)}
+              style={{
+                padding: "10px 18px",
+                backgroundColor: showEmailModal ? "#741515" : "#8b1a1a",
+                border: "none",
+                color: "white",
+                borderRadius: "6px",
+                fontWeight: 800,
+                fontSize: "13px",
+                display: "inline-flex",
+                alignItems: "center",
+                gap: "6px",
+                cursor: "pointer",
+                boxShadow: "0 2px 8px rgba(139, 26, 26, 0.2)",
+              }}
+            >
+              <Mail className="w-4 h-4" /> 개인 메일로 보내기
+            </button>
+
+            <button onClick={handlePrint} className="btn-premium" style={{ padding: "10px 18px", fontSize: "13px", display: "inline-flex", alignItems: "center", gap: "6px", cursor: "pointer", backgroundColor: "#1a0f08", color: "white", borderRadius: "6px", border: "none", fontWeight: 700 }}>
               <Printer className="w-4 h-4" /> PDF 출력
             </button>
           </div>
         </div>
+
+        {/* 신설: 개인 메일로 보내기 인라인 폼 패널 */}
+        {showEmailModal && (
+          <div
+            className="print-hidden"
+            style={{
+              backgroundColor: "#fcfaf7",
+              border: "1.5px solid #ebdcd0",
+              borderRadius: "8px",
+              padding: "16px 20px",
+              marginBottom: "20px",
+              display: "flex",
+              flexDirection: "column",
+              gap: "10px",
+            }}
+          >
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+                <span style={{ fontSize: "14px" }}>✉️</span>
+                <strong style={{ fontSize: "13px", color: "#1a0f08", fontWeight: 800 }}>진단 결과보고서 개인 이메일 발송</strong>
+                <span style={{ fontSize: "11px", color: "#796e65" }}>- 입력하신 이메일로 암호화 리포트가 즉시 전송됩니다.</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => setShowEmailModal(false)}
+                style={{ background: "none", border: "none", fontSize: "16px", color: "#8c827a", cursor: "pointer", padding: "0 4px" }}
+              >
+                ✕
+              </button>
+            </div>
+
+            <form onSubmit={handleSendEmail} style={{ display: "flex", alignItems: "center", gap: "10px", flexWrap: "wrap" }}>
+              <input
+                type="email"
+                value={targetEmail}
+                onChange={(e) => setTargetEmail(e.target.value)}
+                placeholder="수신할 이메일 주소를 입력하세요 (예: student@example.com)"
+                required
+                style={{
+                  flex: 1,
+                  minWidth: "260px",
+                  height: "38px",
+                  padding: "0 12px",
+                  border: "1.5px solid #d4c7b8",
+                  borderRadius: "5px",
+                  fontSize: "13px",
+                  fontWeight: 600,
+                  outline: "none",
+                  backgroundColor: "#ffffff",
+                }}
+              />
+              <button
+                type="submit"
+                disabled={isSendingEmail}
+                style={{
+                  height: "38px",
+                  padding: "0 20px",
+                  backgroundColor: "#8b1a1a",
+                  color: "white",
+                  border: "none",
+                  borderRadius: "5px",
+                  fontSize: "13px",
+                  fontWeight: 800,
+                  cursor: isSendingEmail ? "wait" : "pointer",
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: "6px",
+                  opacity: isSendingEmail ? 0.7 : 1,
+                }}
+              >
+                {isSendingEmail ? "보고서 발송 중..." : "리포트 즉시 발송 →"}
+              </button>
+            </form>
+
+            {emailStatus === "success" && (
+              <div style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "12px", color: "#15803d", fontWeight: 700 }}>
+                <CheckCircle2 className="w-4 h-4" /> {emailMessage}
+              </div>
+            )}
+            {emailStatus === "error" && (
+              <div style={{ fontSize: "12px", color: "#dc2626", fontWeight: 700 }}>
+                오류: {emailMessage}
+              </div>
+            )}
+          </div>
+        )}
 
         <div style={{ backgroundColor: "white", padding: "20px 32px", borderRadius: "20px", border: "1px solid #ECE0D1", boxShadow: "0 10px 30px rgba(44, 26, 10, 0.03)", marginBottom: "24px", display: "flex", flexWrap: "wrap", gap: "36px", alignItems: "center" }}>
           <div>
@@ -89,8 +269,17 @@ export default function ReportComponent({ studentInfo, results, onBack }: Report
           </div>
           <div style={{ width: "1px", height: "30px", backgroundColor: "#ECE0D1" }} className="print-hidden" />
           <div>
-            <span style={{ color: "#9CA3AF", fontSize: "10px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: "4px" }}>평균 점수</span>
-            <span style={{ fontSize: "1.4rem", fontWeight: 950, color: "var(--suprima-burgundy)" }}>{studentInfo.score}</span>
+            <span style={{ color: "#9CA3AF", fontSize: "10px", fontWeight: "bold", textTransform: "uppercase", letterSpacing: "0.08em", display: "block", marginBottom: "4px" }}>
+              {is5Level ? "내신 성적 (5등급제 원성적)" : "평균 내신 등급 (9등급제)"}
+            </span>
+            <span style={{ fontSize: "1.4rem", fontWeight: 950, color: "var(--suprima-burgundy)" }}>
+              {studentInfo.score}등급
+            </span>
+            {is5Level && Number(studentInfo.score) > 0 && (
+              <span style={{ display: "block", fontSize: "11px", color: "#8b1a1a", fontWeight: 800, marginTop: "2px" }}>
+                ➔ 기존 입결 비교 9등급 환산: 약 {convert5To9Grade(Number(studentInfo.score)).toFixed(2)}등급
+              </span>
+            )}
           </div>
           <div style={{ width: "1px", height: "30px", backgroundColor: "#ECE0D1" }} className="print-hidden" />
           <div>
@@ -189,6 +378,10 @@ export default function ReportComponent({ studentInfo, results, onBack }: Report
             결과는 진단용이며 최종 판단은 상담 기준을 따릅니다.
           </div>
         </div>
+      </div>
+
+      <div className="mt-8 print-mb-6">
+        <OfficialFooter className="rounded-2xl border border-[#eadfce]" />
       </div>
 
       <style jsx global>{`

@@ -36,11 +36,17 @@ export default function ReportPage() {
       <div id="standalone-report-wrapper" style={{ width: "100%", maxWidth: "1150px", backgroundColor: "white", borderRadius: "40px", border: "1px solid #ECE0D1", boxShadow: "0 30px 80px rgba(44, 26, 10, 0.05)", padding: "40px 48px", boxSizing: "border-box", position: "relative" }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "8px", background: "linear-gradient(to right, var(--suprima-burgundy), var(--suprima-gold))", borderTopLeftRadius: "40px", borderTopRightRadius: "40px" }} />
         <div className="no-print" style={{ display: "flex", flexWrap: "wrap", justifyContent: "space-between", gap: "16px", alignItems: "center", borderBottom: "1px solid #ECE0D1", paddingBottom: "24px", marginBottom: "40px" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "24px" }}>
-            <Link href="/diagnosis/step4" style={{ display: "flex", alignItems: "center", gap: "6px", color: "#6B7280", fontSize: "12px", fontWeight: "bold", textDecoration: "none", backgroundColor: "#F9FAFB", padding: "8px 16px", borderRadius: "10px", border: "1px solid #E5E7EB" }}><ArrowLeft className="w-4 h-4" /> 진단 화면</Link>
-            <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}><Image src="/suprema-logo.svg" alt="수프리마 랩" width={140} height={38} priority style={{ objectFit: "contain" }} /></Link>
+          <div style={{ display: "flex", alignItems: "center", gap: "20px" }}>
+            <Link href="/diagnosis/step4" style={{ display: "flex", alignItems: "center", gap: "6px", color: "#6B7280", fontSize: "12px", fontWeight: "bold", textDecoration: "none", backgroundColor: "#F9FAFB", padding: "8px 16px", borderRadius: "8px", border: "1px solid #E5E7EB" }}><ArrowLeft className="w-4 h-4" /> 진단 화면으로</Link>
+            <Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none", gap: "12px" }}>
+              <Image src="/suprema-official-logo.png" alt="대치 수프리마 공식 로고" width={130} height={42} priority style={{ objectFit: "contain", height: "36px", width: "auto" }} />
+              <div style={{ borderLeft: "2px solid rgba(139, 26, 26, 0.2)", paddingLeft: "12px" }}>
+                <span style={{ fontSize: "16px", fontWeight: 900, color: "#8b1a1a", letterSpacing: "-0.02em" }}>나의 입시멘토</span>
+                <span style={{ display: "block", fontSize: "10px", color: "#796e65", fontWeight: 700 }}>대입 심층 진단 리포트</span>
+              </div>
+            </Link>
           </div>
-          <span style={{ fontSize: "11px", fontWeight: 900, color: "#9CA3AF", letterSpacing: "0.2em", textTransform: "uppercase" }}>Diagnosis Report</span>
+          <span style={{ fontSize: "11px", fontWeight: 900, color: "#8b1a1a", letterSpacing: "0.15em", textTransform: "uppercase" }}>Official Report</span>
         </div>
         {!ready ? <p role="status">저장된 진단 결과를 확인하고 있습니다.</p> : snapshot ? <>
           <p style={{ marginBottom: "20px", color: "#6b7280", fontSize: "13px" }}>진단 시각: {new Date(snapshot.createdAt).toLocaleString("ko-KR")}</p>

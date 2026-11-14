@@ -1,0 +1,32 @@
+{
+  "checked_at_utc": "2026-11-13T14:29:56.838629+00:00",
+  "scope": "review download only",
+  "downloads": [
+    {
+      "repository": "vercel-labs/agent-skills",
+      "stars": 33996,
+      "commit": "1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62",
+      "selected_path": "skills/react-best-practices/",
+      "source": "https://github.com/vercel-labs/agent-skills/tree/1a2c79d4e6c4a2283dc2c614b6538cbe1ed5ca62/skills/react-best-practices",
+      "file": "vercel-react-best-practices-1a2c79d4.zip",
+      "bytes": 98485,
+      "archive_entries": 76,
+      "sha256": "7981faa52f63726e539a9364a8d5b51759c015162c26798e045cbb5e37ee54a1",
+      "installed": false,
+      "activated": false
+    },
+    {
+      "repository": "microsoft/playwright-mcp",
+      "stars": 39593,
+      "commit": "78eca85361efb545a4c0f59b6140aef0721c5412",
+      "selected_path": null,
+      "source": "https://codeload.github.com/microsoft/playwright-mcp/zip/78eca85361efb545a4c0f59b6140aef0721c5412",
+      "file": "playwright-mcp-source-78eca853.zip",
+      "bytes": 89742,
+      "archive_entries": 56,
+      "sha256": "20b24bec059f75593dbf36d99bb686430c1e8aff228fbf87da8eacbcf883a51c",
+      "installed": false,
+      "activated": false
+    }
+  ]
+}

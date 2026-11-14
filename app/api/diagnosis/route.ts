@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { diagnoseAdmissionRange } from "@/lib/utils/admission/admissionDiagnosis";
+import { diagnoseAdmissionRange, convert5To9Grade } from "@/lib/utils/admission/admissionDiagnosis";
 import { getActiveAdmissions } from "@/lib/admissions/store";
 import { buildYearCutoffs, resolveAdmissionRow, validateDiagnosisInput } from "@/lib/admissions/diagnosis";
 
 import { academyCors } from "@/lib/academy/bridge";
 
 export const runtime = "nodejs";
-function convert5To9Grade(grade: number) {
-  if (grade <= 2) return 1 + (grade - 1) * 2.6;
-  if (grade <= 3) return 3.6 + (grade - 2) * 2.2;
-  if (grade <= 4) return 5.8 + (grade - 3) * 2;
-  return 7.8 + (grade - 4) * 1.2;
-}
 async function diagnose(req: NextRequest) {
   let input: ReturnType<typeof validateDiagnosisInput>;
   try { input = validateDiagnosisInput(await req.json()); }

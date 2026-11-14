@@ -1,344 +1,1017 @@
+/* ==========================================================================
+   SUPREMA PROFESSIONAL WIDE DASHBOARD DESIGN SYSTEM
+   - 좌우 폭 확장 (max-width: 1040px)
+   - 학생부 등록 -> 본인인증 -> 나이스 연결 일체형 파이프라인
+   - 타이틀과 입력창의 명확한 상하 위계 분리
+   ========================================================================== */
+
 .formCard {
-  background: transparent;
-  padding: 0;
-  border: none;
-  box-shadow: none;
-  max-width: 100%;
+  width: 100%;
+  max-width: 760px;
   margin: 0 auto;
-}
-
-.formTitle {
-  font-size: 2rem;
-  font-weight: 900;
-  margin-bottom: 12px;
-  text-align: center;
-  letter-spacing: -0.04em;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
   color: #1a0f08;
+  padding: 6px 4px 28px 4px;
 }
 
-.formSubtitle {
-  font-size: 1.05rem;
-  color: var(--text-dim);
-  text-align: center;
-  margin-bottom: 28px;
-}
-
+/* 상단 알림 (이전 저장 데이터가 있을 때) */
 .saveAlert {
-  background: var(--suprima-cream-dark);
-  border-radius: 16px;
-  padding: 16px 24px;
-  margin-bottom: 24px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid var(--border-light);
+  padding: 12px 18px;
+  background: #fdfaf7;
+  border-left: 3px solid #8b1a1a;
+  border-radius: 4px;
+  font-size: 13px;
+  color: #4a3b32;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
 }
 
 .saveAlert span {
-  font-weight: 800;
-  color: var(--suprima-burgundy);
-  font-size: 13px;
+  font-weight: 600;
 }
 
 .alertBtn {
-  background: white;
-  border: 1px solid var(--suprima-burgundy);
-  color: var(--suprima-burgundy);
-  padding: 8px 16px;
-  border-radius: 10px;
-  font-weight: 800;
-  font-size: 12px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.alertBtn:hover {
-  background: var(--suprima-burgundy);
-  color: white;
-}
-
-.formGrid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  column-gap: 40px;
-  row-gap: 14px;
-}
-
-.formGroup {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 16px;
-}
-
-.label {
-  font-size: 13px;
-  font-weight: 900;
-  color: var(--text-main);
-  letter-spacing: 0.02em;
-  width: 140px;
-  flex-shrink: 0;
-  text-align: left;
-}
-
-.formGroup input,
-.formGroup select {
-  flex: 1;
-  width: 100%;
-  height: 48px;
-  padding: 0 16px;
-  border-radius: 12px;
-  border: 2px solid var(--border-dim);
-  background: var(--suprima-cream);
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-.formGroup input:focus,
-.formGroup select:focus {
-  outline: none;
-  border-color: var(--suprima-burgundy);
-  background: white;
-  box-shadow: 0 0 0 4px rgba(139, 26, 26, 0.1);
-}
-
-.formFooter {
-  margin-top: 32px;
-  text-align: center;
-}
-
-.submitBtn {
-  background: var(--suprima-burgundy);
-  color: white;
-  padding: 16px 48px;
-  border-radius: 100px;
-  font-size: 1.1rem;
-  font-weight: 900;
+  background: none;
   border: none;
+  color: #8b1a1a;
+  font-weight: 800;
+  font-size: 13px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 15px 30px rgba(139, 26, 26, 0.15);
+  text-decoration: underline;
+  padding: 0;
 }
 
-.submitBtn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 20px 40px rgba(139, 26, 26, 0.25);
-}
-
-@media (max-width: 900px) {
-  .formGrid {
-    grid-template-columns: 1fr;
-    row-gap: 12px;
-  }
-  .formGroup {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 6px;
-  }
-  .label {
-    width: auto;
-  }
-}
-
-/* Premium PDF Auto-GPA Calculation Section Styles */
-.pdfSection {
-  grid-column: 1 / -1;
-  background: rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(10px);
-  border: 1px solid #ECE0D1;
-  border-radius: 20px;
-  padding: 24px;
-  margin-top: 10px;
-  box-sizing: border-box;
-  transition: all 0.3s ease;
-}
-
-.pdfSectionTitle {
-  font-size: 14px;
-  font-weight: 900;
-  color: var(--suprima-burgundy);
-  margin-bottom: 6px;
-  letter-spacing: -0.02em;
-}
-
-.pdfSectionDesc {
-  font-size: 11px;
-  color: #7C7267;
-  margin-bottom: 16px;
-  line-height: 1.4;
-}
-
-.dropzone {
-  border: 2px dashed #ECE0D1;
-  border-radius: 14px;
-  padding: 28px 16px;
-  text-align: center;
-  background: rgba(255, 255, 255, 0.5);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+/* --------------------------------------------------------------------------
+   메인 섹션 블록 (와이드 라인 구분)
+   -------------------------------------------------------------------------- */
+.sectionBlock {
   display: flex;
   flex-direction: column;
+  gap: 16px;
+  padding-bottom: 26px;
+  border-bottom: 1.5px solid #ebdcd0;
+}
+
+.sectionBlock:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.headerLeft {
+  display: flex;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.sectionTitle {
+  font-size: 16px;
+  font-weight: 800;
+  color: #1a0f08;
+  letter-spacing: -0.02em;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.sectionStepNum {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #8b1a1a;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.sectionDesc {
+  font-size: 13px;
+  color: #796e65;
+}
+
+.headerBadge {
+  font-size: 11px;
+  font-weight: 700;
+  color: #8b1a1a;
+  background: #fbf5f2;
+  border: 1px solid #ebdcd0;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+
+/* --------------------------------------------------------------------------
+   법적 컴플라이언스 배너 (학생부 저장/활용 금지 준수 공지)
+   -------------------------------------------------------------------------- */
+.complianceNotice {
+  background: #fbf8f5;
+  border: 1px solid #ebdcd0;
+  border-left: 3px solid #8b1a1a;
+  border-radius: 4px;
+  padding: 10px 14px;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 12px;
+  color: #4a3b32;
+  line-height: 1.5;
+}
+
+.complianceIcon {
+  font-size: 14px;
+  margin-top: 1px;
+}
+
+.complianceText strong {
+  color: #8b1a1a;
+  font-weight: 800;
+  display: inline-block;
+  margin-right: 4px;
+}
+
+.complianceNoticeFooter {
+  background: #fdfaf7;
+  border: 1px solid #eadfd4;
+  border-left: 3.5px solid #8b1a1a;
+  border-radius: 6px;
+  padding: 12px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  font-size: 12px;
+  color: #4a3b32;
+  line-height: 1.55;
+  word-break: keep-all;
+  max-width: 960px;
+  width: 100%;
+  margin-top: 18px;
+  text-align: left;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+}
+
+/* 5등급제 -> 9등급제 실시간 환산 안내 바 */
+.gradeConversionNotice {
+  background: #fbf5f2;
+  border: 1px solid #ebdcd0;
+  border-left: 3px solid #8b1a1a;
+  border-radius: 6px;
+  padding: 10px 14px;
+  display: flex;
   align-items: center;
   gap: 10px;
-}
-
-.dropzone:hover {
-  border-color: var(--suprima-burgundy);
-  background: rgba(139, 26, 26, 0.02);
-  transform: translateY(-1px);
-}
-
-.dropzoneActive {
-  border-color: var(--suprima-burgundy);
-  background: rgba(139, 26, 26, 0.05);
-  box-shadow: inset 0 0 10px rgba(139, 26, 26, 0.03);
-}
-
-.uploadIcon {
-  font-size: 28px;
-  color: #B19B86;
-  margin-bottom: 2px;
-}
-
-.uploadText {
-  font-size: 13px;
-  font-weight: 800;
-  color: #5C4E43;
-}
-
-.uploadSubtext {
-  font-size: 10px;
-  color: #A09181;
-}
-
-/* Infinite Spinner without lagging client CPU */
-.spinner {
-  width: 24px;
-  height: 24px;
-  border: 2.5px solid rgba(139, 26, 26, 0.1);
-  border-top-color: var(--suprima-burgundy);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to { transform: rotate(360deg); }
-}
-
-.loadingText {
   font-size: 12px;
+  color: #4a3b32;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+.conversionBadge {
+  background: #8b1a1a;
+  color: #ffffff;
+  font-size: 10.5px;
   font-weight: 800;
-  color: var(--suprima-burgundy);
-  animation: pulse 1.5s infinite ease-in-out;
+  padding: 2px 7px;
+  border-radius: 4px;
+  white-space: nowrap;
 }
 
-@keyframes pulse {
-  0%, 100% { opacity: 0.6; }
-  50% { opacity: 1; }
-}
-
-.successBox {
-  background: rgba(46, 117, 89, 0.06);
-  border: 1px solid rgba(46, 117, 89, 0.2);
-  border-radius: 12px;
-  padding: 14px 18px;
-  margin-top: 12px;
+/* --------------------------------------------------------------------------
+   2. 학생부 등록 및 발급 메인 영역 (앞단 화면 깔끔화)
+   - 복잡한 인증 컨트롤은 모달로 분리
+   - 앞단에는 [나이스에서 학생부 발급받기] & [학생부 PDF 파일 직접 등록] 2가지 선택 제공
+   -------------------------------------------------------------------------- */
+.recordRegisterMain {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 16px;
+  background: #fdfcfb;
+  border: 1.5px solid #ebdcd0;
+  border-radius: 8px;
+  padding: 22px 24px;
 }
 
-.successHeader {
+.recordGuidanceBox {
+  background: #fff8f5;
+  border-left: 3px solid #8b1a1a;
+  padding: 12px 16px;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.recordGuidanceTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: #8b1a1a;
   display: flex;
   align-items: center;
-  gap: 8px;
-  font-size: 13px;
-  font-weight: 900;
-  color: #2E7559;
+  gap: 6px;
 }
 
-.badgeList {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
+.recordGuidanceDesc {
+  font-size: 12px;
+  color: #64564c;
+  line-height: 1.5;
+}
+
+/* 2열 또는 카드형 옵션 선택 */
+.recordOptionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
   margin-top: 4px;
 }
 
-.badge {
-  background: white;
-  border: 1px solid rgba(46, 117, 89, 0.15);
-  color: #388E3C;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 4px 8px;
-  border-radius: 6px;
+@media (max-width: 768px) {
+  .recordOptionsGrid {
+    grid-template-columns: 1fr;
+  }
 }
 
-.errorText {
-  font-size: 12px;
-  font-weight: 800;
-  color: #D32F2F;
-  margin-top: 10px;
-  background: rgba(211, 47, 47, 0.05);
-  padding: 10px 14px;
-  border-radius: 10px;
-  border: 1px solid rgba(211, 47, 47, 0.15);
-}
-
-.analysisPreviewBox {
-  background: rgba(139, 26, 26, 0.03);
-  border: 1px solid rgba(139, 26, 26, 0.12);
-  border-radius: 16px;
+.recordOptionCard {
+  background: #ffffff;
+  border: 1.5px solid #ebdcd0;
+  border-radius: 8px;
   padding: 20px;
-  margin-top: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  box-sizing: border-box;
+  justify-content: space-between;
+  gap: 14px;
+  transition: all 0.2s ease;
 }
 
-.analysisPreviewTitle {
+.recordOptionCard:hover {
+  border-color: #8b1a1a;
+  box-shadow: 0 4px 12px rgba(139, 26, 26, 0.06);
+}
+
+.recordOptionCardActive {
+  border-color: #8b1a1a;
+  background: #fffdfc;
+  box-shadow: 0 0 0 1px #8b1a1a;
+}
+
+.cardHead {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.cardIcon {
+  font-size: 24px;
+  line-height: 1;
+}
+
+.cardMeta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.cardTitle {
+  font-size: 14px;
+  font-weight: 800;
+  color: #1a0f08;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cardBadge {
+  background: #8b1a1a;
+  color: #ffffff;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 3px;
+}
+
+.cardDesc {
+  font-size: 12px;
+  color: #796e65;
+  line-height: 1.45;
+}
+
+.cardAction {
+  margin-top: auto;
+}
+
+.btnOpenAuthModal {
+  width: 100%;
+  background: #8b1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 12px 16px;
   font-size: 13px;
-  font-weight: 900;
-  color: var(--suprima-burgundy);
-  margin: 0 0 4px 0;
-  letter-spacing: -0.02em;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
 }
 
-.analysisPreviewGrid {
+.btnOpenAuthModal:hover {
+  background: #731515;
+}
+
+.btnPdfSelect {
+  width: 100%;
+  background: #ffffff;
+  color: #3b2a20;
+  border: 1.5px solid #cfc1b2;
+  border-radius: 6px;
+  padding: 11px 16px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  transition: all 0.15s ease;
+}
+
+.btnPdfSelect:hover {
+  border-color: #8b1a1a;
+  color: #8b1a1a;
+  background: #fdfaf7;
+}
+
+/* --------------------------------------------------------------------------
+   학생부 발급 간편인증 전용 모달 (Auth Modal)
+   - 메인 화면을 어지럽히지 않고 팝업으로 깔끔하게 본인인증 수행
+   -------------------------------------------------------------------------- */
+.modalOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(18, 10, 5, 0.65);
+  backdrop-filter: blur(4px);
+  z-index: 9999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+}
+
+.modalContent {
+  background: #ffffff;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 520px;
+  padding: 28px;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: modalFadeIn 0.2s ease-out;
+}
+
+@keyframes modalFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+.modalHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  border-bottom: 1.5px solid #ebdcd0;
+  padding-bottom: 16px;
+}
+
+.modalTitleWrap {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.modalTitle {
+  font-size: 17px;
+  font-weight: 800;
+  color: #1a0f08;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.modalSubtitle {
+  font-size: 12px;
+  color: #796e65;
+  margin: 0;
+}
+
+.modalCloseBtn {
+  background: none;
+  border: none;
+  font-size: 22px;
+  color: #9c8e82;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  transition: color 0.15s ease;
+}
+
+.modalCloseBtn:hover {
+  color: #1a0f08;
+}
+
+.modalBody {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.modalNotice {
+  background: #fbf5f2;
+  border: 1px solid #ebdcd0;
+  border-left: 3px solid #8b1a1a;
+  border-radius: 4px;
+  padding: 10px 14px;
+  font-size: 12px;
+  color: #4a3b32;
+  line-height: 1.45;
+}
+
+.modalSectionLabel {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a0f08;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.authRoleTabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.authRoleBtn {
+  padding: 10px;
+  border: 1.5px solid #cfc1b2;
+  border-radius: 6px;
+  background: #ffffff;
+  color: #4a3b32;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+}
+
+.authRoleBtnActive {
+  border-color: #8b1a1a;
+  background: #fff8f5;
+  color: #8b1a1a;
+  font-weight: 800;
+}
+
+.providerGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.providerCard {
+  border: 1.5px solid #dfd3c5;
+  border-radius: 6px;
+  padding: 12px 6px;
+  background: #ffffff;
+  color: #3b2a20;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.providerCard:hover {
+  border-color: #8b1a1a;
+}
+
+.providerCardActive {
+  border-color: #8b1a1a;
+  background: #8b1a1a;
+  color: #ffffff;
+  font-weight: 800;
+}
+
+.modalFooter {
+  border-top: 1.5px solid #ebdcd0;
+  padding-top: 16px;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.analysisPreviewItem {
+.btnModalSubmit {
+  width: 100%;
+  background: #8b1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btnModalSubmit:hover:not(:disabled) {
+  background: #731515;
+}
+
+.btnModalSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.modalSecurityNote {
+  font-size: 11px;
+  color: #8c827a;
+  text-align: center;
+}
+
+/* 파이프라인 1단계: 학생부 PDF 파일 직접 등록 영역 */
+.pdfUploadSection {
   display: flex;
   flex-direction: column;
+  gap: 8px;
+}
+
+.pdfDropArea {
+  border: 1.5px dashed #cfc1b2;
+  border-radius: 6px;
+  padding: 20px 24px;
+  text-align: center;
+  background: #ffffff;
+  font-size: 13px;
+  color: #5c4e43;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: 6px;
-  background: white;
-  padding: 12px 16px;
-  border-radius: 10px;
-  border: 1px solid #ECE0D1;
-  text-align: left;
 }
 
-.analysisPreviewLabel {
-  font-size: 11px;
-  font-weight: 900;
-  color: #8B1A1A;
-  background: rgba(139, 26, 26, 0.05);
-  padding: 2px 8px;
-  border-radius: 4px;
-  width: max-content;
+.pdfDropArea:hover {
+  border-color: #8b1a1a;
+  background: #fdfaf7;
 }
 
-.analysisPreviewText {
+.pdfDropTitle {
+  font-weight: 800;
+  color: #1a0f08;
+  font-size: 14px;
+}
+
+.pdfDropSub {
   font-size: 12px;
-  color: #5C4E43;
-  margin: 0;
-  line-height: 1.5;
+  color: #8c827a;
+}
+
+/* 연결 구분선 (Or divider) */
+.flowDivider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #8c827a;
+  font-size: 12px;
+  font-weight: 700;
+  margin: 2px 0;
+}
+
+.flowDivider::before,
+.flowDivider::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #ebdcd0;
+}
+
+.flowDivider span {
+  padding: 0 14px;
+  color: #8b1a1a;
+  background: #f4ede6;
+  border-radius: 20px;
+  padding: 3px 12px;
+  font-size: 11px;
+}
+
+/* 파이프라인 2단계 & 3단계: [인증] ➔ [나이스 가기/가져오기] */
+.neisPipelineBox {
+  background: #ffffff;
+  border: 1px solid #ebdcd0;
+  border-radius: 6px;
+  padding: 14px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.pipelineHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.pipelineTitleWrap {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pipelineStepBadge {
+  background: #8b1a1a;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.pipelineTitle {
+  font-size: 13px;
+  font-weight: 800;
+  color: #1a0f08;
+}
+
+.pipelineSub {
+  font-size: 12px;
+  color: #796e65;
+}
+
+/* 인증 컨트롤 바 (인라인 정렬) */
+.pipelineControlsRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.authGroup {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.authRoleGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+  color: #3b2a20;
   font-weight: 600;
 }
 
+.authRoleLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+/* 간편인증사 칩 */
+.providerGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.providerBtn {
+  background: #ffffff;
+  border: 1.5px solid #d4c7b8;
+  border-radius: 4px;
+  padding: 5px 11px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #3b2a20;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.providerBtn:hover {
+  border-color: #8b1a1a;
+}
+
+.providerBtnActive {
+  border-color: #8b1a1a;
+  background: #8b1a1a;
+  color: #ffffff;
+}
+
+/* 인증 -> 나이스 가기 실행 버튼 */
+.btnNeisPipeline {
+  background: #1a0f08;
+  color: #ffffff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  white-space: nowrap;
+  transition: background 0.15s ease;
+}
+
+.btnNeisPipeline:hover:not(:disabled) {
+  background: #8b1a1a;
+}
+
+.btnNeisPipeline:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+/* 학생부 추출 완료 안내 배너 */
+.recordSuccessBanner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #15803d;
+}
+
+.recordSuccessText {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 700;
+}
+
+.recordSuccessSub {
+  font-size: 12px;
+  color: #4b5563;
+}
+
+/* --------------------------------------------------------------------------
+   폼 그리드 (타이틀과 입력창의 명확한 상하 분리)
+   -------------------------------------------------------------------------- */
+.formGridRow {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  gap: 16px 24px;
+}
+
+.field {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+}
+
+/* 뚜렷한 타이틀 라벨 */
+.label {
+  font-size: 12px;
+  font-weight: 700;
+  color: #4b3d33;
+  letter-spacing: -0.02em;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.req {
+  color: #8b1a1a;
+  font-weight: 900;
+}
+
+.opt {
+  font-size: 10px;
+  color: #9c8e83;
+  font-weight: normal;
+  background: #f4ede6;
+  padding: 1px 4px;
+  border-radius: 2px;
+}
+
+/* 뚜렷하고 정갈한 데이터 입력창 */
+.input,
+.select {
+  height: 40px;
+  border: 1.5px solid #d4c7b8;
+  border-radius: 5px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1a0f08;
+  background: #ffffff;
+  padding: 0 12px;
+  outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.02);
+}
+
+.input:focus,
+.select:focus {
+  border-color: #8b1a1a;
+  box-shadow: 0 0 0 2px rgba(139, 26, 26, 0.12);
+}
+
+/* 와이드 화면에 맞춘 넉넉하고 비례감 있는 너비 */
+.wName {
+  width: 120px;
+}
+
+.wSchool {
+  width: 220px;
+}
+
+.wGrade {
+  width: 110px;
+}
+
+.wConsultant {
+  width: 170px;
+}
+
+.wCareer {
+  width: 320px;
+}
+
+.wGradeNum {
+  width: 100px;
+}
+
+.wPhone {
+  width: 160px;
+}
+
+.wEmail {
+  width: 260px;
+}
+
+/* --------------------------------------------------------------------------
+   성적 데이터 요약 라인 (사전 검증 칩)
+   -------------------------------------------------------------------------- */
+.gradeSummaryBlock {
+  background: #faf7f4;
+  border: 1px solid #ebdcd0;
+  border-radius: 6px;
+  padding: 12px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.gradeSummaryHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+  font-size: 13px;
+}
+
+.gradeScoreHighlight {
+  font-size: 15px;
+  font-weight: 900;
+  color: #8b1a1a;
+}
+
+.chipList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.chip {
+  background: #ffffff;
+  border: 1px solid #dfd3c5;
+  border-radius: 3px;
+  padding: 3px 8px;
+  font-size: 11px;
+  color: #4a3b32;
+  font-weight: 600;
+}
+
+.chipTop {
+  border-color: #8b1a1a;
+  color: #8b1a1a;
+  font-weight: 800;
+  background: #fdf8f5;
+}
+
+/* --------------------------------------------------------------------------
+   푸터 & CTA 버튼 (화면 정중앙 정렬)
+   -------------------------------------------------------------------------- */
+.formFooter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding-top: 24px;
+  margin-top: 12px;
+  text-align: center;
+}
+
+.privacyText {
+  font-size: 12px;
+  color: #796e65;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 680px;
+  line-height: 1.5;
+}
+
+.privacyText strong {
+  color: #1a0f08;
+}
+
+.btnSubmit {
+  background: #8b1a1a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 16px 52px;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  letter-spacing: -0.01em;
+  box-shadow: 0 4px 14px rgba(139, 26, 26, 0.22);
+}
+
+.btnSubmit:hover:not(:disabled) {
+  background: #741515;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(139, 26, 26, 0.3);
+}
+
+.btnSubmit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.errorNote {
+  font-size: 12px;
+  color: #dc2626;
+  font-weight: 600;
+}
+
+@media (max-width: 900px) {
+  .formGridRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .wName, .wSchool, .wGrade, .wConsultant, .wCareer, .wGradeNum, .wPhone, .wEmail {
+    width: 100%;
+  }
+  .pipelineControlsRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .formFooter {
+    flex-direction: column-reverse;
+    align-items: stretch;
+  }
+  .btnSubmit {
+    width: 100%;
+    padding: 14px;
+  }
+}

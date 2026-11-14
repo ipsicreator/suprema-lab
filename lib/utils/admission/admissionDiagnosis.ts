@@ -20,8 +20,25 @@ export type AdmissionDiagnosisResult = {
   yearly: YearFeedback[];
 };
 
-const YEAR_ORDER = [2026, 2025, 2024];
-const YEAR_WEIGHTS: Record<number, number> = { 2026: 0.5, 2025: 0.3, 2024: 0.2 };
+export const YEAR_ORDER = [2026, 2025, 2024];
+export const YEAR_WEIGHTS: Record<number, number> = { 2026: 0.5, 2025: 0.3, 2024: 0.2 };
+
+/**
+ * 2028 개편 5등급제 성적을 기존 9등급제(2024~2026 입결 데이터) 비교용 등급으로 비례 변환합니다.
+ * - 5등급제 1등급(누적 10%) -> 9등급제 1.0 ~ 3.6 (중심 1.83)
+ * - 5등급제 2등급(누적 34%) -> 9등급제 3.6 ~ 5.8
+ * - 5등급제 3등급(누적 66%) -> 9등급제 5.8 ~ 7.8
+ * - 5등급제 4등급(누적 90%) -> 9등급제 7.8 ~ 9.0
+ */
+export function convert5To9Grade(grade: number): number {
+  if (!Number.isFinite(grade) || grade <= 0) return 1.0;
+  if (grade <= 1) return 1.0;
+  if (grade <= 2) return Math.round((1.0 + (grade - 1.0) * 2.6) * 100) / 100;
+  if (grade <= 3) return Math.round((3.6 + (grade - 2.0) * 2.2) * 100) / 100;
+  if (grade <= 4) return Math.round((5.8 + (grade - 3.0) * 2.0) * 100) / 100;
+  return Math.round((7.8 + (grade - 4.0) * 1.2) * 100) / 100;
+}
+
 const validGrade = (value: unknown): value is number => typeof value === "number" && Number.isFinite(value) && value >= 1 && value <= 9;
 
 function roundToTwo(value: number) {

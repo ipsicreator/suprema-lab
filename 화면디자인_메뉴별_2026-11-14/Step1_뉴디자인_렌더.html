@@ -1,0 +1,728 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>수프리마랩 Step 1 (진단정보입력) 뉴디자인</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Pretendard", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+      letter-spacing: -0.02em;
+    }
+    body {
+      background-color: #f7f4ee;
+      color: #1a0f08;
+      padding: 32px 16px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+    .shell {
+      width: 100%;
+      max-width: 1080px;
+      background: #ffffff;
+      border: 1px solid #eadfce;
+      border-radius: 28px;
+      box-shadow: 0 24px 70px rgba(44, 26, 10, 0.06);
+      overflow: hidden;
+    }
+    
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 32px;
+      border-bottom: 1px solid #f3ede4;
+      background: #ffffff;
+    }
+    .brand-wrap {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: #8b1a1a;
+      color: white;
+      font-weight: 900;
+      font-size: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 10px rgba(139, 26, 26, 0.2);
+    }
+    .brand-text h1 {
+      font-size: 16px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #1a0f08;
+      line-height: 1.1;
+    }
+    .brand-text span {
+      font-size: 10px;
+      font-weight: 800;
+      color: #8b1a1a;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    .brand-divider {
+      height: 28px;
+      width: 1px;
+      background: #eadfce;
+      margin: 0 4px;
+    }
+    .brand-sub {
+      font-size: 12px;
+      font-weight: 700;
+      color: #8b1a1a;
+    }
+    .brand-sub-desc {
+      font-size: 11px;
+      color: #706b65;
+    }
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    .badge-pill {
+      font-size: 11px;
+      font-weight: 800;
+      color: #8b1a1a;
+      background: #fbf5f2;
+      border: 1px solid #f0ded6;
+      padding: 4px 12px;
+      border-radius: 20px;
+      letter-spacing: 0.05em;
+    }
+    .header-link {
+      font-size: 13px;
+      font-weight: 700;
+      color: #8b1a1a;
+      text-decoration: none;
+    }
+
+    /* Steps */
+    .steps-section {
+      background: rgba(250, 248, 245, 0.7);
+      border-bottom: 1px solid #f3ede4;
+      padding: 24px 32px;
+    }
+    .steps-wrapper {
+      position: relative;
+      max-width: 760px;
+      margin: 0 auto;
+    }
+    .steps-line {
+      position: absolute;
+      top: 20px;
+      left: 12%;
+      right: 12%;
+      height: 2px;
+      background: #e8ded2;
+      z-index: 0;
+    }
+    .steps-list {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      position: relative;
+      z-index: 1;
+      list-style: none;
+    }
+    .step-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .step-num {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: 800;
+      border: 2px solid #eadfce;
+      background: #ffffff;
+      color: #9ca3af;
+      transition: all 0.2s ease;
+    }
+    .step-item.active .step-num {
+      border-color: #8b1a1a;
+      background: #8b1a1a;
+      color: #ffffff;
+      box-shadow: 0 0 0 4px rgba(139, 26, 26, 0.15), 0 6px 14px rgba(139, 26, 26, 0.2);
+    }
+    .step-title {
+      font-size: 13px;
+      font-weight: 800;
+      color: #706b65;
+      margin-top: 8px;
+    }
+    .step-item.active .step-title {
+      color: #8b1a1a;
+    }
+    .step-desc {
+      font-size: 11px;
+      color: #8a8177;
+      margin-top: 2px;
+    }
+
+    /* Page Hero Title */
+    .hero {
+      text-align: center;
+      padding: 36px 32px 14px;
+    }
+    .hero h2 {
+      font-size: 26px;
+      font-weight: 900;
+      color: #1a0f08;
+      letter-spacing: -0.03em;
+    }
+    .hero p {
+      font-size: 14px;
+      color: #706b65;
+      margin-top: 8px;
+      line-height: 1.5;
+    }
+
+    /* Main Form */
+    .form-container {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 12px 32px 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+
+    /* Cards */
+    .card {
+      background: #ffffff;
+      border: 1px solid #eadfce;
+      border-radius: 20px;
+      padding: 24px 28px;
+      box-shadow: 0 4px 18px rgba(44, 26, 10, 0.02);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      border-bottom: 1px solid #f4ede4;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .card-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1a0f08;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-indicator {
+      width: 4px;
+      height: 16px;
+      background: #8b1a1a;
+      border-radius: 2px;
+    }
+    .card-subtitle {
+      font-size: 12px;
+      color: #706b65;
+      margin-top: 3px;
+    }
+    .card-tag {
+      font-size: 11px;
+      font-weight: 800;
+      color: #8b1a1a;
+      background: #fbf5f2;
+      border: 1px solid #f0ded6;
+      padding: 3px 10px;
+      border-radius: 12px;
+    }
+    .card-tag.green {
+      color: #1b6342;
+      background: #eef7f2;
+      border-color: #c9e8d7;
+    }
+
+    /* Grid & Form fields */
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px 20px;
+    }
+    .col-full {
+      grid-column: 1 / -1;
+    }
+    .field-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .field-label {
+      font-size: 12px;
+      font-weight: 800;
+      color: #2c2520;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .req {
+      color: #8b1a1a;
+      margin-left: 2px;
+      font-weight: 900;
+    }
+    .opt {
+      font-size: 10px;
+      font-weight: 700;
+      color: #8a8177;
+      background: #f2eee8;
+      padding: 1px 6px;
+      border-radius: 4px;
+    }
+    .input-box {
+      width: 100%;
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 11px;
+      border: 1.5px solid #e4d8cb;
+      background: #faf8f5;
+      font-size: 13.5px;
+      color: #1a0f08;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+    .input-box:focus {
+      background: #ffffff;
+      border-color: #8b1a1a;
+      box-shadow: 0 0 0 3px rgba(139, 26, 26, 0.1);
+    }
+    .input-box::placeholder {
+      color: #aba195;
+    }
+    .select-box {
+      appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' fill='%23706b65' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: calc(100% - 14px) center;
+      cursor: pointer;
+    }
+
+    /* Grade Hint */
+    .grade-hint {
+      font-size: 11.5px;
+      font-weight: 800;
+      color: #8b1a1a;
+      background: #fbf5f2;
+      border: 1px solid #f0ded6;
+      border-radius: 8px;
+      padding: 7px 12px;
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    /* PDF Dropzone */
+    .dropzone {
+      border: 2px dashed #ded3c5;
+      border-radius: 16px;
+      padding: 30px 20px;
+      background: #faf8f5;
+      text-align: center;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+    .dropzone:hover {
+      border-color: #8b1a1a;
+      background: #fdfaf7;
+    }
+    .dropzone-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: #f3eae0;
+      color: #8b1a1a;
+      font-size: 13px;
+      font-weight: 900;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      letter-spacing: 0.05em;
+    }
+    .dropzone-title {
+      font-size: 13.5px;
+      font-weight: 800;
+      color: #2c2520;
+    }
+    .dropzone-desc {
+      font-size: 11.5px;
+      color: #706b65;
+    }
+
+    /* Analysis Result Preview */
+    .analysis-success {
+      background: #edf7f2;
+      border: 1px solid #c9e8d7;
+      border-radius: 12px;
+      padding: 12px 16px;
+      margin-top: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .analysis-success-text {
+      font-size: 13px;
+      font-weight: 800;
+      color: #1b6342;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .analysis-badge-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+    .subject-badge {
+      background: #ffffff;
+      border: 1px solid #c9e8d7;
+      color: #1b6342;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+    .ai-preview-card {
+      background: #fdfaf7;
+      border: 1px solid #ebdcd0;
+      border-radius: 14px;
+      padding: 16px;
+      margin-top: 12px;
+    }
+    .ai-preview-header {
+      font-size: 12px;
+      font-weight: 800;
+      color: #8b1a1a;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .ai-preview-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .ai-item {
+      background: #ffffff;
+      border: 1px solid #ebdcd0;
+      border-radius: 10px;
+      padding: 10px 12px;
+    }
+    .ai-label {
+      font-size: 10.5px;
+      font-weight: 800;
+      color: #8b1a1a;
+      background: #fbf5f2;
+      padding: 2px 6px;
+      border-radius: 4px;
+      width: fit-content;
+      margin-bottom: 5px;
+    }
+    .ai-text {
+      font-size: 11.5px;
+      color: #5c4e43;
+      line-height: 1.45;
+    }
+
+    /* Submit Button */
+    .submit-wrap {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .btn-submit {
+      background: #8b1a1a;
+      color: #ffffff;
+      border: none;
+      padding: 16px 48px;
+      border-radius: 100px;
+      font-size: 15px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 24px rgba(139, 26, 26, 0.22);
+      transition: all 0.2s ease;
+    }
+    .btn-submit:hover {
+      background: #731515;
+      transform: translateY(-2px);
+      box-shadow: 0 14px 30px rgba(139, 26, 26, 0.3);
+    }
+
+    /* Footer */
+    .footer {
+      border-top: 1px solid #f3ede4;
+      background: rgba(250, 248, 245, 0.5);
+      padding: 16px 32px;
+      text-align: center;
+      font-size: 12px;
+      color: #8a8177;
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    
+    <!-- Top Header -->
+    <header class="header">
+      <div class="brand-wrap">
+        <div class="brand-logo">S</div>
+        <div class="brand-text">
+          <h1>SUPREMA LAB</h1>
+          <span>AI 입시 솔루션 플랫폼</span>
+        </div>
+        <div class="brand-divider"></div>
+        <div>
+          <div class="brand-sub">나의 입시멘토</div>
+          <div class="brand-sub-desc">탐구·세특 입시위치진단</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <span class="badge-pill">PREMIUM DIAGNOSIS</span>
+        <span class="header-link">내 활동 기록 · 학원 연결 →</span>
+      </div>
+    </header>
+
+    <!-- Steps -->
+    <section class="steps-section">
+      <div class="steps-wrapper">
+        <div class="steps-line"></div>
+        <ol class="steps-list">
+          <li class="step-item active">
+            <div class="step-num">1</div>
+            <div class="step-title">학생부 정보입력</div>
+            <div class="step-desc">사용자 정보와 성적 입력</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">2</div>
+            <div class="step-title">학생부 분석</div>
+            <div class="step-desc">상세 분석 리포트</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">3</div>
+            <div class="step-title">탐구·세특·입시</div>
+            <div class="step-desc">탐구 주제 및 활동 제안</div>
+          </li>
+          <li class="step-item">
+            <div class="step-num">4</div>
+            <div class="step-title">입시 위치 진단</div>
+            <div class="step-desc">희망 대학 적합도 판정</div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Hero Title -->
+    <section class="hero">
+      <h2>진단 정보 입력</h2>
+      <p>정밀한 진단과 리포트 발송을 위해 모든 정보를 정확히 입력해주세요.</p>
+    </section>
+
+    <!-- Form Cards -->
+    <main class="form-container">
+      
+      <!-- 섹션 1: 기본 학생 정보 -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-indicator"></span>
+              기본 학생 정보
+            </div>
+            <div class="card-subtitle">정밀 진단 및 리포트 작성을 위한 학생 인적사항입니다.</div>
+          </div>
+          <span class="card-tag">기본 정보</span>
+        </div>
+        <div class="grid-2">
+          <div class="field-group">
+            <label class="field-label">학생 이름 <span class="req">*</span></label>
+            <input type="text" class="input-box" value="김수프리마" placeholder="학생 이름 입력" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">학교명 <span class="req">*</span></label>
+            <input type="text" class="input-box" value="대치수프리고등학교" placeholder="예: 대치고등학교" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">학년 <span class="req">*</span></label>
+            <select class="input-box select-box">
+              <option selected>고등학교 3학년</option>
+              <option>고등학교 2학년</option>
+              <option>고등학교 1학년</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">
+              <span>담당 컨설턴트</span>
+              <span class="opt">선택</span>
+            </label>
+            <input type="text" class="input-box" value="이정민 수석 컨설턴트" placeholder="담당 컨설턴트 성함 (선택 입력)" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 섹션 2: 진로 목표 및 내신 성적 -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-indicator"></span>
+              진로 목표 및 내신 성적
+            </div>
+            <div class="card-subtitle">희망 전공과 내신 성적을 입력하거나, 아래 PDF 업로드로 자동 반영하세요.</div>
+          </div>
+          <span class="card-tag">진로·성적</span>
+        </div>
+        <div class="grid-2">
+          <div class="field-group col-full">
+            <label class="field-label">희망 진로 / 학과 <span class="req">*</span></label>
+            <input type="text" class="input-box" value="인공지능소프트웨어학과 (컴퓨터공학)" placeholder="예: 의예과, 소프트웨어학과, 경영학과 등" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">평가 등급 체계 <span class="req">*</span></label>
+            <select class="input-box select-box">
+              <option selected>기존 9등급제 (현행 수능·고3 기준)</option>
+              <option>내신 5등급제 (2028 개편 체계)</option>
+            </select>
+          </div>
+          <div class="field-group">
+            <label class="field-label">
+              <span>실제 평균 내신 등급 (1.00 ~ 9.00)</span>
+              <span class="req">*</span>
+            </label>
+            <!-- 임의 기본값 2.5 제거됨, 사용자 값 입력 -->
+            <input type="number" class="input-box" value="1.82" step="0.01" placeholder="예: 2.35 (직접 입력 또는 PDF 분석)" />
+            <div class="grade-hint">
+              <span>✓ 실제 성적 반영 중 (목표 대학 최적화 분석 대상)</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 섹션 3: 연락처 및 보고서 수령 -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-indicator"></span>
+              연락처 및 보고서 수령
+            </div>
+            <div class="card-subtitle">진단 결과 리포트 전송 및 학원 상담 안내를 위한 연락 정보입니다.</div>
+          </div>
+          <span class="card-tag">연락 정보</span>
+        </div>
+        <div class="grid-2">
+          <div class="field-group">
+            <label class="field-label">학생 연락처 <span class="req">*</span></label>
+            <input type="tel" class="input-box" value="010-1234-5678" placeholder="010-0000-0000" />
+          </div>
+          <div class="field-group">
+            <label class="field-label">학부모 연락처 <span class="req">*</span></label>
+            <input type="tel" class="input-box" value="010-9876-5432" placeholder="010-0000-0000" />
+          </div>
+          <div class="field-group col-full">
+            <label class="field-label">보고서 수신 이메일 <span class="req">*</span></label>
+            <input type="email" class="input-box" value="student@supremalab.edu" placeholder="example@email.com" />
+          </div>
+        </div>
+      </section>
+
+      <!-- 섹션 4: 생활기록부 PDF 자동 성적 분석 -->
+      <section class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-indicator"></span>
+              생활기록부 PDF 자동 성적 분석
+            </div>
+            <div class="card-subtitle">PDF를 업로드하면 교과 성적 추출 및 평균 내신 계산, 핵심 키워드 분석이 자동 반영됩니다.</div>
+          </div>
+          <span class="card-tag green">원클릭 분석 완료</span>
+        </div>
+
+        <div class="dropzone">
+          <div class="dropzone-icon">PDF</div>
+          <div class="dropzone-title">학생부 PDF 파일을 드래그하거나 클릭하여 업로드하세요</div>
+          <div class="dropzone-desc">발급 원본 파일 기준 (최대 30MB) · 교과 성적과 세특 분석값만 안전하게 추출합니다.</div>
+        </div>
+
+        <!-- 성적 분석 완료 결과 -->
+        <div class="analysis-success">
+          <div class="analysis-success-text">
+            <span>✓</span>
+            <span>성적 분석 완료 (자동 계산 내신: <strong>1.82등급</strong>)</span>
+          </div>
+          <span style="font-size: 11.5px; color: #1b6342; font-weight: 700;">1학년~3학년 1학기 총 28과목 추출</span>
+        </div>
+
+        <div class="analysis-badge-list">
+          <span class="subject-badge">국어 (4단위 / 1등급)</span>
+          <span class="subject-badge">수학 (4단위 / 2등급)</span>
+          <span class="subject-badge">영어 (4단위 / 1등급)</span>
+          <span class="subject-badge">한국사 (3단위 / 1등급)</span>
+          <span class="subject-badge">통합사회 (3단위 / 2등급)</span>
+          <span class="subject-badge">통합과학 (3단위 / 1등급)</span>
+          <span style="font-size: 11px; color: #706b65; align-self: center; margin-left: 4px;">+22개 과목</span>
+        </div>
+
+        <!-- AI 프리뷰 -->
+        <div class="ai-preview-card">
+          <div class="ai-preview-header">
+            <span>학생부 핵심 분석 프리뷰</span>
+            <span style="font-size: 10px; background: #fbf5f2; padding: 2px 6px; border-radius: 4px; color: #8b1a1a;">사전 추출 요약</span>
+          </div>
+          <div class="ai-preview-grid">
+            <div class="ai-item">
+              <div class="ai-label">전공 적합성 및 진로</div>
+              <div class="ai-text"><strong>[인공지능·소프트웨어]</strong> 수학 및 정보 교과에서의 알고리즘 탐구 역량이 우수하며 프로젝트 성취도가 높음.</div>
+            </div>
+            <div class="ai-item">
+              <div class="ai-label">핵심 학업 역량</div>
+              <div class="ai-text">수학·과학 교과의 상위 등급 유지와 세특 내 이론 연계 심화 탐구 능력이 돋보임.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Submit CTA -->
+      <div class="submit-wrap">
+        <button type="button" class="btn-submit">
+          학생부 분석 단계로 이동 (Step 2) →
+        </button>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      수프리마랩 학생부종합 입시 진단 플랫폼 · 검증된 기준 데이터 및 실시간 AI 분석 반영
+    </footer>
+  </div>
+</body>
+</html>

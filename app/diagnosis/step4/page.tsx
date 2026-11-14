@@ -7,6 +7,7 @@ import { diagnosisScreenText } from "@/app/diagnosis/content";
 import { diagnosisSteps } from "../steps";
 import { makeReportSnapshot, readReportSnapshot, REPORT_STORAGE_KEY } from "@/app/report/snapshot";
 import { isPublishedChoice, judgmentFromLevel, targetOptions, profileFromValue, type Step4Profile, type DiagnosisJudgment, type PublishedAdmission, type TargetChoice } from "./targetLogic";
+import { convert5To9Grade } from "@/lib/utils/admission/admissionDiagnosis";
 
 type UniversityTarget = TargetChoice & { id: string; judgment: DiagnosisJudgment; reason: string };
 type Step3Topic = { id: string; topic_title: string; setuk_sentence: string };
@@ -174,15 +175,63 @@ export default function DiagnosisStep4Page() {
 
   return (
     <FlowShell badge="PREMIUM DIAGNOSIS" title={diagnosisScreenText.step4.title} subtitle={diagnosisScreenText.step4.subtitle} currentStep={4} steps={diagnosisSteps}>
-      <div className="mx-auto max-w-[980px] rounded-[28px] border border-[#eadfce] bg-white p-6 text-left shadow-[0_18px_50px_rgba(44,26,10,0.04)]">
-        <div className="mb-5 flex flex-wrap items-center justify-between gap-3 rounded-[22px] border border-[#eadfce] bg-[#fffaf4] p-5 print:hidden">
-          <div><div className="text-xs font-black tracking-[0.18em] text-[#8b1a1a]">{complete ? "FINAL RESULT" : "SELECT TARGETS"}</div><h2 className="mt-2 text-xl font-black text-[#1a0f08]">희망대학 {targets.length}개 진단</h2><p className="mt-1 text-sm font-semibold text-[#6c6256]">{summary}</p></div>
-          <div className="flex flex-wrap gap-2">
-            <button type="button" onClick={diagnose} disabled={!canDiagnose || diagnosing || sending} className="rounded-full bg-[#8b1a1a] px-5 py-3 text-sm font-black text-white disabled:opacity-50">{diagnosing ? "진단 중…" : "진단 실행"}</button>
-            <button type="button" onClick={() => { if (checkProfileUnchanged()) window.print(); }} disabled={!complete || diagnosing} className="rounded-full border border-[#8b1a1a] px-5 py-3 text-sm font-black text-[#8b1a1a] disabled:opacity-50">인쇄</button>
-            <button type="button" onClick={() => setMailOpen(previous => !previous)} disabled={!complete || diagnosing} className="rounded-full border border-[#8b1a1a] bg-white px-5 py-3 text-sm font-black text-[#8b1a1a] disabled:opacity-50">메일 보내기</button>
+      <div className="mx-auto max-w-[1040px] rounded-[24px] border border-[#eadfce] bg-white p-6 md:p-8 text-left shadow-[0_18px_50px_rgba(44,26,10,0.04)]">
+        <div className="mb-6 flex flex-wrap items-center justify-between gap-4 rounded-[16px] border border-[#eadfce] bg-[#faf7f4] p-5 print:hidden">
+          <div>
+            <div className="text-xs font-black tracking-[0.15em] text-[#8b1a1a]">
+              {complete ? "FINAL DIAGNOSIS RESULT" : "TARGET SELECTION"}
+            </div>
+            <h2 className="mt-1 text-xl font-black text-[#1a0f08]">
+              희망대학 {targets.length}개 심층 진단
+            </h2>
+            <p className="mt-1 text-sm font-semibold text-[#6c6256]">{summary}</p>
           </div>
-          {mailOpen && complete && <div className="mt-4 flex w-full flex-wrap gap-2"><input type="email" aria-label="결과 받을 메일주소" value={email} onChange={event => setEmail(event.target.value)} placeholder="메일주소 입력" className="min-w-[240px] flex-1 rounded-xl border border-[#d9c8b3] bg-white px-4 py-3" /><button type="button" onClick={handleSendMail} disabled={sending} className="rounded-xl bg-[#0f766e] px-5 py-3 font-black text-white disabled:opacity-50">{sending ? "발송 중" : "전체 결과 발송"}</button></div>}
+          <div className="flex flex-wrap gap-2.5 items-center">
+            <button
+              type="button"
+              onClick={diagnose}
+              disabled={!canDiagnose || diagnosing || sending}
+              className="rounded-lg bg-[#8b1a1a] px-5 py-2.5 text-sm font-black text-white disabled:opacity-50 hover:bg-[#741515] transition-colors"
+            >
+              {diagnosing ? "진단 중…" : "진단 실행"}
+            </button>
+            <button
+              type="button"
+              onClick={() => { if (checkProfileUnchanged()) window.print(); }}
+              disabled={!complete || diagnosing}
+              className="rounded-lg border border-[#8b1a1a] bg-white px-5 py-2.5 text-sm font-black text-[#8b1a1a] disabled:opacity-50 hover:bg-[#fbf5f2] transition-colors"
+            >
+              인쇄 / PDF
+            </button>
+            <button
+              type="button"
+              onClick={() => setMailOpen(previous => !previous)}
+              disabled={!complete || diagnosing}
+              className="rounded-lg border border-[#8b1a1a] bg-[#8b1a1a] text-white px-5 py-2.5 text-sm font-black disabled:opacity-50 hover:bg-[#741515] transition-colors inline-flex items-center gap-1.5"
+            >
+              ✉️ 결과 메일로 보내기
+            </button>
+          </div>
+          {mailOpen && complete && (
+            <div className="mt-3 flex w-full flex-wrap gap-2 pt-3 border-t border-[#ebdcd0]">
+              <input
+                type="email"
+                aria-label="결과 받을 메일주소"
+                value={email}
+                onChange={event => setEmail(event.target.value)}
+                placeholder="수신할 이메일 주소 입력 (예: student@example.com)"
+                className="min-w-[260px] flex-1 rounded-lg border border-[#d9c8b3] bg-white px-4 py-2.5 text-sm font-semibold outline-none focus:border-[#8b1a1a]"
+              />
+              <button
+                type="button"
+                onClick={handleSendMail}
+                disabled={sending}
+                className="rounded-lg bg-[#1a0f08] px-5 py-2.5 text-sm font-black text-white disabled:opacity-50 hover:bg-[#8b1a1a] transition-colors"
+              >
+                {sending ? "발송 중..." : "리포트 즉시 발송"}
+              </button>
+            </div>
+          )}
         </div>
         {loading && <p role="status" className="mb-4 rounded-xl bg-slate-50 p-4">입시 데이터를 불러오는 중입니다.</p>}
         {dataError && <p role="alert" className="mb-4 rounded-xl bg-rose-50 p-4 text-rose-700">{dataError}</p>}
@@ -193,7 +242,9 @@ export default function DiagnosisStep4Page() {
           <h3 className="text-lg font-black text-[#1f1720]">전 단계 요약</h3>
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             <Summary title="1단계 학생정보입력">{profile?.studentName || "학생명 없음"} · {profile?.schoolName || "학교명 없음"}</Summary>
-            <Summary title="2단계 학생부 분석">희망 진로 {profile?.careerHint || "정보 없음"} · 내신 {hasGrade ? grade : "—"}등급 ({profile?.gradingSystem === "5-level" ? "5등급제" : "9등급제"})</Summary>
+            <Summary title="2단계 학생부 분석">
+              희망 진로 {profile?.careerHint || "정보 없음"} · 내신 {hasGrade ? grade : "—"}등급 ({profile?.gradingSystem === "5-level" ? `5등급제 (9등급 환산 약 ${convert5To9Grade(grade).toFixed(2)}등급)` : "9등급제"})
+            </Summary>
             <Summary title="3단계 탐구활동/독서/세특">총 {step3Bundle?.topics?.length || 0}개 주제</Summary>
           </div>
           {step3Bundle?.topics?.length ? <div className="mt-4 grid gap-3 md:grid-cols-2">{step3Bundle.topics.slice(0, 6).map((topic, index) => <div key={topic.id || index} className="rounded-2xl border border-[#eadfce] bg-white p-4"><div className="text-xs font-black text-[#8b1a1a]">주제 {index + 1}</div><div className="mt-2 font-black">{topic.topic_title}</div><p className="mt-2 text-sm leading-6 text-slate-600">{topic.setuk_sentence}</p></div>)}</div> : null}
