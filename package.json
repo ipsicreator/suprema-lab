@@ -30,6 +30,7 @@
     "pdf2json": "^4.0.3",
     "pocketbase": "^0.26.9",
     "postcss": "^8.5.14",
+    "pptxgenjs": "^4.0.1",
     "puppeteer": "^25.1.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
