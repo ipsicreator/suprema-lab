@@ -419,7 +419,7 @@ export default function IntroScreen() {
         </div>
       </section>
 
-      {/* 5. B2B 학원 솔루션 및 1·3·6개월 관리형 컨설팅 모델 */}
+      {/* 5. B2B 학원 솔루션 및 학기제 관리형 컨설팅 모델 (~8월/~2월 종료 기준) */}
       <section id="b2b" className="bg-white py-16 sm:py-24 border-b border-[#ebdcca]">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
           <div className="rounded-3xl border border-[#eadfce] bg-gradient-to-br from-[#fffdfa] via-[#fcf8f2] to-[#f8f1e6] p-8 sm:p-12 shadow-sm">
@@ -430,10 +430,10 @@ export default function IntroScreen() {
               <h2 className="mt-3 text-2xl font-black text-[#1a0f08] sm:text-4xl">
                 컨설턴트 앱 + 나의 입시멘토
                 <br />
-                학원 수강생을 위한 1:1 밀착 입시 관리
+                학원 수강생을 위한 1개 학기 단위 밀착 입시 관리
               </h2>
               <p className="mt-3 text-sm font-semibold leading-relaxed text-slate-600 break-keep">
-                학생은 「나의 입시멘토」에서 정밀 진단과 탐구 과제를 수행하고, 학원 원장과 전담 컨설턴트는 「컨설턴트 앱」에서 암호화된 고유 코드로 연동되어 학생별 맞춤 탐구와 세특을 1-Click으로 배정합니다.
+                고교 학사 일정에 맞추어 <strong>~8월(1학기 마감) 및 ~2월(2학기/학년말 마감)</strong> 종료 시점을 기준으로 잔여 개월 수를 유연하게 계산(종료시점 - 가입시점)하여 학원별 맞춤 관리를 지원합니다.
               </p>
             </div>
 
@@ -442,13 +442,13 @@ export default function IntroScreen() {
               <div className="rounded-2xl border border-[#e4d6c3] bg-white p-5 shadow-2xs">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="rounded-full bg-[#8b1a1a]/10 px-3 py-1 text-xs font-black text-[#8b1a1a]">
-                    1개월 속성 과정
+                    수시 직전 (1개월)
                   </span>
                   <Clock size={16} className="text-[#8b1a1a]" />
                 </div>
                 <h4 className="text-base font-black text-[#1a0f08]">단기 속성 진단</h4>
                 <p className="mt-1 text-xs font-semibold text-slate-600">
-                  수시 원서 라인업 확정 및 생기부 5등급제 정밀 진단
+                  수시 원서 접수 직전 6개 대학 파이널 라인업 확정
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs font-semibold text-slate-600">
                   <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 164개 대학 모의 지원선 분석</li>
@@ -457,25 +457,25 @@ export default function IntroScreen() {
                 </ul>
               </div>
 
-              {/* 3개월 */}
+              {/* 3~4개월 */}
               <div className="rounded-2xl border-2 border-[#1e5a84] bg-white p-5 shadow-2xs relative">
                 <div className="absolute -top-3 right-4 rounded-full bg-[#1e5a84] px-2.5 py-0.5 text-[10px] font-black text-white">
                   가장 추천
                 </div>
                 <div className="mb-2 flex items-center justify-between">
                   <span className="rounded-full bg-[#1e5a84] px-3 py-1 text-xs font-black text-white">
-                    3개월 학기 과정
+                    학기 집중 (3~4개월)
                   </span>
                   <Clock size={16} className="text-[#1e5a84]" />
                 </div>
                 <h4 className="text-base font-black text-[#1a0f08]">학기 집중 케어</h4>
                 <p className="mt-1 text-xs font-semibold text-slate-600">
-                  중간·기말 내신 추이 반영 및 과목별 세특·독서 탐구 첨삭
+                  5월 가입 ➔ 8월 종료 / 12월 가입 ➔ 2월 종료
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs font-semibold text-slate-600">
-                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 학기별 성적 추이 심층 분석</li>
-                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 탐구보고서 첨삭 (월 2회)</li>
-                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 나이스 기재용 세특 초안 검수</li>
+                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 시험 직후 집중 탐구활동 설계 (월 2회)</li>
+                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 카카오 도서 DB 연계 심화 탐구</li>
+                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 나이스 마감 대비 3단계 세특 문장 검수</li>
                 </ul>
               </div>
 
@@ -483,16 +483,16 @@ export default function IntroScreen() {
               <div className="rounded-2xl border border-[#e4d6c3] bg-white p-5 shadow-2xs">
                 <div className="mb-2 flex items-center justify-between">
                   <span className="rounded-full bg-[#d97706]/10 px-3 py-1 text-xs font-black text-[#d97706]">
-                    6개월 풀케어
+                    학기 풀코스 (6개월)
                   </span>
                   <Clock size={16} className="text-[#d97706]" />
                 </div>
                 <h4 className="text-base font-black text-[#1a0f08]">수시 올인원 풀케어</h4>
                 <p className="mt-1 text-xs font-semibold text-slate-600">
-                  생활기록부 전 영역 상시 관리 및 실전 모의 면접 완성
+                  3월 가입 ➔ 8월 종료 / 9월 가입 ➔ 2월 종료
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs font-semibold text-slate-600">
-                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 생기부 전 영역(자·동·진·특) 코칭</li>
+                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 생기부 전 영역(자·동·진·특) 상시 코칭</li>
                   <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 최신 컷오프 기반 파이널 원서 전략</li>
                   <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 서류/제시문 기반 실전 모의 면접</li>
                 </ul>
