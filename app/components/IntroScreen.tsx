@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import OfficialFooter from "./OfficialFooter";
+import ProgramGuideTour from "./ProgramGuideTour";
 import {
   Sparkles,
   BookOpen,
@@ -45,7 +46,13 @@ export default function IntroScreen() {
             </div>
           </Link>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
+            <a
+              href="#program-tour"
+              className="rounded-xl border border-[#8b1a1a]/30 bg-[#8b1a1a]/5 px-3.5 py-1.5 text-xs font-bold text-[#8b1a1a] shadow-2xs transition hover:bg-[#8b1a1a] hover:text-white"
+            >
+              🌟 프로그램 소개 (9대 핵심 가이드)
+            </a>
             <Link
               href="/activities"
               className="rounded-xl border border-[#d8c7b2] bg-white px-4 py-1.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:border-[#8b1a1a] hover:text-[#8b1a1a]"
@@ -146,6 +153,11 @@ export default function IntroScreen() {
           </div>
         </div>
       </section>
+
+      {/* 2.5 [신규 탑재] 「나의 입시멘토」 9단계 비주얼 프로그램 소개 투어 */}
+      <div id="program-tour">
+        <ProgramGuideTour />
+      </div>
 
       {/* 3. 대치 수프리마 대입전략연구소 소개 & 3대 철학 */}
       <section id="about" className="border-b border-[#e9dfd2] bg-white py-16 sm:py-24">
