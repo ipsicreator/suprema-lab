@@ -63,11 +63,11 @@ const MENU_GUIDES: Record<string, MenuGuide> = {
     isExternal: true,
     purpose: "컨설턴트 4대 실행 항목(진단 ➔ 플래너 ➔ 도서/세특 ➔ 월간 보고서)을 밀착 코칭하고, 실행 데이터를 자동 집계해 A4 출력 및 학부모 원클릭 메일링을 전송하는 현장 워크스페이스",
     target: "총괄 마스터(전 권한 오픈) / 학원 관리자(원장) / 담당 컨설턴트",
-    whenToUse: "원생 등록, 5/9등급 성적 분석, 주차별 플래너 과제 점검, 카카오 도서 DB 매칭, 3단계 세특 검수, 월간 활동 보고서 A4 출력 및 학부모 메일 발송 시",
+    whenToUse: "원생 등록, 5/9등급 성적 분석, 주차별 플래너 과제 점검, 수프리마랩 도서 DB 매칭, 3단계 세특 검수, 월간 활동 보고서 A4 출력 및 학부모 메일 발송 시",
     steps: [
       "1. [진단] 5등급/9등급 내신 환산 및 164개 대학 컷오프 기반 수시 적합도를 분석합니다.",
       "2. [플래너/퀘스트] 학생 등록 학사 퀘스트(수행평가·시험일정)를 확인하고, 1클릭 [⚡탐구·도서 매칭]으로 전문 피드백을 제공합니다.",
-      "3. [세특/도서] 카카오 도서 DB 연계 필독서와 3단계(동기-과정-변화) 세특을 검수·배정합니다.",
+      "3. [세특/도서] 수프리마랩 도서 DB 연계 필독서와 3단계(동기-과정-변화) 세특을 검수·배정합니다.",
       "4. [보고서] [⚡실행 데이터 자동 집계]로 월간 활동 보고서를 생성해 A4 출력 및 학부모 메일링을 발송합니다."
     ],
     keyTip: "학생이 퀘스트를 올리면 컨설턴트는 [⚡탐구·도서 매칭] 버튼 하나로 고품격 피드백에만 집중할 수 있습니다.",
@@ -297,7 +297,7 @@ export default function AdminDashboardHub({ academyAppUrl }: AdminDashboardHubPr
                 </h2>
               </div>
               <span className="text-[11px] font-semibold text-slate-500">
-                진단 ➔ 플래너 ➔ 카카오 도서 세특 ➔ 월간 보고서 A4출력 & 학부모 메일링 표준 절차
+                진단 ➔ 플래너 ➔ 수프리마랩 도서 세특 ➔ 월간 보고서 A4출력 & 학부모 메일링 표준 절차
               </span>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -567,7 +567,7 @@ export default function AdminDashboardHub({ academyAppUrl }: AdminDashboardHubPr
                 <ol className="list-decimal pl-4 space-y-1">
                   <li><strong>학생 CRM 등록</strong>: 상단 `[+ 신규 학생 등록]`에서 이름, 학교, 학년, 연락처를 등록합니다.</li>
                   <li><strong>학생부 및 성적 분석</strong>: 5등급제 ⟷ 9등급제 자동 환산 성적과 학종 취약 과목을 확인합니다.</li>
-                  <li><strong>독서·세특 배정</strong>: 카카오 도서 DB 연계 전공 필독서와 3단계 완성형 문장을 검수합니다.</li>
+                  <li><strong>독서·세특 배정</strong>: 수프리마랩 도서 DB 연계 전공 필독서와 3단계 완성형 문장을 검수합니다.</li>
                   <li><strong>추천서/평가서 인쇄</strong>: 학원 로고가 인쇄된 맞춤 추천서 및 학기 평가서를 A4로 즉시 출력합니다.</li>
                   <li><strong>강사 배정</strong>: `학원 관리자` 탭에서 담당 강사별로 학생을 1:1로 배정합니다.</li>
                 </ol>

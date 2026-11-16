@@ -236,7 +236,7 @@ export default function IntroScreen() {
                     입시는 막연한 '감'이나 '운'이 아닙니다.
                   </p>
                   <p className="text-xs font-semibold leading-relaxed text-slate-600 break-keep">
-                    전국 164개 대학 입결 데이터와 카카오 도서 DB, AI 엔진이 결합된 <strong>‘오차 없는 탄탄한 설계 인프라’</strong>가 학생 뒤를 든든하게 받치고 있다는 전문성의 선언입니다.
+                    전국 164개 대학 입결 데이터와 수프리마랩 도서 DB, AI 엔진이 결합된 <strong>‘오차 없는 탄탄한 설계 인프라’</strong>가 학생 뒤를 든든하게 받치고 있다는 전문성의 선언입니다.
                   </p>
                 </div>
 
@@ -393,7 +393,7 @@ export default function IntroScreen() {
                 </div>
                 <h3 className="text-lg font-black text-[#1a0f08]">독서 연계 탐구 & 세특</h3>
                 <p className="mt-2 text-xs font-semibold leading-relaxed text-slate-700 break-keep">
-                  모든 탐구는 필독서에서 출발합니다. 카카오 도서 DB와 AI가 도서명과 핵심 이론이 녹아든 완성형 세특 문장을 작성합니다.
+                  모든 탐구는 필독서에서 출발합니다. 수프리마랩 도서 DB와 AI가 도서명과 핵심 이론이 녹아든 완성형 세특 문장을 작성합니다.
                 </p>
               </div>
               <Link
@@ -486,7 +486,7 @@ export default function IntroScreen() {
                 </p>
                 <ul className="mt-3 space-y-1.5 text-xs font-semibold text-slate-600">
                   <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 시험 직후 집중 탐구활동 설계 (월 2회)</li>
-                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 카카오 도서 DB 연계 심화 탐구</li>
+                  <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 수프리마랩 도서 DB 연계 심화 탐구</li>
                   <li className="flex items-center gap-1.5"><Check size={13} className="text-emerald-600" /> 나이스 마감 대비 3단계 세특 문장 검수</li>
                 </ul>
               </div>

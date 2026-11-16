@@ -241,7 +241,7 @@ function addSlideHeader(slide, category, title, subtitle) {
   // 5. Subtext
   s1.addText([
     { text: '2028 대입 개편 5등급제·9등급제 자동 환산과 전국 164개 대학 26,295개 전형 최신 컷오프를 탑재\n', options: { bold: true } },
-    { text: '하여, 학생부 정밀 분석부터 나이스 기재용 세특 문장과 카카오 도서 연계 추천까지 한 번에 완성합니다.', options: { bold: false } },
+    { text: '하여, 학생부 정밀 분석부터 나이스 기재용 세특 문장과 수프리마랩 도서 연계 추천까지 한 번에 완성합니다.', options: { bold: false } },
   ], {
     x: 1.5,
     y: 3.75,
@@ -478,7 +478,7 @@ function addSlideHeader(slide, category, title, subtitle) {
     '• 나이스 10초 간편인증 연동 및 정부24 PDF 원클릭 분석',
     '• 2028 개편 5등급제 ⟷ 9등급제 실시간 양방향 자동 변환',
     '• 학생 주도 월간 퀘스트 등록 (수행평가 일정, 시험범위, 자기평가서)',
-    '• 카카오 도서 DB 공식 연계 도서명·핵심이론 탑재 독서 탐구',
+    '• 수프리마랩 도서 DB 공식 연동 도서명·핵심이론 탑재 독서 탐구',
     '• 나이스 기재용 3단계(동기➔과정➔성장) 완성형 세특 문장 자동 생성',
     '• 164개 대학 26,295개 전형 상향·적정·안정 실시간 모의 컷오프',
   ];
@@ -550,7 +550,7 @@ function addSlideHeader(slide, category, title, subtitle) {
 {
   const s4 = pres.addSlide();
   s4.background = { color: COLORS.bgLight };
-  addSlideHeader(s4, '03. CORE MATCHING ENGINE', '대한민국 유일 핵심 엔진: 단계별 세부 매칭 4단계 아키텍처', '단순 검색 탈피! 키워드 추출 ➔ 과목 6단계 심화 ➔ 연구 가설 ➔ 카카오 도서 DB & 나이스 3단계 세특 완결');
+  addSlideHeader(s4, '03. CORE MATCHING ENGINE', '대한민국 유일 핵심 엔진: 단계별 세부 매칭 4단계 아키텍처', '단순 검색 탈피! 키워드 추출 ➔ 과목 6단계 심화 ➔ 연구 가설 ➔ 수프리마랩 도서 DB & 나이스 3단계 세특 완결');
 
   // 4 Horizontal Process Steps
   const matchingSteps = [
@@ -577,9 +577,9 @@ function addSlideHeader(slide, category, title, subtitle) {
     },
     {
       step: 'STEP 04',
-      title: '카카오 도서 & 세특',
-      sub: '카카오 API + 3단계 완결',
-      desc: '• 카카오 도서 DB 기반 실시간 단행본 매칭\n• 나이스 3단계(동기➔탐구과정➔변화성장) 공식 기재 규격 문장 완성',
+      title: '수프리마랩 도서 & 세특',
+      sub: '수프리마랩 DB + 3단계 완결',
+      desc: '• 수프리마랩 공식 도서 DB 기반 실시간 단행본 매칭\n• 나이스 3단계(동기➔탐구과정➔변화성장) 공식 기재 규격 문장 완성',
       accent: COLORS.darkBurgundy,
     },
   ];
@@ -744,7 +744,7 @@ function addSlideHeader(slide, category, title, subtitle) {
     {
       badge: '원클릭 연계',
       title: '04. [⚡ 탐구·도서 매칭] 1초 전환',
-      desc: '• 퀘스트 카드 클릭 시 즉시 [3. 탐구·세특 추천] 탭으로 자동 이동\n• 해당 과목명 및 과제명이 AI 프롬프트에 자동 주입되어 10초 만에 카카오 도서 세특 도출\n• 컨설턴트는 오직 완성도 높은 탐구 피드백에만 100% 집중',
+      desc: '• 퀘스트 카드 클릭 시 즉시 [3. 탐구·세특 추천] 탭으로 자동 이동\n• 해당 과목명 및 과제명이 AI 프롬프트에 자동 주입되어 10초 만에 수프리마랩 도서 세특 도출\n• 컨설턴트는 오직 완성도 높은 탐구 피드백에만 100% 집중',
       accent: COLORS.teal,
     },
   ];
@@ -820,7 +820,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       num: '01',
       title: '수행평가 막막함 Zero & 즉각 아이디어',
       sub: '과제 입력 즉시 도서 및 탐구 방향 도출',
-      desc: '• 학기 중 쏟아지는 학교 수행평가 주제를 기입하는 즉시 전공 맞춤 카카오 도서와 탐구 주제가 도출\n• 막막한 백지 상태에서 고민하는 시간을 없애고 수행평가 준비 소요 시간 70% 단축\n• 내신 기간 중 수행평가 스트레스 없이 지필고사 공부 시간 확보',
+      desc: '• 학기 중 쏟아지는 학교 수행평가 주제를 기입하는 즉시 전공 맞춤 수프리마랩 추천 도서와 탐구 주제가 도출\n• 막막한 백지 상태에서 고민하는 시간을 없애고 수행평가 준비 소요 시간 70% 단축\n• 내신 기간 중 수행평가 스트레스 없이 지필고사 공부 시간 확보',
       accent: COLORS.burgundy,
     },
     {
@@ -1116,7 +1116,7 @@ function addSlideHeader(slide, category, title, subtitle) {
     '• 권장 대상: 1인 원장 체제, 단과 강사 중심, 입시 전담 인력이 부족한 학원',
     '• 100% 실전 대행: 대치 수프리마 대입전략연구소 전문 연구원이 원내 입시연구소로 업무 전담',
     '• 생기부·성적 분석 대행: 학생 데이터 등록 및 수시 6개 대학 분석 리포트 발행',
-    '• 수행평가 & 도서 배정: 학교별 수행평가 분석 및 카카오 도서 세특 1-Click 배정 대행',
+    '• 수행평가 & 도서 배정: 학교별 수행평가 분석 및 수프리마랩 도서 세특 1-Click 배정 대행',
     '• 월간 활동 보고서 발행: 매월 말 학부모 발송용 보고서 작성, 출력본 및 이메일 직발송 대행',
     '• 학부모 상담 스크립트: 입시 문의 시 학부모 응대용 전문 브리핑 스크립트 서면 지원',
     '• 추가 인건비 부담 없이 원내 대치동 입시 연구소를 즉시 보유하는 효과 달성',
@@ -1172,7 +1172,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       points: [
         '• 학기 전 과정 교과 성적 및 비교과 완벽 케어',
         '• 주차별 플래너 & 시험기간 D-Day 실시간 코칭',
-        '• 수행평가 퀘스트 전 과목 첨삭 & 카카오 도서 매칭',
+        '• 수행평가 퀘스트 전 과목 첨삭 & 수프리마랩 도서 매칭',
         '• 매월 대치수프리마 월간 활동 보고서 발송',
         '• 학기말 완성형 세특 포트폴리오(A4) 최종 완성',
       ],
@@ -1299,7 +1299,7 @@ function addSlideHeader(slide, category, title, subtitle) {
     {
       num: 'STEP 03',
       title: '도서 세특 & 수행평가 연계',
-      desc: '• NEIS 핵심 근거가 되는 학교 수행평가 내용 다이렉트 기입\n• 희망 전공 맞춤 카카오 도서 DB 공식 연계 추천\n• 책의 핵심 이론이 자연스럽게 녹아든 3단계 세특 초안',
+      desc: '• NEIS 핵심 근거가 되는 학교 수행평가 내용 다이렉트 기입\n• 희망 전공 맞춤 수프리마랩 공식 도서 DB 연계 추천\n• 책의 핵심 이론이 자연스럽게 녹아든 3단계 세특 초안',
       accent: COLORS.teal,
     },
     {
@@ -1450,7 +1450,7 @@ function addSlideHeader(slide, category, title, subtitle) {
   const contactLeft = [
     '• 연구소 본원: 서울시 강남구 테헤란로 326 B1F (대치수프리마 입시&코칭센터)',
     '• 대표 컨설턴트: 이기욱 대표컨설턴트 / 대치수프리마 대입전략연구소',
-    '• 핵심 인프라: 전국 164개 대학 입결 데이터베이스 & 카카오 도서 DB & AI 엔진 탑재',
+    '• 핵심 인프라: 전국 164개 대학 입결 데이터베이스 & 수프리마랩 도서 DB & AI 엔진 탑재',
   ];
   s11.addText(contactLeft.join('\n\n'), {
     x: 1.2,

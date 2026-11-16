@@ -199,7 +199,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       title: 'Persona B : 세특 마감 쫓기는 고1·고2',
       sub: '일반고/자사고 재학 / 쇼츠·릴스·틱톡 헤비 유저',
       pain: '• 수행평가와 생기부 세특 마감 직전 주제 고갈 및 멘붕\n• 챗GPT 문장은 나이스 기재 금지어에 걸릴 위험이 큼\n• 책을 읽지 않고도 전공 이론이 녹아든 완성형 문장이 필요',
-      solution: '➔ 카카오 도서 DB 연계 1-Click 3단계 나이스 규격 완성형 문장 도출',
+      solution: '➔ 수프리마랩 도서 DB 연계 1-Click 3단계 나이스 규격 완성형 문장 도출',
       color: COLORS.blueNavy,
     },
     {
@@ -266,7 +266,7 @@ function addSlideHeader(slide, category, title, subtitle) {
     {
       stage: 'Middle of Funnel',
       name: '2. 무료 체험 & 신뢰 구축',
-      desc: '• 나이스 간편인증 or PDF 10초 업로드\n• 2028 개편 5등급제 ⟷ 9등급제 실시간 환산\n• 카카오 도서 DB 연계 필독서 3권 즉시 추천\n• 164개 대학 합격 컷오프 모의 프리뷰',
+      desc: '• 나이스 간편인증 or PDF 10초 업로드\n• 2028 개편 5등급제 ⟷ 9등급제 실시간 환산\n• 수프리마랩 도서 DB 연계 필독서 3권 즉시 추천\n• 164개 대학 합격 컷오프 모의 프리뷰',
       kpi: '웹 유입 대비 1단계 등록 전환율 25%+',
       color: COLORS.blueNavy,
     },
@@ -323,7 +323,7 @@ function addSlideHeader(slide, category, title, subtitle) {
 {
   const s4 = pres.addSlide();
   s4.background = { color: COLORS.bgLight };
-  addSlideHeader(s4, '03. VIDEO STRATEGY', '숏폼 비디오(쇼츠/릴스/틱톡) 핵심 제작 공식', '3초 후킹, 고화질 자막, 카카오 도서 DB 시연으로 시청자를 단숨에 웹사이트 유입으로 연결합니다.');
+  addSlideHeader(s4, '03. VIDEO STRATEGY', '숏폼 비디오(쇼츠/릴스/틱톡) 핵심 제작 공식', '3초 후킹, 고화질 자막, 수프리마랩 도서 DB 시연으로 시청자를 단숨에 웹사이트 유입으로 연결합니다.');
 
   const rules = [
     {
@@ -340,8 +340,8 @@ function addSlideHeader(slide, category, title, subtitle) {
     },
     {
       num: '03',
-      title: '실전 시연 & 카카오 도서 DB',
-      desc: '막연한 팁이 아닌 실제 화면 10초 스피드런:\n나이스 PDF 드래그 ➔ 5/9등급 자동 환산 ➔\n카카오 도서 DB 연계 3단계 세특 문장 완결.\n"시스템의 실행력"을 눈으로 직접 확인',
+      title: '실전 시연 & 수프리마랩 도서 DB',
+      desc: '막연한 팁이 아닌 실제 화면 10초 스피드런:\n나이스 PDF 드래그 ➔ 5/9등급 자동 환산 ➔\n수프리마랩 도서 DB 연계 3단계 세특 문장 완결.\n"시스템의 실행력"을 눈으로 직접 확인',
       color: COLORS.teal,
     },
     {
@@ -400,7 +400,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       num: '비디오 02 (학생)',
       title: '세특 마감 D-3, 챗GPT 쓰지 마라',
       hook: '“세특 마감 3일 전, 아직도 빈 화면?”',
-      core: '챗GPT 기재금지어 위험 ➔ 카카오 도서 DB 연계 3단계 완성형 문장 자동 생성',
+      core: '챗GPT 기재금지어 위험 ➔ 수프리마랩 도서 DB 연계 3단계 완성형 문장 자동 생성',
       cta: '검색창에 「나의 입시멘토」 검색',
       color: COLORS.blueNavy,
     },
@@ -586,7 +586,7 @@ function addSlideHeader(slide, category, title, subtitle) {
 
   const checkItems = [
     '✓ 무료(Free) 단어 절대 배제 — 유료 프리미엄 솔루션 명시',
-    '✓ 도서 DB는 반드시 ‘카카오 도서 DB’로 정확히 표기 (알라딘 배제)',
+    '✓ 도서 DB는 반드시 ‘수프리마랩 도서 DB’로 정확히 표기 (알라딘 배제)',
     '✓ 대학 DB 규모 ‘164개 대학 26,295개 전형’ 공식 수치 준수',
     '✓ 2028 개편 5등급제 ⟷ 9등급제 자동 환산 기술력 강조',
     '✓ 1개 학기 단위 (~8월/~2월 종료) 잔여 개월수 공식 준수',

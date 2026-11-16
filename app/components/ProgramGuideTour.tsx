@@ -86,7 +86,7 @@ export default function ProgramGuideTour() {
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
-                <span><strong>카카오 도서 DB 공식 연동</strong> 기반 교과 연계 필독서 100% 실명 매칭</span>
+                <span><strong>수프리마랩 공식 도서 DB 연동</strong> 기반 교과 연계 필독서 100% 실명 매칭</span>
               </li>
               <li className="flex items-start gap-2">
                 <CheckCircle2 size={14} className="text-emerald-600 shrink-0 mt-0.5" />
@@ -123,9 +123,9 @@ export default function ProgramGuideTour() {
             </div>
             <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-4.5 space-y-2">
               <span className="rounded-md bg-emerald-600 px-2.5 py-0.5 text-[11px] font-black text-white">대치수프리마 해법</span>
-              <h4 className="font-black text-[#1a0f08] text-sm">검증된 컷오프와 카카오 도서</h4>
+              <h4 className="font-black text-[#1a0f08] text-sm">검증된 컷오프와 수프리마랩 도서 DB</h4>
               <p className="text-slate-600 font-semibold leading-relaxed text-xs">
-                실제 합격선 컷오프와 카카오 도서 공식 서지 정보를 결합하여, 대학 입학사정관이 신뢰하는 공신력 있는 포트폴리오를 도출합니다.
+                실제 합격선 컷오프와 수프리마랩 공식 입시 도서 데이터베이스를 결합하여, 대학 입학사정관이 신뢰하는 공신력 있는 포트폴리오를 도출합니다.
               </p>
             </div>
           </div>
@@ -139,7 +139,7 @@ export default function ProgramGuideTour() {
     {
       id: "slide-3",
       badge: "03 · 핵심 매칭 아키텍처",
-      title: "키워드 ➔ 과목 ➔ 탐구 가설 ➔ 카카오 도서 세특",
+      title: "키워드 ➔ 과목 ➔ 탐구 가설 ➔ 수프리마랩 도서 세특",
       subtitle: "교과 개념을 대학이 주목하는 탐구 질문으로 바꾸는 시각적 연결 파이프라인 (핵심 엔진)",
       theme: "blue",
       icon: <Layers className="w-6 h-6 text-blue-700" />,
@@ -168,7 +168,7 @@ export default function ProgramGuideTour() {
             <div className="rounded-xl border border-emerald-200 bg-emerald-50/70 p-3 text-center space-y-1">
               <span className="text-[10px] font-black uppercase text-emerald-700 bg-emerald-100 px-2 py-0.5 rounded">STEP 04</span>
               <h4 className="font-black text-slate-900 text-xs sm:text-sm">4. 도서 & 3단계 세특</h4>
-              <p className="text-[10.5px] font-semibold text-slate-600">카카오 도서 DB 실명 매칭 및 세특 완성</p>
+              <p className="text-[10.5px] font-semibold text-slate-600">수프리마랩 도서 DB 실명 매칭 및 세특 완성</p>
               <span className="inline-block text-[10px] font-extrabold text-emerald-800 bg-white px-2 py-0.5 rounded-full border border-emerald-200">동기 ➔ 과정 ➔ 성장변화</span>
             </div>
           </div>
@@ -263,7 +263,7 @@ export default function ProgramGuideTour() {
                 <Flame size={16} /> 1. 수행평가 & 세특 막막함 100% 해소
               </div>
               <p className="text-slate-600 font-semibold text-xs leading-relaxed">
-                "선생님이 세특 써오라는데 도대체 뭘 써야 할지 모르겠어요" ➔ 학교 과제 주제만 넣으면 카카오 추천 도서와 3단계 완성형 문장이 10초 만에 도출됩니다.
+                "선생님이 세특 써오라는데 도대체 뭘 써야 할지 모르겠어요" ➔ 학교 과제 주제만 넣으면 수프리마랩 추천 도서와 3단계 완성형 문장이 10초 만에 도출됩니다.
               </p>
             </div>
             <div className="rounded-2xl border border-blue-200 bg-white p-4.5 space-y-1.5 shadow-2xs">
@@ -401,7 +401,7 @@ export default function ProgramGuideTour() {
                 <Zap size={16} /> ⚡ [탐구·도서 매칭] 원클릭 브릿지
               </div>
               <p className="text-slate-600 font-semibold text-xs leading-relaxed">
-                학생이 올린 퀘스트 항목 옆의 버튼을 누르면 1초 만에 [탐구·세특 추천] 탭으로 과목과 과제명이 자동 전달되어, 카카오 도서 검색과 AI 세특 생성을 10초 만에 끝마칩니다.
+                학생이 올린 퀘스트 항목 옆의 버튼을 누르면 1초 만에 [탐구·세특 추천] 탭으로 과목과 과제명이 자동 전달되어, 수프리마랩 도서 DB 매칭과 AI 세특 생성을 10초 만에 끝마칩니다.
               </p>
             </div>
             <div className="rounded-2xl border border-[#ebdcca] bg-white p-4.5 space-y-2">
