@@ -546,11 +546,11 @@ function addSlideHeader(slide, category, title, subtitle) {
 
   const academyFeatures = [
     '• 암호화된 고유 코드로 재원생 데이터 1-Click 안전 연동',
-    '• 학생별 내신 성적 추이 및 탐구 보고서 실시간 모니터링',
-    '• 1개월 / 3개월(학기집중) / 6개월(학기풀코스) 기간별 관리',
-    '• 학원 로고가 각인된 심화탐구·독서·세특 맞춤 추천서 발급',
-    '• 시험 직후 학부모 상담용 종합 성장 평가서 즉시 인쇄',
-    '• 학원 담당자 입시 교육 또는 본원 전문 연구원 업무 대행',
+    '• 주차별 밀착 플래너 관리 및 과제 완료율(%) 실시간 추적',
+    '• 시기별 시험기간(중간/기말/모평/수능) D-Day 실시간 카운트다운',
+    '• 학교 수행평가 주제 다이렉트 기입 & 카카오 도서 세특 연계',
+    '• 월간 활동 보고서 ⚡[Auto-Fill] 자동 집계 ➔ 🖨️ A4 인쇄 & ✉️ 메일링',
+    '• 학원 담당자 입시 교육(Track A) 또는 본원 전문 연구원 대행(Track B)',
   ];
   s3.addText(academyFeatures.join('\n\n'), {
     x: 7.183,
@@ -575,26 +575,26 @@ function addSlideHeader(slide, category, title, subtitle) {
   const benefits = [
     {
       num: '01',
-      title: '재원생 락인(Lock-in) 극대화',
-      desc: '교과 수업에 수시 학종 관리가 유기적으로 결합되어 학기 중은 물론 방학 기간 이탈을 완벽 차단합니다. 1개 학기 단위 밀착 코칭으로 연간 등록율을 대폭 향상시킵니다.',
+      title: '재원생 이탈 0% & 학부모 충성도',
+      desc: '매월 말 학부모에게 발송되는 품격 있는 월간 활동 보고서(플래너·도서·수행평가 집계)로 학부모 만족도를 극대화하고 시험 직후 수강생 이탈을 완벽 차단합니다.',
       accent: COLORS.burgundy,
     },
     {
       num: '02',
       title: '신규 원생 유치 킬러 무기',
-      desc: '‘대치 수프리마 164개 대학 입결 기반 1:1 정밀 진단’을 간판 무기로 학부모 설명회 및 상담 등록률을 폭발적으로 증가시킵니다. 타 학원이 흉내낼 수 없는 독보적 차별점입니다.',
+      desc: '‘대치 수프리마 164개 대학 입결 기반 1:1 정밀 진단 & 6개 대학 배치 설명회’를 간판 무기로 학부모 설명회 및 신규 상담 등록률을 폭발적으로 증가시킵니다.',
       accent: COLORS.blueNavy,
     },
     {
       num: '03',
       title: '강사 업무 부담 90% 이상 경감',
-      desc: '복잡한 입시 분석과 세특 문장 작성을 시스템과 AI가 전담합니다. 강사진은 본연의 교과 강의와 학생 관리에만 몰입할 수 있어 강사 피로도를 획기적으로 낮춥니다.',
+      desc: '도서 탐색, 세특 작성, 월간 보고서 집계를 [Auto-Fill]과 AI가 10초 만에 해결합니다. 강사진은 본연의 교과 강의와 학생 관리에만 집중할 수 있습니다.',
       accent: COLORS.teal,
     },
     {
       num: '04',
-      title: '대치동 최상위 브랜딩 탑재',
-      desc: '지방 및 수도권 학원도 ‘대치수프리마 대입전략연구소 공식 제휴 학원’ 명칭과 최신 대치동 입결 데이터베이스를 공식 활용하여 지역 내 1등 학원 위상을 확고히 합니다.',
+      title: '수행평가 방어 & 대치동 브랜딩',
+      desc: '학교 수행평가 주제를 가져오면 맞춤 도서와 세특 문장이 즉각 도출되어 학생들의 과제 부담을 학원이 선제적으로 완벽 케어하며 대치동 1등 학원 위상을 확립합니다.',
       accent: COLORS.amber,
     },
   ];
@@ -939,32 +939,32 @@ function addSlideHeader(slide, category, title, subtitle) {
 {
   const s7 = pres.addSlide();
   s7.background = { color: COLORS.bgLight };
-  addSlideHeader(s7, '06. 4-STEP PROCESS', '“따라만 해도 완성되는” 정교한 4단계 진단 플로우', '학생부 등록부터 대학 위치 진단까지, 직관적인 내비게이션으로 막힘없이 완성됩니다.');
+  addSlideHeader(s7, '06. 4-STEP PROCESS', '학원과 학생이 함께 완결하는 컨설턴트 4단계 실행 사이클', '진단에서 끝나지 않고, 플래너 실행과 수행평가, 월간 학부모 보고서까지 물 흐르듯 완성됩니다.');
 
   const steps = [
     {
       num: 'STEP 01',
-      title: '학생부 간편 등록 & 환산',
-      desc: '• 나이스 10초 간편인증 또는 정부24 PDF 업로드\n• 2028 개편 5등급제 ⟷ 9등급제 실시간 자동 변환\n• 학생 기본 성적 데이터 자동 파싱 & 저장',
+      title: '학생부·성적 정밀 진단',
+      desc: '• 나이스 간편인증 또는 정부24 PDF 원클릭 등록\n• 2028 개편 5등급제 ⟷ 9등급제 실시간 자동 변환\n• 164개 대학 26,295개 수시 전형 모의 합격선 산출',
       accent: COLORS.burgundy,
     },
     {
       num: 'STEP 02',
-      title: '학생부 AI 정밀 분석',
-      desc: '• 교과 성적 추이 & 학종 적합도 AI 정밀 진단\n• 학생의 진로 역량과 이수 과목 적합성 평가\n• 전공 역량별 취약 영역 및 보완 포인트 도출',
+      title: '밀착 플래너 & 시험 D-Day',
+      desc: '• 시기별 시험기간(중간/기말/모평/수능) D-Day 실시간 배너\n• 시험 21일 전(3주 이내) 집중 대비 모드 배지 가동\n• 주차별 학습 과제 부여 및 완료율(%) 실시간 추적',
       accent: COLORS.blueNavy,
     },
     {
       num: 'STEP 03',
-      title: '독서 연계 심화 탐구·세특',
-      desc: '• 카카오 도서 DB 연계 추천 도서 매칭\n• 도서명·핵심이론이 자연스럽게 녹아든 탐구 가설\n• 나이스 기재 기준에 부합하는 3단계 완성형 세특',
-      accent: COLORS.burgundy,
+      title: '도서 세특 & 수행평가 연계',
+      desc: '• NEIS 핵심 근거가 되는 학교 수행평가 내용 다이렉트 기입\n• 희망 전공 맞춤 카카오 도서 DB 공식 연계 추천\n• 책의 핵심 이론이 자연스럽게 녹아든 3단계 세특 초안',
+      accent: COLORS.teal,
     },
     {
       num: 'STEP 04',
-      title: '164개 대학 위치 진단',
-      desc: '• 164개 대학 26,295개 수시 전형 컷오프 비교\n• 상향(도전)·적정(유력)·안정 3단계 모의 지원선\n• 학부모 상담용 종합 분석 리포트 즉시 출력',
-      accent: COLORS.teal,
+      title: '월간 활동 보고서 & 메일링',
+      desc: '• ⚡ [Auto-Fill] 버튼 1클릭으로 한 달간 실행 실적 즉시 취합\n• 대치수프리마 공식 버건디 품격의 🖨️ A4 프리미엄 인쇄\n• 공식 메일링 엔진을 통한 ✉️ 학부모 즉시 메일 직발송',
+      accent: COLORS.darkBurgundy,
     },
   ];
 
@@ -1006,7 +1006,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       y: 3.05,
       w: 2.15,
       h: 0.6,
-      fontSize: 14,
+      fontSize: 13,
       fontFace: FONT_TITLE,
       color: COLORS.darkText,
       bold: true,
@@ -1017,7 +1017,7 @@ function addSlideHeader(slide, category, title, subtitle) {
       y: 3.8,
       w: 2.15,
       h: 2.5,
-      fontSize: 10,
+      fontSize: 9.8,
       fontFace: FONT_BODY,
       color: COLORS.slateText,
       lineSpacingMultiple: 1.3,
@@ -1152,6 +1152,14 @@ async function run() {
     const copyTarget = path.join(guideDir, '대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.pptx');
     fs.copyFileSync(pptxFile, copyTarget);
     console.log(`Copied proposal pptx to ${copyTarget}`);
+  }
+
+  // Copy to root public guides as well
+  const rootGuideDir = path.resolve('public/guides');
+  if (fs.existsSync(rootGuideDir)) {
+    const rootCopyTarget = path.join(rootGuideDir, '대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.pptx');
+    fs.copyFileSync(pptxFile, rootCopyTarget);
+    console.log(`Copied proposal pptx to root ${rootCopyTarget}`);
   }
 }
 

@@ -335,6 +335,57 @@ export default function AdminDashboardHub({ academyAppUrl }: AdminDashboardHubPr
               </a>
             </div>
           </div>
+
+          <hr className="border-[#ebdcca]" />
+
+          {/* Row 3: 학원 전용 B2B 제안서 (원장님 제휴 협의용) */}
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-2">
+              <div className="flex items-center gap-2">
+                <Building2 size={16} className="text-purple-800" />
+                <h2 className="text-sm font-black text-[#1a0f08]">
+                  🏢 학원 전용 B2B 제안서 (원장님 제휴·설명회 발표 및 도입 협의용 공식 제안서)
+                </h2>
+              </div>
+              <span className="text-[11px] font-semibold text-slate-500">
+                2-Track 운영 모델 · 7대 핵심 특장점 · 4단계 실행 사이클 · 학기제 산정 공식 수록
+              </span>
+            </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <a
+                href="/guides/대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.pptx"
+                download="대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.pptx"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-purple-200 bg-white px-3 py-1.5 text-xs font-bold text-purple-800 shadow-2xs transition hover:bg-purple-50"
+              >
+                <Presentation size={13} />
+                <span>B2B 제안 Slide(PPTX)</span>
+              </a>
+              <a
+                href="/guides/대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.docx"
+                download="대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.docx"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-violet-200 bg-white px-3 py-1.5 text-xs font-bold text-violet-800 shadow-2xs transition hover:bg-violet-50"
+              >
+                <FileText size={13} />
+                <span>B2B 제안 Word(DOCX)</span>
+              </a>
+              <a
+                href="/guides/대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.xlsx"
+                download="대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.xlsx"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-emerald-200 bg-white px-3 py-1.5 text-xs font-bold text-emerald-800 shadow-2xs transition hover:bg-emerald-50"
+              >
+                <FileSpreadsheet size={13} />
+                <span>B2B 제안 Excel(XLSX)</span>
+              </a>
+              <a
+                href="/guides/대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.md"
+                download="대치수프리마_나의입시멘토_컨설턴트앱_B2B_제안서.md"
+                className="inline-flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-2xs transition hover:bg-slate-50"
+              >
+                <FileText size={13} />
+                <span>B2B 제안 Markdown(MD)</span>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
